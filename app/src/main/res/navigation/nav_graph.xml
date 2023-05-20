@@ -31,6 +31,13 @@
         <action
             android:id="@+id/action_loginFragment_to_categoriesFragment"
             app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mealsFragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/nav_graph"
+            />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -71,4 +78,9 @@
         android:label="AllergiesFragment"
         tools:layout="@layout/fragment_allergies"
         />
+    <fragment
+        android:id="@+id/mealsFragment"
+        android:name="com.example.foodplanner.planner.MealsFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_meals" />
 </navigation>

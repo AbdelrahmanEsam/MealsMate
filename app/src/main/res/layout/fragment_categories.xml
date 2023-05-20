@@ -62,7 +62,7 @@
             android:id="@+id/followRoutineTextView"
             style="@style/title_font"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:text="@string/do_you_follow_any_of_these_routines"
             android:textColor="@color/black"

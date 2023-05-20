@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
@@ -62,12 +63,14 @@ public class CategoriesFragment extends Fragment {
 
         binding.forwardImageView.setOnClickListener(view1 -> {
 
-            List<String> selectedRoutines = adapter.getSelectedRoutines();
-            Toast.makeText(getContext(),selectedRoutines.size()+"",Toast.LENGTH_LONG).show();
+            //List<String> selectedRoutines = adapter.getSelectedRoutines();
             FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                     .addSharedElement(binding.cardProgress, "orangeProgress")
                     .build();
-            controller.navigate(CategoriesFragmentDirections.actionCategoriesFragmentToFavouritesFragment());
+            controller.navigate(CategoriesFragmentDirections.actionCategoriesFragmentToFavouritesFragment()
+                    ,extras);
+
+
 
         });
 

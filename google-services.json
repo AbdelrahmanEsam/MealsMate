@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "804616878889",
+    "project_id": "mealsmate",
+    "storage_bucket": "mealsmate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804616878889:android:72c4fb68932fa0c6da5538",
+        "android_client_info": {
+          "package_name": "com.example.foodplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804616878889-lse4pc7s9clfgptb2tiecp7r4418eplr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foodplanner",
+            "certificate_hash": "70e8135dbd4512000cba1e1a7a70dd1ffe11b213"
+          }
+        },
+        {
+          "client_id": "804616878889-ttqlcbnab1ll0kam4br7c4hmkj0n99nu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNIsu7n6RKbDpxq7JeaNLlQspL3Jv2ww0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804616878889-a5f90e5ou1j7j2dpa7ti1n2r7ilt8tg9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

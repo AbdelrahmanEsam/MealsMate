@@ -7,8 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,9 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Transition transition = TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move);
+        setSharedElementEnterTransition(transition);
+        setSharedElementReturnTransition(transition);
 
     }
 
@@ -81,8 +87,10 @@ public class FavouritesFragment extends Fragment {
         binding.favouritesRecycler.setAdapter(adapter);
         binding.forwardImageView.setOnClickListener(view1 -> {
             List<String> selectedFavourites = adapter.getSelectedFavourites();
-
-            controller.navigate(FavouritesFragmentDirections.actionFavouritesFragmentToAllergiesFragment());
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(binding.cardProgress, "orangeProgress")
+                    .build();
+            controller.navigate(FavouritesFragmentDirections.actionFavouritesFragmentToAllergiesFragment(),extras);
         });
     }
 }

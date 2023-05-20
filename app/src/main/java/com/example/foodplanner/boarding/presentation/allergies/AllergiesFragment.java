@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,9 @@ public class AllergiesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Transition transition = TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move);
+        setSharedElementEnterTransition(transition);
+        setSharedElementReturnTransition(transition);
     }
 
     @Override

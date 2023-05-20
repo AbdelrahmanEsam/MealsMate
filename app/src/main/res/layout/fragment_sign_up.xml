@@ -102,39 +102,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/repeatPasswordInputLayout"
-            style="@style/textInputLayout"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_45sdp"
-            android:layout_marginTop="@dimen/_30sdp"
-            android:paddingBottom="0dp"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
-            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                style="@style/p3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray10"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/signUpButton"
             style="@style/p2"
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_30sdp"
             android:background="@drawable/button_background"
             android:gravity="center"
             android:text="@string/sign_up"
@@ -142,7 +115,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toTopOf="@+id/repeatPasswordInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
 
 
         <TextView

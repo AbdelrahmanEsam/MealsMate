@@ -19,4 +19,8 @@
     <string name="name">name</string>
     <string name="choose_your_favourites">choose your favourites</string>
     <string name="do_you_have_any_allergies">do you have any allergies</string>
+    <string name="settings">settings</string>
+    <string name="meals">meals</string>
+    <string name="favourites">favourites</string>
+    <string name="schedule">schedule</string>
 </resources>

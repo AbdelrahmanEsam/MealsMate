@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/settingsFragment" android:title="@string/settings" android:icon="@drawable/settings" />
+    <item android:id="@+id/mealsFragment" android:title="@string/meals" android:icon="@drawable/meals" />
+    <item android:id="@+id/favouritesMealsFragment" android:title="@string/favourites" android:icon="@drawable/favourites" />
+    <item android:id="@+id/scheduleFragment" android:title="@string/schedule" android:icon="@drawable/calender" />
+</menu>
