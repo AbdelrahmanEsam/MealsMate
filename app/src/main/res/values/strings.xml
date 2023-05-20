@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Meal Mate</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="splash_content">solution for your meal problems</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="username">username</string>
+    <string name="don_t_have_an_account">Don’t have an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forget_password">forget Password ?</string>
+    <string name="or">or</string>
+    <string name="sign_in_with_google">Sign in With Google</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_up_with_google">Sign up with google</string>
+    <string name="skip"><u>skip</u></string>
+    <string name="let_s_get_started">let\'s get started</string>
+    <string name="do_you_follow_any_of_these_routines">do you follow any of these routines ?</string>
+    <string name="name">name</string>
+    <string name="choose_your_favourites">choose your favourites</string>
+    <string name="do_you_have_any_allergies">do you have any allergies</string>
+</resources>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/splash_text_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="10dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/lottie_splash"
+            android:layout_marginTop="30dp"
+            motion:layout_constraintBottom_toBottomOf="parent" />
+
+        <Constraint
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+
+            android:id="@+id/title"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/lottie_splash" />
+
+
+
+        <Constraint
+            android:id="@+id/splash_text_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/lottie_splash"
+            android:layout_marginTop="30dp"
+            motion:layout_constraintBottom_toBottomOf="parent" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/title"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/lottie_splash" />
+
+
+        <Constraint
+            android:id="@+id/splash_text_content"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/lottie_splash"
+            android:layout_marginTop="30dp"
+            motion:layout_constraintBottom_toBottomOf="parent" />
+    </ConstraintSet>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:autoTransition="animateToEnd"
+        motion:motionInterpolator="bounce"
+       motion:duration="1000"
+        >
+        <KeyFrameSet>
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="1"
+                android:scaleX="0.1" />
+
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="30"
+                android:scaleX="0.3" />
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="50"
+                android:scaleX="0.5" />
+
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="80"
+                android:scaleX="0.8" />
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="90"
+                android:scaleX="1.2" />
+
+            <KeyAttribute
+                motion:motionTarget="@+id/splash_text_content"
+                motion:framePosition="100"
+                android:scaleX="1.0" />
+
+
+            <KeyAttribute
+                motion:motionTarget="@+id/title"
+                motion:framePosition="1"
+                android:scaleX="0.1" />
+
+
+            <KeyAttribute
+                motion:motionTarget="@+id/title"
+                motion:framePosition="50"
+                android:scaleX="0.5" />
+
+
+        </KeyFrameSet>
+    </Transition>
+
+
+
+
+
+</MotionScene>
