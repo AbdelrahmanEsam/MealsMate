@@ -11,7 +11,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.boarding.presentation.categories.RoutinesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals;
+package com.example.foodplanner.meals.controller;
 
 import android.os.Bundle;
 
@@ -8,18 +8,19 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.foodplanner.MainActivity;
-import com.example.foodplanner.R;
 import com.example.foodplanner.data.ApiProvider;
 import com.example.foodplanner.data.RetrofitClient;
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
+import com.example.foodplanner.meals.view.MealsAdapter;
 import com.example.utils.CustomFlexLayoutManager;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -70,13 +71,14 @@ public class MealsFragment extends Fragment {
 
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-               MealsResponse myResponse =  response.body();
+                MealsResponse myResponse =  response.body();
+                Log.d("responseYes",myResponse.getMeals().size() +" ");
                 adapter.setMeals(myResponse.getMeals(),getContext());
             }
 
             @Override
             public void onFailure(Call<MealsResponse> call, Throwable t) {
-
+                Log.d("responseYes","fail");
             }
         });
 

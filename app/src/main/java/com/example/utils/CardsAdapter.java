@@ -1,4 +1,4 @@
-package com.example.foodplanner.boarding.presentation.categories;
+package com.example.utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,10 +13,10 @@ import com.example.foodplanner.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.RoutinesViewHolder> {
+public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.RoutinesViewHolder> {
 
-    private List<String> routines = new ArrayList<>();
-    private List<String> selectedRoutines = new ArrayList<>();
+    private List<String> cards = new ArrayList<>();
+    private List<String> selectedCards = new ArrayList<>();
     private Context context;
 
     @NonNull
@@ -28,16 +28,16 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.Routin
     @Override
     public void onBindViewHolder(@NonNull RoutinesViewHolder holder, int position) {
 
-        holder.routineTextView.setText(routines.get(position));
+        holder.routineTextView.setText(cards.get(position));
 
         holder.layout.setOnClickListener(view -> {
-            String clickedRoutine = routines.get(position);
-            if (selectedRoutines.contains(clickedRoutine)){
+            String clickedRoutine = cards.get(position);
+            if (selectedCards.contains(clickedRoutine)){
                 holder.strokeCardView.setCardBackgroundColor(context.getResources().getColor(R.color.black));
-                selectedRoutines.remove(clickedRoutine);
+                selectedCards.remove(clickedRoutine);
             }else{
                 holder.strokeCardView.setCardBackgroundColor(context.getResources().getColor(R.color.orange));
-                selectedRoutines.add(clickedRoutine);
+                selectedCards.add(clickedRoutine);
             }
 
         });
@@ -45,20 +45,20 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.Routin
 
     @Override
     public int getItemCount() {
-        return routines.size();
+        return cards.size();
     }
 
-    public void setRoutines(List<String> routines , Context context)
+    public void setCards(List<String> cards , Context context)
     {
         this.context = context;
-        this.routines = routines;
+        this.cards = cards;
         notifyDataSetChanged();
     }
 
-    public List<String> getSelectedRoutines()
+    public List<String> getSelectedCards()
     {
 
-        return selectedRoutines;
+        return selectedCards;
     }
 
     static class RoutinesViewHolder extends  RecyclerView.ViewHolder{

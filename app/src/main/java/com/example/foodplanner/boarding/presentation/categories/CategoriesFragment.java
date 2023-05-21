@@ -6,17 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.Toast;
 
 import com.example.foodplanner.databinding.FragmentCategoriesBinding;
+import com.example.utils.CardsAdapter;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -51,8 +49,8 @@ public class CategoriesFragment extends Fragment {
         routines.add("vegan");
         routines.add("vegeterian");
         routines.add("pork");
-        RoutinesAdapter adapter  = new RoutinesAdapter();
-        adapter.setRoutines(routines,getContext());
+        CardsAdapter adapter  = new CardsAdapter();
+        adapter.setCards(routines,getContext());
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getContext());
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.FLEX_START);

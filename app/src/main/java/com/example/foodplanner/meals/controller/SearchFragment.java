@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals;
+package com.example.foodplanner.meals.controller;
 
 import android.os.Bundle;
 
@@ -12,27 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
-import com.example.foodplanner.boarding.presentation.categories.RoutinesAdapter;
-import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
+import com.example.foodplanner.databinding.FragmentSearchBinding;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
-import java.util.ArrayList;
-import java.util.List;
 
+public class SearchFragment extends Fragment {
 
-public class MealDetailsFragment extends Fragment {
-
-
-
-    private FragmentMealDetailsBinding binding;
+    private FragmentSearchBinding binding;
     private NavController controller;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +34,7 @@ public class MealDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentMealDetailsBinding.inflate(inflater, container, false);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -52,10 +43,14 @@ public class MealDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-        ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
+
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getContext());
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.FLEX_START);
 
 
-
-
+        binding.countriesRecyclerView.setLayoutManager(layoutManager);
+        binding.categoriesRecyclerView.setLayoutManager(layoutManager);
+        binding.ingredientsRecyclerView.setLayoutManager(layoutManager);
     }
 }

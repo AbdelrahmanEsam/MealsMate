@@ -1,6 +1,5 @@
 package com.example.foodplanner.boarding.presentation.favourites;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,26 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Toast;
 
-import com.example.foodplanner.R;
-import com.example.foodplanner.boarding.presentation.categories.RoutinesAdapter;
-import com.example.foodplanner.data.ApiProvider;
-import com.example.foodplanner.data.RetrofitClient;
-import com.example.foodplanner.data.dto.MealsResponse;
-import com.example.foodplanner.databinding.FragmentCategoriesBinding;
 import com.example.foodplanner.databinding.FragmentFavouritesBinding;
-import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
 public class FavouritesFragment extends Fragment {

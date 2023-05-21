@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals;
+package com.example.foodplanner.meals.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
 
     private List<Meal> meals = new ArrayList<>();
     private Context context;
-    private int flexCount;
+
 
 
 
@@ -36,7 +36,11 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
     @Override
     public void onBindViewHolder(@NonNull RoutinesViewHolder holder, int position) {
 
-
+        holder.itemView.post(() -> {
+         if(holder.itemView.getMeasuredWidth() < holder.itemView.getWidth() ){
+           holder.layout.setMinimumWidth(holder.itemView.getWidth());
+         }
+        });
 
 
         Meal meal = meals.get(position);

@@ -80,7 +80,16 @@
         />
     <fragment
         android:id="@+id/mealsFragment"
-        android:name="com.example.foodplanner.meals.MealsFragment"
+        android:name="com.example.foodplanner.meals.controller.MealsFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_meals" />
+        tools:layout="@layout/fragment_meals" >
+        <action
+            android:id="@+id/action_mealsFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.foodplanner.meals.controller.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".meals.MealsFragment"
+    tools:context=".meals.controller.MealsFragment"
     android:fillViewport="true">
 
 
@@ -26,6 +26,97 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.025" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:src="@drawable/favourite"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:src="@drawable/arrow_back"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/mealImage"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:elevation="@dimen/_10sdp"
+            android:src="@drawable/meal"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
+        <TextView
+            android:id="@+id/mealNameTextView"
+            style="@style/title_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:text="@string/good_morning"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/mealImage" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="instructions"
+            android:textAlignment="center"
+            android:textColor="@color/gray20"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/instructionsTextView" />
+
+        <TextView
+            android:id="@+id/instructionsTextView"
+            style="@style/p1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/instructions"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/mealNameTextView" />
+
+
+        <TextView
+            android:id="@+id/ingredientsTextView"
+            style="@style/p1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/instructions"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredientsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintStart_toStartOf="@+id/ingredientsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/ingredientsTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
