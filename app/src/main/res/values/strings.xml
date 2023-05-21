@@ -23,4 +23,8 @@
     <string name="meals">meals</string>
     <string name="favourites">favourites</string>
     <string name="schedule">schedule</string>
+    <string name="good_morning">Good morning,</string>
+    <string name="dish_of_the_day">DISH OF THE DAY</string>
+    <string name="type_in_your_favourite_dish">type in your favourite dish ......</string>
+    <string name="choose_your_meal">Meals for you</string>
 </resources>

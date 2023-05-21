@@ -80,7 +80,7 @@
         />
     <fragment
         android:id="@+id/mealsFragment"
-        android:name="com.example.foodplanner.planner.MealsFragment"
+        android:name="com.example.foodplanner.meals.MealsFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_meals" />
 </navigation>

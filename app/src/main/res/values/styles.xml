@@ -60,6 +60,20 @@
     </style>
 
 
+    <style name="searchStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeWidth">@dimen/_2sdp</item>
+        <item name="boxStrokeColor">@color/black</item>
+        <item name="android:radius">@dimen/_20sdp</item>
+        <item name="boxStrokeWidthFocused">@dimen/_1sdp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/_15sdp</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/_15sdp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/_15sdp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/_15sdp</item>
+        <item name="strokeColor">@color/black</item>
+
+    </style>
+
+
 
     
     

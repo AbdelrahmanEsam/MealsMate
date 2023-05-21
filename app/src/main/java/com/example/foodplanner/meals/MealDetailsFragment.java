@@ -1,4 +1,4 @@
-package com.example.foodplanner.planner;
+package com.example.foodplanner.meals;
 
 import android.os.Bundle;
 
@@ -13,13 +13,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.MainActivity;
+import com.example.foodplanner.R;
+import com.example.foodplanner.boarding.presentation.categories.RoutinesAdapter;
+import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
-public class MealsFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
 
-    private FragmentMealsBinding binding;
+public class MealDetailsFragment extends Fragment {
+
+
+
+    private FragmentMealDetailsBinding binding;
     private NavController controller;
+
 
 
     @Override
@@ -31,7 +43,7 @@ public class MealsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentMealsBinding.inflate(inflater, container, false);
+        binding = FragmentMealDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -41,5 +53,9 @@ public class MealsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
+
+
+
+
     }
 }

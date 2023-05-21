@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-interface ApiProvider {
+public interface ApiProvider {
 
    @GET("random.php")
     Call<MealsResponse> getMealOfTheDay();

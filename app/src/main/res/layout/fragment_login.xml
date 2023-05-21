@@ -31,7 +31,7 @@
             app:layout_constraintGuide_percent="0.025" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailInputLayout"
+            android:id="@+id/searchInputLayout"
             style="@style/textInputLayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
@@ -69,7 +69,7 @@
             app:layout_constraintBottom_toTopOf="@+id/signInButton"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/emailInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/searchInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/p3"
