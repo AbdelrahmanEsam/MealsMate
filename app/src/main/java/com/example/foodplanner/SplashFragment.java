@@ -1,6 +1,8 @@
 package com.example.foodplanner;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -64,8 +66,18 @@ public class SplashFragment extends Fragment {
 
           }
       });
+    }
 
+    @SuppressLint("SourceLockedOrientationActivity")
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 }

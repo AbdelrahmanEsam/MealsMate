@@ -11,15 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.foodplanner.databinding.FragmentCalendarBinding;
-import com.example.foodplanner.databinding.FragmentFavourites2Binding;
 import com.example.foodplanner.databinding.FragmentFavouritesBinding;
 
 
 public class FavouritesFragment extends Fragment {
 
 
-    private FragmentFavourites2Binding binding;
+    private FragmentFavouritesBinding binding;
     private NavController controller;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +28,7 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentFavourites2Binding.inflate(inflater, container, false);
+        binding = FragmentFavouritesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -39,7 +37,6 @@ public class FavouritesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-
     }
 
 }

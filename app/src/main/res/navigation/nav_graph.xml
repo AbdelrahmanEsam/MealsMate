@@ -66,7 +66,7 @@
         android:id="@+id/favouritesFragment"
         android:name="com.example.foodplanner.boarding.presentation.favourites.view.SelectFavouritesFragment"
         android:label="FavouritesFragment"
-        tools:layout="@layout/fragment_favourites"
+        tools:layout="@layout/fragment_choose_favourites"
         >
         <action
             android:id="@+id/action_favouritesFragment_to_allergiesFragment"
@@ -120,7 +120,7 @@
         android:id="@+id/favouritesMealsFragment"
         android:name="com.example.foodplanner.favourites.view.FavouritesFragment"
         android:label="fragment_favourites2"
-        tools:layout="@layout/fragment_favourites2" />
+        tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.foodplanner.authenticationandaccount.presentation.forgetpassword.view.ResetPasswordFragment"

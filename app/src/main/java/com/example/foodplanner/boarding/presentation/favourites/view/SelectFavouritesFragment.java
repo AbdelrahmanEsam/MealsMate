@@ -1,6 +1,12 @@
 package com.example.foodplanner.boarding.presentation.favourites.view;
 
 import android.os.Bundle;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,14 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import android.transition.Transition;
-import android.transition.TransitionInflater;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-
-import com.example.foodplanner.databinding.FragmentFavouritesBinding;
+import com.example.foodplanner.databinding.FragmentChooseFavouritesBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
 public class SelectFavouritesFragment extends Fragment {
 
 
-    private FragmentFavouritesBinding binding;
+    private FragmentChooseFavouritesBinding binding;
     private NavController controller ;
     private List<String> favourites = new ArrayList<>();
 
@@ -42,7 +41,7 @@ public class SelectFavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentFavouritesBinding.inflate(inflater, container, false);
+        binding = FragmentChooseFavouritesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
