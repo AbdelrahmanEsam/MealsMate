@@ -1,4 +1,4 @@
-package com.example.foodplanner.boarding.presentation.categories;
+package com.example.foodplanner.boarding.presentation.categories.view;
 
 import android.os.Bundle;
 

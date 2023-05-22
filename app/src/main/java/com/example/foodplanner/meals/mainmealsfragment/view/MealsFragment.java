@@ -1,9 +1,10 @@
-package com.example.foodplanner.meals.controller;
+package com.example.foodplanner.meals.mainmealsfragment.view;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,12 +17,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.foodplanner.MainActivity;
-import com.example.foodplanner.data.ApiProvider;
-import com.example.foodplanner.data.RetrofitClient;
+import com.example.foodplanner.R;
+import com.example.foodplanner.data.remote.ApiProvider;
+import com.example.foodplanner.data.remote.RetrofitClient;
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
-import com.example.foodplanner.meals.view.MealsAdapter;
 import com.example.utils.CustomFlexLayoutManager;
 import com.example.utils.OnMealClickListener;
 import com.google.android.flexbox.FlexDirection;
@@ -65,6 +66,51 @@ public class MealsFragment extends Fragment implements OnMealClickListener {
 
         binding.mealOfTheDayBarrier.setOnClickListener(view1 -> {
             Toast.makeText(getContext(), "yes", Toast.LENGTH_SHORT).show();
+        });
+
+
+
+        binding.searchImageView.setOnClickListener(view12 -> {
+
+            PopupMenu popupMenu = new PopupMenu(requireContext(), binding.searchImageView);
+
+
+            popupMenu.getMenuInflater().inflate(R.menu.search_popup_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                switch (menuItem.getItemId())
+                {
+
+                    case  R.id.byName:{
+
+                        binding.searchInputLayout.getEditText().setText(R.string.type_in_your_favourite_dish);
+                        break;
+                    }
+
+                    case  R.id.byCategory:{
+                        binding.searchInputLayout.getEditText().setText(R.string.category_placeholder);
+
+
+                        break;
+                    }
+
+                    case  R.id.byCountry:{
+                        binding.searchInputLayout.getEditText().setText(R.string.nationality_placeholder);
+
+                        break;
+                    }
+
+
+                    case  R.id.byIngredient:{
+                        binding.searchInputLayout.getEditText().setText(R.string.ingredient_placeholder);
+                        break;
+                    }
+
+
+                }
+                return true;
+            });
+
+            popupMenu.show();
         });
 
 

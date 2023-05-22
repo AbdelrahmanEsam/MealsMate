@@ -1,4 +1,4 @@
-package com.example.foodplanner.boarding.presentation.allergies;
+package com.example.foodplanner.boarding.presentation.allergies.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;

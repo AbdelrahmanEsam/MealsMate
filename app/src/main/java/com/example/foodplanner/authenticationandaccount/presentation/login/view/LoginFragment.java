@@ -1,6 +1,4 @@
-package com.example.foodplanner.authentication.presentation;
-
-import static android.content.ContentValues.TAG;
+package com.example.foodplanner.authenticationandaccount.presentation.login.view;
 
 import android.os.Bundle;
 
@@ -10,29 +8,21 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.foodplanner.R;
-import com.example.foodplanner.databinding.FragmentSignUpBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.foodplanner.databinding.FragmentLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.Executor;
+
+public class LoginFragment extends Fragment {
 
 
-public class SignUpFragment extends Fragment {
-
-
-    private FragmentSignUpBinding binding;
+    private FragmentLoginBinding binding;
     private NavController controller ;
     private FirebaseAuth mAuth;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +32,10 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSignUpBinding.inflate(inflater, container, false);
+            binding = FragmentLoginBinding.inflate(inflater, container, false);
 
-        return binding.getRoot();
+            return binding.getRoot();
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -54,19 +43,27 @@ public class SignUpFragment extends Fragment {
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
 
-        binding.signIn.setOnClickListener(view1 -> controller.popBackStack());
-        binding.backImageView.setOnClickListener(view1 ->     controller.popBackStack());
+        binding.signUp.setOnClickListener(view1 -> {
+            controller.navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment());
+        });
 
-        mAuth.createUserWithEmailAndPassword("email", "password")
+
+        binding.signInButton.setOnClickListener(view1 -> {
+           // controller.navigate(LoginFragmentDirections.actionLoginFragmentToCategoriesFragment());
+            controller.navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment());
+        });
+
+
+        mAuth.signInWithEmailAndPassword("email", "password")
                 .addOnCompleteListener(requireActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        //updateUI(user);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.d(TAG, "createUserWithEmail:failure", task.getException());
 
-                       // updateUI(null);
+                    if (task.isSuccessful()) {
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+                      //  updateUI(user);
+                    } else {
+
+                      //  updateUI(null);
                     }
                 });
 

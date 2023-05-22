@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/byName" android:title="@string/by_name"/>
+    <item android:id="@+id/byCountry" android:title="@string/by_country"/>
+    <item android:id="@+id/byCategory" android:title="@string/by_category"/>
+    <item android:id="@+id/byIngredient" android:title="@string/by_ingredient"/>
+</menu>

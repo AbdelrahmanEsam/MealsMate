@@ -21,7 +21,7 @@
         android:id="@+id/loginFragment"
 
 
-        android:name="com.example.foodplanner.authentication.presentation.LoginFragment"
+        android:name="com.example.foodplanner.authenticationandaccount.presentation.login.view.LoginFragment"
         android:label="fragment_login"
 
         tools:layout="@layout/fragment_login" >
@@ -38,17 +38,20 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/nav_graph"
             />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.foodplanner.authentication.presentation.SignUpFragment"
+        android:name="com.example.foodplanner.authenticationandaccount.presentation.signup.view.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_sign_up"
 
         />
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.example.foodplanner.boarding.presentation.categories.CategoriesFragment"
+        android:name="com.example.foodplanner.boarding.presentation.categories.view.CategoriesFragment"
         android:label="CategoriesFragment"
         tools:layout="@layout/fragment_categories"
         >
@@ -61,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
-        android:name="com.example.foodplanner.boarding.presentation.favourites.FavouritesFragment"
+        android:name="com.example.foodplanner.boarding.presentation.favourites.view.SelectFavouritesFragment"
         android:label="FavouritesFragment"
         tools:layout="@layout/fragment_favourites"
         >
@@ -74,13 +77,13 @@
     </fragment>
     <fragment
         android:id="@+id/allergiesFragment"
-        android:name="com.example.foodplanner.boarding.presentation.allergies.AllergiesFragment"
+        android:name="com.example.foodplanner.boarding.presentation.allergies.view.AllergiesFragment"
         android:label="AllergiesFragment"
         tools:layout="@layout/fragment_allergies"
         />
     <fragment
         android:id="@+id/mealsFragment"
-        android:name="com.example.foodplanner.meals.controller.MealsFragment"
+        android:name="com.example.foodplanner.meals.mainmealsfragment.view.MealsFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_meals" >
         <action
@@ -92,12 +95,12 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.foodplanner.meals.controller.SearchFragment"
+        android:name="com.example.foodplanner.meals.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/mealDetailsFragment"
-        android:name="com.example.foodplanner.meals.controller.MealDetailsFragment"
+        android:name="com.example.foodplanner.meals.detailsfragment.view.MealDetailsFragment"
         android:label="MealDetailsFragment"
         tools:layout="@layout/fragment_meal_details"
         >
@@ -108,4 +111,24 @@
             android:name="meal"
             app:argType="com.example.foodplanner.data.dto.Meal" />
     </fragment>
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.example.foodplanner.calendar.view.calendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/favouritesMealsFragment"
+        android:name="com.example.foodplanner.favourites.view.FavouritesFragment"
+        android:label="fragment_favourites2"
+        tools:layout="@layout/fragment_favourites2" />
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.foodplanner.authenticationandaccount.presentation.forgetpassword.view.ResetPasswordFragment"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.foodplanner.authenticationandaccount.presentation.settings.view.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

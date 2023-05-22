@@ -1,4 +1,4 @@
-package com.example.foodplanner.boarding.presentation.favourites;
+package com.example.foodplanner.boarding.presentation.favourites.view;
 
 import android.os.Bundle;
 
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FavouritesFragment extends Fragment {
+public class SelectFavouritesFragment extends Fragment {
 
 
     private FragmentFavouritesBinding binding;
@@ -85,7 +85,7 @@ public class FavouritesFragment extends Fragment {
             FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                     .addSharedElement(binding.cardProgress, "orangeProgress")
                     .build();
-            controller.navigate(FavouritesFragmentDirections.actionFavouritesFragmentToAllergiesFragment(),extras);
+            controller.navigate(SelectFavouritesFragmentDirections.actionFavouritesFragmentToAllergiesFragment(),extras);
         });
     }
 }

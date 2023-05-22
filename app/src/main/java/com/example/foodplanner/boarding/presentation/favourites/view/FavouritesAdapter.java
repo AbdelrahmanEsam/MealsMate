@@ -1,4 +1,4 @@
-package com.example.foodplanner.boarding.presentation.favourites;
+package com.example.foodplanner.boarding.presentation.favourites.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;

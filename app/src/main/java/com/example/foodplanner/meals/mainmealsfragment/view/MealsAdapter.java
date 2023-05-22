@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals.view;
+package com.example.foodplanner.meals.mainmealsfragment.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.meals.controller.MealsFragment;
 import com.example.utils.OnMealClickListener;
 import com.google.android.material.card.MaterialCardView;
 
