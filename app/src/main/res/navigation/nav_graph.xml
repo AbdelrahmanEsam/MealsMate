@@ -86,10 +86,26 @@
         <action
             android:id="@+id/action_mealsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_mealsFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.foodplanner.meals.controller.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/mealDetailsFragment"
+        android:name="com.example.foodplanner.meals.controller.MealDetailsFragment"
+        android:label="MealDetailsFragment"
+        tools:layout="@layout/fragment_meal_details"
+        >
+        <argument
+            android:name="transitionName"
+            app:argType="string" />
+        <argument
+            android:name="meal"
+            app:argType="com.example.foodplanner.data.dto.Meal" />
+    </fragment>
 </navigation>

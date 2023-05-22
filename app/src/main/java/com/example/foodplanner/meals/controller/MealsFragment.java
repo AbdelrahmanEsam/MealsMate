@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
 import com.example.foodplanner.meals.view.MealsAdapter;
 import com.example.utils.CustomFlexLayoutManager;
+import com.example.utils.OnMealClickListener;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -34,7 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MealsFragment extends Fragment {
+public class MealsFragment extends Fragment implements OnMealClickListener {
 
 
     private FragmentMealsBinding binding;
@@ -65,6 +67,8 @@ public class MealsFragment extends Fragment {
             Toast.makeText(getContext(), "yes", Toast.LENGTH_SHORT).show();
         });
 
+
+
         Retrofit client = RetrofitClient.getClient();
 
         client.create(ApiProvider.class).searchMealsByName("").enqueue(new Callback<MealsResponse>() {
@@ -72,8 +76,7 @@ public class MealsFragment extends Fragment {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 MealsResponse myResponse =  response.body();
-                Log.d("responseYes",myResponse.getMeals().size() +" ");
-                adapter.setMeals(myResponse.getMeals(),getContext());
+                adapter.setMeals(myResponse.getMeals(),getContext(),MealsFragment.this);
             }
 
             @Override
@@ -84,7 +87,6 @@ public class MealsFragment extends Fragment {
 
 
 
-        adapter.setMeals(meals,getContext());
         setRecyclerView();
 
     }
@@ -107,5 +109,13 @@ public class MealsFragment extends Fragment {
         binding.mealsRecycler.setAdapter(adapter);
         binding.mealsRecycler.setNestedScrollingEnabled(false);
 
+    }
+
+    @Override
+    public void onMealClickListener(Meal meal, String transitionName) {
+        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                .addSharedElement(binding.mealImage, transitionName)
+                .build();
+        controller.navigate(MealsFragmentDirections.actionMealsFragmentToMealDetailsFragment(transitionName,meal),extras);
     }
 }
