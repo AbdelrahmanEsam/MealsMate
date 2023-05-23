@@ -44,7 +44,30 @@ public class AddDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         //controller = Navigation.findNavController(view);
         initViews();
+        clickListeners();
 
+
+    }
+
+    private void clickListeners()
+    {
+        binding.addToBreakfast.getRoot().setOnClickListener(view1 -> {
+
+        });
+
+
+        binding.addToLaunch.getRoot().setOnClickListener(view1 -> {
+
+        });
+
+
+        binding.addToDinner.getRoot().setOnClickListener(view1 -> {
+
+        });
+
+        binding.addToFavourites.getRoot().setOnClickListener(view1 -> {
+
+        });
     }
 
     private void initViews()

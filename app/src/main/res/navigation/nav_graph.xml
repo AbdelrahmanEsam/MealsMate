@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.example.foodplanner.calendar.view.calendarFragment"
+        android:name="com.calendar.view.calendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment

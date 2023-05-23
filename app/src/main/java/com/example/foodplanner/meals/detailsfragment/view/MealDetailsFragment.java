@@ -29,10 +29,14 @@ import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -74,14 +78,6 @@ public class MealDetailsFragment extends Fragment {
        Meal meal =  getArguments().getParcelable(getString(R.string.meal));
         initViews(meal);
 
-
-
-
-
-
-
-
-
     }
 
 
@@ -90,6 +86,13 @@ public class MealDetailsFragment extends Fragment {
         super.onResume();
         ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
 
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding.youtubePlayerView.release();
     }
 
 
@@ -109,6 +112,9 @@ public class MealDetailsFragment extends Fragment {
 
         binding.instructionsTextView.setText(meal.getStrInstructions());
 
+        binding.mealNameTextView.setText(meal.getStrMeal());
+        binding.areaTextView.setText(meal.getStrArea());
+
         setIngredientsRecycler(meal);
 
         binding.backImageView.setOnClickListener(view1 -> {
@@ -119,17 +125,33 @@ public class MealDetailsFragment extends Fragment {
 
     private void setUpYoutubeVideo(String url)
     {
-        Log.d("youtube",url);
+        getLifecycle().addObserver(binding.youtubePlayerView);
 
-        binding.youtubePlayerView.setWebViewClient(new WebViewClient());
-        binding.youtubePlayerView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        binding.youtubePlayerView.getSettings().setJavaScriptEnabled(true);
-        binding.youtubePlayerView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-        binding.youtubePlayerView.setWebChromeClient(new WebChromeClient());
-        binding.youtubePlayerView.loadUrl(url);
+        binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                youTubePlayer.loadVideo(getYouTubeId(url), 0);
+            }
+        });
+
 
 
     }
+
+
+    private String getYouTubeId (String youTubeUrl) {
+        String pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(youTubeUrl);
+        if(matcher.find()){
+            return matcher.group();
+        } else {
+            return "error";
+        }
+    }
+
+
+
 
 
 

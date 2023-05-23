@@ -1,4 +1,4 @@
-package com.example.foodplanner.calendar.view;
+package com.calendar.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +13,14 @@ import androidx.navigation.Navigation;
 
 import com.example.foodplanner.databinding.FragmentCalendarBinding;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
-public class calendarFragment extends Fragment {
+
+public class calendarFragment extends Fragment implements OnDayClicked {
 
     private FragmentCalendarBinding binding;
     private NavController controller;
@@ -36,6 +42,18 @@ public class calendarFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
+
+    }
+
+
+
+
+
+
+
+
+    @Override
+    public void onDayClicked(String day) {
 
     }
 }
