@@ -10,7 +10,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_30sdp"
+        >
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/vGuideline97.5percent"
@@ -37,10 +39,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/backImageView"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_20sdp"
+            android:scaleType="center"
             android:src="@drawable/arrow_back"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +63,7 @@
 
         <TextView
             android:id="@+id/mealNameTextView"
-            style="@style/title_two"
+            style="@style/title_font"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_25sdp"
@@ -71,21 +74,24 @@
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/mealImage" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:text="instructions"
-            android:textAlignment="center"
-            android:textColor="@color/gray20"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
-            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/instructionsTextView" />
+
 
         <TextView
             android:id="@+id/instructionsTextView"
+            style="@style/p3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/instructions"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray20"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/instructionsHeaderTextView" />
+
+        <TextView
+            android:id="@+id/instructionsHeaderTextView"
             style="@style/p1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -102,21 +108,33 @@
             style="@style/p1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:text="@string/instructions"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:text="@string/ingredients"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/youtubePlayerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredientsRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_25sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/ingredientsTextView"
-            app:layout_constraintTop_toBottomOf="@+id/ingredientsTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/ingredientsTextView"
+            tools:listitem="@layout/ingredients_item" />
+
+        <WebView
+            android:id="@+id/youtubePlayerView"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/instructionsTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -4,20 +4,11 @@
     android:layout_height="@dimen/_120sdp"
     android:layout_width="@dimen/_90sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/_10sdp"
+    app:cardElevation="0dp"
     android:layout_marginTop="@dimen/_10sdp"
     android:layout_marginEnd="@dimen/_10sdp"
     android:id="@+id/strokeCardView"
-    >
-
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/_1sdp"
-    android:background="@color/white"
-    app:cardCornerRadius="@dimen/_10sdp"
-    android:id="@+id/innerCardView"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,7 +16,7 @@
 
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ingredientsImageView"
+            android:id="@+id/ingredientImageView"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_15sdp"
@@ -36,7 +27,7 @@
 
 
         <TextView
-            android:id="@+id/favouriteTextView"
+            android:id="@+id/ingredientTextView"
             style="@style/p2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,10 +37,11 @@
             android:text="Cheese"
             android:textColor="@color/black"
             android:textStyle="bold"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/ingredientsImageView"
-            app:layout_constraintStart_toStartOf="@+id/ingredientsImageView"
-            app:layout_constraintTop_toBottomOf="@+id/ingredientsImageView" />
+            app:layout_constraintEnd_toEndOf="@+id/ingredientImageView"
+            app:layout_constraintStart_toStartOf="@+id/ingredientImageView"
+            app:layout_constraintTop_toBottomOf="@+id/ingredientImageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+
 </androidx.cardview.widget.CardView>

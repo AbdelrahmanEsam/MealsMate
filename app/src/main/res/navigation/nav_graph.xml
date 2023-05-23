@@ -92,6 +92,9 @@
         <action
             android:id="@+id/action_mealsFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_mealsFragment_to_addDialogFragment"
+            app:destination="@id/addDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -131,4 +134,9 @@
         android:name="com.example.foodplanner.authenticationandaccount.presentation.settings.view.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <dialog
+        android:id="@+id/addDialogFragment"
+        android:name="com.example.foodplanner.meals.mainmealsfragment.view.AddDialogFragment"
+        android:label="fragment_add_dialog"
+        tools:layout="@layout/fragment_add_dialog" />
 </navigation>

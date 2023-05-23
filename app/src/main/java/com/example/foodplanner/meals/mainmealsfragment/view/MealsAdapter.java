@@ -14,17 +14,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.utils.OnMealClickListener;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesViewHolder> implements OnMealClickListener {
+public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesViewHolder>  {
 
     private List<Meal> meals = new ArrayList<>();
     private Context context;
     private  OnMealClickListener listener;
+    private  OnMealAddClicked addListener;
 
 
 
@@ -59,7 +59,12 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
 
         holder.layout.setOnClickListener(view -> {
 
-            listener.onMealClickListener(meal,"mealImage"+position);
+            listener.onMealClickListener(meal,holder.mealImage);
+        });
+
+
+        holder.addImageView.setOnClickListener(view -> {
+            addListener.onMealAddClicked(meal);
         });
 
     }
@@ -69,19 +74,16 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
         return meals.size();
     }
 
-    public void setMeals(List<Meal> meals, Context context, OnMealClickListener listener)
+    public void setMeals(List<Meal> meals, Context context, OnMealClickListener listener,OnMealAddClicked addListener)
     {
         this.listener = listener;
+        this.addListener = addListener;
         this.context = context;
         this.meals = meals;
         notifyDataSetChanged();
     }
 
-    @Override
-    public void onMealClickListener(Meal meal, String transitionName) {
 
-
-    }
 
 
     static class RoutinesViewHolder extends  RecyclerView.ViewHolder{

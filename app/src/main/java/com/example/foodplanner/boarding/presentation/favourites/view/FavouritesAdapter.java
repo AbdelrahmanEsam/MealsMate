@@ -72,7 +72,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.Ro
         public RoutinesViewHolder(@NonNull View itemView) {
             super(itemView);
             this.layout = itemView;
-            favouriteTextView = itemView.findViewById(R.id.favouriteTextView);
+            favouriteTextView = itemView.findViewById(R.id.ingredientTextView);
             strokeCardView = itemView.findViewById(R.id.strokeCardView);
             innerCardView = itemView.findViewById(R.id.innerCardView);
         }

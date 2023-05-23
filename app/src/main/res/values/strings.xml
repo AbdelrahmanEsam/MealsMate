@@ -39,4 +39,11 @@
     <string name="nationality_placeholder">what is your nationality ? … </string>
     <string name="category_placeholder">category of your meal ? …</string>
     <string name="ingredient_placeholder">your favourite ingredient ? …</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="launch">launch</string>
+    <string name="dinner">dinner</string>
+    <string name="ingredients">ingredients</string>
+    <string name="ingredient">ingredient</string>
+    <string name="transition_name">transitionName</string>
+    <string name="meal">meal</string>
 </resources>

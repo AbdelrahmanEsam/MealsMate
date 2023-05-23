@@ -75,6 +75,11 @@
 
 
 
+    <style name="MyDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">#52000000</item>
+    </style>
+
+
     
     
 </resources>

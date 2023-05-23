@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.foodplanner.MainActivity;
@@ -24,7 +25,6 @@ import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
 import com.example.utils.CustomFlexLayoutManager;
-import com.example.utils.OnMealClickListener;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
@@ -37,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MealsFragment extends Fragment implements OnMealClickListener {
+public class MealsFragment extends Fragment implements OnMealClickListener,OnMealAddClicked {
 
 
     private FragmentMealsBinding binding;
@@ -122,7 +122,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 MealsResponse myResponse =  response.body();
-                adapter.setMeals(myResponse.getMeals(),getContext(),MealsFragment.this);
+                adapter.setMeals(myResponse.getMeals(),getContext(),MealsFragment.this,MealsFragment.this);
             }
 
             @Override
@@ -150,7 +150,8 @@ public class MealsFragment extends Fragment implements OnMealClickListener {
     {
         FlexboxLayoutManager layoutManager = new CustomFlexLayoutManager(getContext());
         layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.SPACE_AROUND);
+        layoutManager.setJustifyContent(JustifyContent.SPACE_EVENLY);
+
         binding.mealsRecycler.setLayoutManager(layoutManager);
         binding.mealsRecycler.setAdapter(adapter);
         binding.mealsRecycler.setNestedScrollingEnabled(false);
@@ -158,10 +159,15 @@ public class MealsFragment extends Fragment implements OnMealClickListener {
     }
 
     @Override
-    public void onMealClickListener(Meal meal, String transitionName) {
+    public void onMealClickListener(Meal meal, ImageView transitionView) {
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(binding.mealImage, transitionName)
+                .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();
-        controller.navigate(MealsFragmentDirections.actionMealsFragmentToMealDetailsFragment(transitionName,meal),extras);
+        controller.navigate(MealsFragmentDirections.actionMealsFragmentToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
+    }
+
+    @Override
+    public void onMealAddClicked(Meal meal) {
+        controller.navigate(MealsFragmentDirections.actionMealsFragmentToAddDialogFragment());
     }
 }
