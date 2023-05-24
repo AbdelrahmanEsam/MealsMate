@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.data.remote.ApiProvider;
-import com.example.foodplanner.data.remote.RetrofitClient;
+import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
 import com.example.foodplanner.data.dto.AllCategoriesResponse;
 import com.example.foodplanner.data.dto.Area;
 import com.example.foodplanner.data.dto.AreaResponse;
@@ -62,71 +62,6 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-
-
-        Retrofit client = RetrofitClient.getClient();
-        client.create(ApiProvider.class).getAllCategories().enqueue(new Callback<AllCategoriesResponse>() {
-            @Override
-            public void onResponse(Call<AllCategoriesResponse> call, Response<AllCategoriesResponse> response) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    categoriesAdapter.setCards(response.body().getMealCategories().stream().map(MealCategory::getCategory).collect(Collectors.toList()), getContext());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AllCategoriesResponse> call, Throwable t) {
-
-            }
-        });
-
-
-        client.create(ApiProvider.class).getAllCountries().enqueue(new Callback<AreaResponse>() {
-            @Override
-            public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    countriesAdapter.setCards(response.body().getAreas().stream().map(Area::getArea).collect(Collectors.toList()), getContext());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AreaResponse> call, Throwable t) {
-
-            }
-        });
-
-
-        client.create(ApiProvider.class).getAllCategories().enqueue(new Callback<AllCategoriesResponse>() {
-            @Override
-            public void onResponse(Call<AllCategoriesResponse> call, Response<AllCategoriesResponse> response) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    categoriesAdapter.setCards(response.body().getMealCategories().stream().map(MealCategory::getCategory).collect(Collectors.toList()), getContext());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AllCategoriesResponse> call, Throwable t) {
-
-            }
-        });
-
-
-        client.create(ApiProvider.class).getAllIngredients().enqueue(new Callback<IngredientsResponse>() {
-            @Override
-            public void onResponse(Call<IngredientsResponse> call, Response<IngredientsResponse> response) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    ingredientsAdapter.setCards(response.body().getMeals().stream().map(MealsItem::getStrIngredient).collect(Collectors.toList()), getContext());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<IngredientsResponse> call, Throwable t) {
-
-            }
-        });
-
-
-
 
         setUpRecyclerView(countriesAdapter,binding.countriesRecyclerView);
         setUpRecyclerView(categoriesAdapter,binding.categoriesRecyclerView);

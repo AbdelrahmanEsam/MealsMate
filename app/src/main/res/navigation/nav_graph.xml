@@ -116,14 +116,13 @@
     </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.calendar.view.calendarFragment"
+        android:name="com.example.foodplanner.schedule.view.ScheduleFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
-    <fragment
-        android:id="@+id/favouritesMealsFragment"
-        android:name="com.example.foodplanner.favourites.view.FavouritesFragment"
-        android:label="fragment_favourites2"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_schedule" >
+        <action
+            android:id="@+id/action_scheduleFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.example.foodplanner.authenticationandaccount.presentation.forgetpassword.view.ResetPasswordFragment"
@@ -138,5 +137,9 @@
         android:id="@+id/addDialogFragment"
         android:name="com.example.foodplanner.meals.mainmealsfragment.view.AddDialogFragment"
         android:label="fragment_add_dialog"
-        tools:layout="@layout/fragment_add_dialog" />
+        tools:layout="@layout/fragment_add_dialog" >
+        <argument
+            android:name="meal"
+            app:argType="com.example.foodplanner.data.dto.Meal" />
+    </dialog>
 </navigation>

@@ -31,7 +31,6 @@ import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +75,7 @@ public class MealDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
        Meal meal =  getArguments().getParcelable(getString(R.string.meal));
+
         initViews(meal);
 
     }
@@ -90,10 +90,12 @@ public class MealDetailsFragment extends Fragment {
 
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         binding.youtubePlayerView.release();
     }
+
+
 
 
 
@@ -101,8 +103,9 @@ public class MealDetailsFragment extends Fragment {
     private void initViews(Meal meal)
     {
         String transitionName = getArguments().getString(getString(R.string.transition_name));
+        Log.d("transitionName",transitionName);
         binding.mealImage.setTransitionName(transitionName);
-
+        Log.d("transitionName",binding.mealImage.getTransitionName());
         setUpYoutubeVideo(meal.getStrYoutube());
 
         Glide.with(requireContext())
@@ -171,7 +174,8 @@ public class MealDetailsFragment extends Fragment {
     {
 
 
-        List<String> ingredients = Arrays.stream(meal.getClass().getMethods()).filter(method -> method.getName().toLowerCase().contains(getString(R.string.ingredient))).map(method -> {
+
+        List<String> ingredients = Arrays.stream(meal.getClass().getMethods()).filter(method -> method.getName().toLowerCase().contains(getString(R.string.ingredient))).filter(method -> method.getName().toLowerCase().contains("get")).map(method -> {
 
 
             String ingredientName   = null;

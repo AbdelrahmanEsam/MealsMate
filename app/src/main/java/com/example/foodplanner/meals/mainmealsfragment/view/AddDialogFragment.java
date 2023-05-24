@@ -5,17 +5,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
+import com.example.foodplanner.data.dto.Meal;
+import com.example.foodplanner.data.local.LocalDataSourceImp;
+import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
+import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.databinding.FragmentAddDialogBinding;
-import com.example.foodplanner.databinding.FragmentMealsBinding;
+import com.example.foodplanner.meals.mainmealsfragment.presenter.MealsFragmentPresenter;
 
 
 public class AddDialogFragment extends DialogFragment {
@@ -42,31 +47,39 @@ public class AddDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //controller = Navigation.findNavController(view);
+        controller = NavHostFragment.findNavController(this);
+        Meal meal =  getArguments().getParcelable(getString(R.string.meal));
         initViews();
-        clickListeners();
+        clickListeners(meal);
 
 
     }
 
-    private void clickListeners()
+    private void clickListeners(Meal meal)
     {
+        Log.d("addDialog",meal.getStrMeal());
         binding.addToBreakfast.getRoot().setOnClickListener(view1 -> {
+
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.breakfast);
+            dismiss();
 
         });
 
 
         binding.addToLaunch.getRoot().setOnClickListener(view1 -> {
-
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.launch);
+            dismiss();
         });
 
 
         binding.addToDinner.getRoot().setOnClickListener(view1 -> {
-
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.dinner);
+            dismiss();
         });
 
         binding.addToFavourites.getRoot().setOnClickListener(view1 -> {
-
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.favourites);
+            dismiss();
         });
     }
 

@@ -3,12 +3,236 @@ package com.example.foodplanner.data.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import com.example.foodplanner.data.dto.table.Breakfast;
+import com.example.foodplanner.data.dto.table.Dinner;
+import com.example.foodplanner.data.dto.table.Favourite;
+import com.example.foodplanner.data.dto.table.Launch;
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
+
+@Entity(tableName = "Meal")
 public class Meal implements Parcelable {
 
 	@SerializedName("strImageSource")
 	private String strImageSource;
+
+	public void setStrImageSource(String strImageSource) {
+		this.strImageSource = strImageSource;
+	}
+
+	public void setStrIngredient10(String strIngredient10) {
+		this.strIngredient10 = strIngredient10;
+	}
+
+	public void setStrIngredient12(String strIngredient12) {
+		this.strIngredient12 = strIngredient12;
+	}
+
+	public void setStrIngredient11(String strIngredient11) {
+		this.strIngredient11 = strIngredient11;
+	}
+
+	public void setStrIngredient14(String strIngredient14) {
+		this.strIngredient14 = strIngredient14;
+	}
+
+	public void setStrCategory(String strCategory) {
+		this.strCategory = strCategory;
+	}
+
+	public void setStrIngredient13(String strIngredient13) {
+		this.strIngredient13 = strIngredient13;
+	}
+
+	public void setStrIngredient16(String strIngredient16) {
+		this.strIngredient16 = strIngredient16;
+	}
+
+	public void setStrIngredient15(String strIngredient15) {
+		this.strIngredient15 = strIngredient15;
+	}
+
+	public void setStrIngredient18(String strIngredient18) {
+		this.strIngredient18 = strIngredient18;
+	}
+
+	public void setStrIngredient17(String strIngredient17) {
+		this.strIngredient17 = strIngredient17;
+	}
+
+	public void setStrArea(String strArea) {
+		this.strArea = strArea;
+	}
+
+	public void setStrCreativeCommonsConfirmed(Object strCreativeCommonsConfirmed) {
+		this.strCreativeCommonsConfirmed = strCreativeCommonsConfirmed;
+	}
+
+	public void setStrIngredient19(String strIngredient19) {
+		this.strIngredient19 = strIngredient19;
+	}
+
+	public void setStrTags(String strTags) {
+		this.strTags = strTags;
+	}
+
+	public void setIdMeal(String idMeal) {
+		this.idMeal = idMeal;
+	}
+
+	public void setStrInstructions(String strInstructions) {
+		this.strInstructions = strInstructions;
+	}
+
+	public void setStrIngredient1(String strIngredient1) {
+		this.strIngredient1 = strIngredient1;
+	}
+
+	public void setStrIngredient3(String strIngredient3) {
+		this.strIngredient3 = strIngredient3;
+	}
+
+	public void setStrIngredient2(String strIngredient2) {
+		this.strIngredient2 = strIngredient2;
+	}
+
+	public void setStrIngredient20(String strIngredient20) {
+		this.strIngredient20 = strIngredient20;
+	}
+
+	public void setStrIngredient5(String strIngredient5) {
+		this.strIngredient5 = strIngredient5;
+	}
+
+	public void setStrIngredient4(String strIngredient4) {
+		this.strIngredient4 = strIngredient4;
+	}
+
+	public void setStrIngredient7(String strIngredient7) {
+		this.strIngredient7 = strIngredient7;
+	}
+
+	public void setStrIngredient6(String strIngredient6) {
+		this.strIngredient6 = strIngredient6;
+	}
+
+	public void setStrIngredient9(String strIngredient9) {
+		this.strIngredient9 = strIngredient9;
+	}
+
+	public void setStrIngredient8(String strIngredient8) {
+		this.strIngredient8 = strIngredient8;
+	}
+
+	public void setStrMealThumb(String strMealThumb) {
+		this.strMealThumb = strMealThumb;
+	}
+
+	public void setStrMeasure20(String strMeasure20) {
+		this.strMeasure20 = strMeasure20;
+	}
+
+	public void setStrYoutube(String strYoutube) {
+		this.strYoutube = strYoutube;
+	}
+
+	public void setStrMeal(String strMeal) {
+		this.strMeal = strMeal;
+	}
+
+	public void setStrMeasure12(String strMeasure12) {
+		this.strMeasure12 = strMeasure12;
+	}
+
+	public void setStrMeasure13(String strMeasure13) {
+		this.strMeasure13 = strMeasure13;
+	}
+
+	public void setStrMeasure10(String strMeasure10) {
+		this.strMeasure10 = strMeasure10;
+	}
+
+	public void setStrMeasure11(String strMeasure11) {
+		this.strMeasure11 = strMeasure11;
+	}
+
+	public void setDateModified(Object dateModified) {
+		this.dateModified = dateModified;
+	}
+
+	public void setStrDrinkAlternate(Object strDrinkAlternate) {
+		this.strDrinkAlternate = strDrinkAlternate;
+	}
+
+	public void setStrSource(String strSource) {
+		this.strSource = strSource;
+	}
+
+	public void setStrMeasure9(String strMeasure9) {
+		this.strMeasure9 = strMeasure9;
+	}
+
+	public void setStrMeasure7(String strMeasure7) {
+		this.strMeasure7 = strMeasure7;
+	}
+
+	public void setStrMeasure8(String strMeasure8) {
+		this.strMeasure8 = strMeasure8;
+	}
+
+	public void setStrMeasure5(String strMeasure5) {
+		this.strMeasure5 = strMeasure5;
+	}
+
+	public void setStrMeasure6(String strMeasure6) {
+		this.strMeasure6 = strMeasure6;
+	}
+
+	public void setStrMeasure3(String strMeasure3) {
+		this.strMeasure3 = strMeasure3;
+	}
+
+	public void setStrMeasure4(String strMeasure4) {
+		this.strMeasure4 = strMeasure4;
+	}
+
+	public void setStrMeasure1(String strMeasure1) {
+		this.strMeasure1 = strMeasure1;
+	}
+
+	public void setStrMeasure18(String strMeasure18) {
+		this.strMeasure18 = strMeasure18;
+	}
+
+	public void setStrMeasure2(String strMeasure2) {
+		this.strMeasure2 = strMeasure2;
+	}
+
+	public void setStrMeasure19(String strMeasure19) {
+		this.strMeasure19 = strMeasure19;
+	}
+
+	public void setStrMeasure16(String strMeasure16) {
+		this.strMeasure16 = strMeasure16;
+	}
+
+	public void setStrMeasure17(String strMeasure17) {
+		this.strMeasure17 = strMeasure17;
+	}
+
+	public void setStrMeasure14(String strMeasure14) {
+		this.strMeasure14 = strMeasure14;
+	}
+
+	public void setStrMeasure15(String strMeasure15) {
+		this.strMeasure15 = strMeasure15;
+	}
 
 	@SerializedName("strIngredient10")
 	private String strIngredient10;
@@ -43,6 +267,7 @@ public class Meal implements Parcelable {
 	@SerializedName("strArea")
 	private String strArea;
 
+	@Ignore
 	@SerializedName("strCreativeCommonsConfirmed")
 	private Object strCreativeCommonsConfirmed;
 
@@ -52,6 +277,8 @@ public class Meal implements Parcelable {
 	@SerializedName("strTags")
 	private String strTags;
 
+	@PrimaryKey
+	@NotNull
 	@SerializedName("idMeal")
 	private String idMeal;
 
@@ -112,9 +339,11 @@ public class Meal implements Parcelable {
 	@SerializedName("strMeasure11")
 	private String strMeasure11;
 
+	@Ignore
 	@SerializedName("dateModified")
 	private Object dateModified;
 
+	@Ignore
 	@SerializedName("strDrinkAlternate")
 	private Object strDrinkAlternate;
 
@@ -379,6 +608,71 @@ public class Meal implements Parcelable {
 	}
 
 
+	public  Meal()
+	{
+
+	}
+
+
+
+	public Meal(String strImageSource, String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, Object strCreativeCommonsConfirmed, String strIngredient19, String strTags, @NotNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, Object dateModified, Object strDrinkAlternate, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14, String strMeasure15) {
+		this.strImageSource = strImageSource;
+		this.strIngredient10 = strIngredient10;
+		this.strIngredient12 = strIngredient12;
+		this.strIngredient11 = strIngredient11;
+		this.strIngredient14 = strIngredient14;
+		this.strCategory = strCategory;
+		this.strIngredient13 = strIngredient13;
+		this.strIngredient16 = strIngredient16;
+		this.strIngredient15 = strIngredient15;
+		this.strIngredient18 = strIngredient18;
+		this.strIngredient17 = strIngredient17;
+		this.strArea = strArea;
+		this.strCreativeCommonsConfirmed = strCreativeCommonsConfirmed;
+		this.strIngredient19 = strIngredient19;
+		this.strTags = strTags;
+		this.idMeal = idMeal;
+		this.strInstructions = strInstructions;
+		this.strIngredient1 = strIngredient1;
+		this.strIngredient3 = strIngredient3;
+		this.strIngredient2 = strIngredient2;
+		this.strIngredient20 = strIngredient20;
+		this.strIngredient5 = strIngredient5;
+		this.strIngredient4 = strIngredient4;
+		this.strIngredient7 = strIngredient7;
+		this.strIngredient6 = strIngredient6;
+		this.strIngredient9 = strIngredient9;
+		this.strIngredient8 = strIngredient8;
+		this.strMealThumb = strMealThumb;
+		this.strMeasure20 = strMeasure20;
+		this.strYoutube = strYoutube;
+		this.strMeal = strMeal;
+		this.strMeasure12 = strMeasure12;
+		this.strMeasure13 = strMeasure13;
+		this.strMeasure10 = strMeasure10;
+		this.strMeasure11 = strMeasure11;
+		this.dateModified = dateModified;
+		this.strDrinkAlternate = strDrinkAlternate;
+		this.strSource = strSource;
+		this.strMeasure9 = strMeasure9;
+		this.strMeasure7 = strMeasure7;
+		this.strMeasure8 = strMeasure8;
+		this.strMeasure5 = strMeasure5;
+		this.strMeasure6 = strMeasure6;
+		this.strMeasure3 = strMeasure3;
+		this.strMeasure4 = strMeasure4;
+		this.strMeasure1 = strMeasure1;
+		this.strMeasure18 = strMeasure18;
+		this.strMeasure2 = strMeasure2;
+		this.strMeasure19 = strMeasure19;
+		this.strMeasure16 = strMeasure16;
+		this.strMeasure17 = strMeasure17;
+		this.strMeasure14 = strMeasure14;
+		this.strMeasure15 = strMeasure15;
+	}
+
+
+	@Ignore
 	protected Meal(Parcel in) {
 		strImageSource = in.readString();
 		strIngredient10 = in.readString();
@@ -434,6 +728,7 @@ public class Meal implements Parcelable {
 		strMeasure14 = in.readString();
 		strMeasure15 = in.readString();
 	}
+
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
@@ -492,10 +787,12 @@ public class Meal implements Parcelable {
 		dest.writeString(strMeasure15);
 	}
 
+
 	@Override
 	public int describeContents() {
 		return 0;
 	}
+
 
 	public static final Creator<Meal> CREATOR = new Creator<Meal>() {
 		@Override
@@ -508,4 +805,62 @@ public class Meal implements Parcelable {
 			return new Meal[size];
 		}
 	};
+
+
+	public Breakfast mealToBreakfastMapper()
+	{
+		return new Breakfast(strImageSource,strIngredient10,strIngredient12,strIngredient11,strIngredient14
+				,strCategory,strIngredient13,strIngredient16,strIngredient15,strIngredient18,strIngredient17,
+				strArea,strCreativeCommonsConfirmed,strIngredient19,strTags,idMeal,strInstructions,strIngredient1
+				,strIngredient3,strIngredient2,strIngredient20,strIngredient5,strIngredient4,strIngredient7
+				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
+				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
+				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+				);
+	}
+
+
+	public Launch  mealToLaunchMapper()
+	{
+		return new Launch(strImageSource,strIngredient10,strIngredient12,strIngredient11,strIngredient14
+				,strCategory,strIngredient13,strIngredient16,strIngredient15,strIngredient18,strIngredient17,
+				strArea,strCreativeCommonsConfirmed,strIngredient19,strTags,idMeal,strInstructions,strIngredient1
+				,strIngredient3,strIngredient2,strIngredient20,strIngredient5,strIngredient4,strIngredient7
+				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
+				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
+				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+		);
+	}
+
+
+	public Dinner mealToDinnerMapper()
+	{
+		return new Dinner(strImageSource,strIngredient10,strIngredient12,strIngredient11,strIngredient14
+				,strCategory,strIngredient13,strIngredient16,strIngredient15,strIngredient18,strIngredient17,
+				strArea,strCreativeCommonsConfirmed,strIngredient19,strTags,idMeal,strInstructions,strIngredient1
+				,strIngredient3,strIngredient2,strIngredient20,strIngredient5,strIngredient4,strIngredient7
+				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
+				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
+				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+		);
+	}
+
+	public Favourite mealToFavouriteMapper()
+	{
+		return new Favourite(strImageSource,strIngredient10,strIngredient12,strIngredient11,strIngredient14
+				,strCategory,strIngredient13,strIngredient16,strIngredient15,strIngredient18,strIngredient17,
+				strArea,strCreativeCommonsConfirmed,strIngredient19,strTags,idMeal,strInstructions,strIngredient1
+				,strIngredient3,strIngredient2,strIngredient20,strIngredient5,strIngredient4,strIngredient7
+				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
+				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
+				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+		);
+	}
+
+
+
 }

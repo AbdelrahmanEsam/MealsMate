@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.calendar.view.calendarFragment"
+    tools:context=".schedule.view.ScheduleFragment"
     android:background="@color/gray"
     android:fillViewport="true">
 
@@ -131,6 +131,32 @@
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/dinnerTextView"
             tools:listitem="@layout/meal_calendar_item" />
+
+
+        <TextView
+            android:id="@+id/favouritesTextView"
+            style="@style/p2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="@string/favourites"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/dinnerRecycler" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/favouritesRecycler"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
+            app:layout_constraintTop_toBottomOf="@+id/favouritesTextView"
+            tools:listitem="@layout/schedule_item"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
