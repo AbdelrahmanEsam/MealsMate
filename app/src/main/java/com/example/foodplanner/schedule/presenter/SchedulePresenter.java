@@ -13,10 +13,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class CalendarFragmentPresenter {
+public class SchedulePresenter {
 
     private RepositoryInterface repository;
-    public CalendarFragmentPresenter(RepositoryInterface repository)
+    public SchedulePresenter(RepositoryInterface repository)
     {
         this.repository = repository;
 

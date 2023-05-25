@@ -48,9 +48,6 @@ public class Repository implements RepositoryInterface{
     }
 
 
-
-
-
     @Override
     public void getAllMealsResponse(AllMealsCallback networkCallback) {
         remote.getAllMealsResponse(networkCallback);

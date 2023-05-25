@@ -46,4 +46,5 @@
     <string name="ingredient">ingredient</string>
     <string name="transition_name">transitionName</string>
     <string name="meal">meal</string>
+    <string name="email">email</string>
 </resources>

@@ -60,7 +60,7 @@ public class ScheduleMealsAdapter extends RecyclerView.Adapter<ScheduleMealsAdap
 
         holder.layout.setOnClickListener(view -> {
 
-            listener.onMealClickListener(meal,holder.mealImage);
+            listener.onMealClicked(meal,holder.mealImage);
         });
     }
 

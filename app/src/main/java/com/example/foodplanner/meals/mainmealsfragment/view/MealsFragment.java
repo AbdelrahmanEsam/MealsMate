@@ -11,7 +11,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,36 +21,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
-import com.example.foodplanner.data.local.LocalDataSource;
 import com.example.foodplanner.data.local.LocalDataSourceImp;
-import com.example.foodplanner.data.remote.ApiProvider;
 import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.databinding.FragmentMealsBinding;
-import com.example.foodplanner.meals.mainmealsfragment.presenter.MealsFragmentPresenter;
+import com.example.foodplanner.meals.mainmealsfragment.presenter.MealsPresenter;
 import com.example.utils.CustomFlexLayoutManager;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MealsFragment extends Fragment implements OnMealClickListener,OnMealAddClicked, MealsFragmentViewInterface {
 
 
     private FragmentMealsBinding binding;
     private NavController controller;
-    private List<Meal> meals = new ArrayList<>();
     private MealsAdapter adapter  = new MealsAdapter();
-    private MealsFragmentPresenter presenter;
+    private MealsPresenter presenter;
     private Meal mealToAdd;
 
     @Override
@@ -72,7 +61,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-        presenter = new MealsFragmentPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
+        presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
         presenter.getAllMeals();
         presenter.getMealOfTheDay();
         addTypeObserver();
@@ -200,7 +189,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     }
 
     @Override
-    public void onMealClickListener(Meal meal, ImageView transitionView) {
+    public void onMealClicked(Meal meal, ImageView transitionView) {
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();

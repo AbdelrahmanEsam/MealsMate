@@ -19,7 +19,7 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesViewHolder>  {
+public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHolder>  {
 
     private List<Meal> meals = new ArrayList<>();
     private Context context;
@@ -30,12 +30,12 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
 
     @NonNull
     @Override
-    public RoutinesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RoutinesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
+    public MealsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MealsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RoutinesViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MealsViewHolder holder, int position) {
 
         holder.itemView.post(() -> {
          if(holder.itemView.getMeasuredWidth() < holder.itemView.getWidth() ){
@@ -59,7 +59,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
 
         holder.layout.setOnClickListener(view -> {
 
-            listener.onMealClickListener(meal,holder.mealImage);
+            listener.onMealClicked(meal,holder.mealImage);
         });
 
 
@@ -86,14 +86,14 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.RoutinesView
 
 
 
-    static class RoutinesViewHolder extends  RecyclerView.ViewHolder{
+    static class MealsViewHolder extends  RecyclerView.ViewHolder{
 
         TextView mealNameTextView,ingredientTextView;
         ImageView mealImage,addImageView;
         View layout;
         MaterialCardView cardView;
 
-        public RoutinesViewHolder(@NonNull View itemView) {
+        public MealsViewHolder(@NonNull View itemView) {
             super(itemView);
             layout = itemView;
 

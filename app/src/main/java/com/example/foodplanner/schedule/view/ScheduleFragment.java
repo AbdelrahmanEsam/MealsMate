@@ -29,17 +29,17 @@ import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
 import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.databinding.FragmentScheduleBinding;
 import com.example.foodplanner.meals.mainmealsfragment.view.OnMealClickListener;
-import com.example.foodplanner.schedule.presenter.CalendarFragmentPresenter;
+import com.example.foodplanner.schedule.presenter.SchedulePresenter;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 
-public class ScheduleFragment extends Fragment implements OnDayClicked, OnMealClickListener {
+public class ScheduleFragment extends Fragment implements OnDayListener, OnMealClickListener {
 
     private FragmentScheduleBinding binding;
     private NavController controller;
-    private CalendarFragmentPresenter presenter;
+    private SchedulePresenter presenter;
     private final ScheduleMealsAdapter breakfastAdapter = new ScheduleMealsAdapter();
     private final ScheduleMealsAdapter launchAdapter = new ScheduleMealsAdapter();
     private final ScheduleMealsAdapter dinnerAdapter = new ScheduleMealsAdapter();
@@ -65,7 +65,7 @@ public class ScheduleFragment extends Fragment implements OnDayClicked, OnMealCl
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
 
-        presenter = new CalendarFragmentPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
+        presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
 
 
         breakfastMealsObservers();
@@ -149,7 +149,7 @@ public class ScheduleFragment extends Fragment implements OnDayClicked, OnMealCl
     }
 
     @Override
-    public void onMealClickListener(Meal meal, ImageView transitionView) {
+    public void onMealClicked(Meal meal, ImageView transitionView) {
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();

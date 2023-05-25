@@ -2,7 +2,7 @@ package com.example.foodplanner.meals.mainmealsfragment.presenter;
 
 import com.example.foodplanner.data.dto.Meal;
 
-public interface MealsFragmentPresenterInterface {
+public interface MealsPresenterInterface {
 
     public void getAllMeals();
     public void getMealOfTheDay();

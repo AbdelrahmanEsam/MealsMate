@@ -27,7 +27,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nameInputLayout"
+            android:id="@+id/emailInputLayout"
             style="@style/textInputLayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
@@ -35,6 +35,7 @@
             android:paddingBottom="0dp"
             app:errorEnabled="true"
             app:hintEnabled="false"
+
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/backImageView">
@@ -44,15 +45,16 @@
                 style="@style/p3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/name"
+                android:hint="@string/email"
                 android:textColor="@color/black"
+                android:inputType="textEmailAddress"
                 android:textColorHint="@color/gray10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/searchInputLayout"
+            android:id="@+id/usernameInputLayout"
             style="@style/textInputLayout"
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
@@ -62,7 +64,7 @@
             app:hintEnabled="false"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/nameInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/emailInputLayout">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +90,7 @@
             app:hintEnabled="false"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-            app:layout_constraintTop_toBottomOf="@+id/searchInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/p3"

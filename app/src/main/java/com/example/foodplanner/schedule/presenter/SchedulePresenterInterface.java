@@ -1,6 +1,6 @@
 package com.example.foodplanner.schedule.presenter;
 
-public interface CalendarFragmentPresenterInterface {
+public interface SchedulePresenterInterface {
 
    void  getAllBreakfastMeals();
    void  getAllLaunchMeals();

@@ -1,7 +1,6 @@
 package com.example.foodplanner.meals.detailsfragment.view;
 
 
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
@@ -10,10 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebViewClient;
-import android.widget.MediaController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +26,7 @@ import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;

@@ -1,8 +1,6 @@
 package com.example.foodplanner.meals.mainmealsfragment.presenter;
 
-import com.example.foodplanner.data.dto.Day;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.local.LocalDataSource;
 import com.example.foodplanner.data.remote.AllMealsCallback;
 import com.example.foodplanner.data.remote.MealOfTheDayCallback;
 import com.example.foodplanner.data.repository.RepositoryInterface;
@@ -10,14 +8,13 @@ import com.example.foodplanner.meals.mainmealsfragment.view.MealsFragmentViewInt
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class MealsFragmentPresenter implements AllMealsCallback,MealsFragmentPresenterInterface, MealOfTheDayCallback {
+public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface, MealOfTheDayCallback {
 
     private RepositoryInterface repository;
     private MealsFragmentViewInterface viewInterface;
 
-    public MealsFragmentPresenter(RepositoryInterface repository, MealsFragmentViewInterface viewInterface)
+    public MealsPresenter(RepositoryInterface repository, MealsFragmentViewInterface viewInterface)
     {
 
         this.repository = repository;

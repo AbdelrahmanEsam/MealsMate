@@ -2,7 +2,7 @@ package com.example.foodplanner.schedule.view;
 
 import com.example.foodplanner.data.dto.Day;
 
-public interface OnDayClicked {
+public interface OnDayListener {
 
     void onDayClicked(Day day, int position);
 }

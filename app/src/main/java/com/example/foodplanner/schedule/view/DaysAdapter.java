@@ -1,7 +1,6 @@
 package com.example.foodplanner.schedule.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
 
     private List<Day> days = new ArrayList<>();
     private Context context;
-    private OnDayClicked listener;
+    private OnDayListener listener;
     private static  int selectedDay = 0 ;
 
 
@@ -47,7 +46,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
         return days.size();
     }
 
-    public void setDays(List<Day> days, Context context, OnDayClicked listener)
+    public void setDays(List<Day> days, Context context, OnDayListener listener)
     {
         this.listener = listener;
         this.context = context;
@@ -75,7 +74,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
         }
 
 
-        public void bind(Day day, OnDayClicked listener) {
+        public void bind(Day day, OnDayListener listener) {
 
             dayTextView.setText(day.getDayName());
             numberTextView.setText(day.getDayNumber());

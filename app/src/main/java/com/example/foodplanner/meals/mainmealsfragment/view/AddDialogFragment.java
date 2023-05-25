@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
@@ -16,11 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.local.LocalDataSourceImp;
-import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
-import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.databinding.FragmentAddDialogBinding;
-import com.example.foodplanner.meals.mainmealsfragment.presenter.MealsFragmentPresenter;
 
 
 public class AddDialogFragment extends DialogFragment {
