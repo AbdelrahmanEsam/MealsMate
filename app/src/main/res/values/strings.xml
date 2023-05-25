@@ -47,4 +47,10 @@
     <string name="transition_name">transitionName</string>
     <string name="meal">meal</string>
     <string name="email">email</string>
+    <string name="welcome">"welcome "</string>
+    <string name="something_went_wrong_with_your_credentials">something went wrong with your credentials</string>
+    <string name="please_insert_valid_email">please insert valid email</string>
+    <string name="your_password_should_have_number_capital_letter_small_letter_and_special_character">your password should have number, capital letter , small letter and special character</string>
+    <string name="login_as_guest">login as guest ?</string>
+    <string name="welcome_our_guest">welcome our guest</string>
 </resources>

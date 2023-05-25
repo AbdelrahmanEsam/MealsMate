@@ -2,8 +2,11 @@ package com.example.foodplanner.authenticationandaccount.presentation.signup.vie
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,10 +17,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.example.foodplanner.R;
+import com.example.foodplanner.authenticationandaccount.presentation.login.presenter.LoginPresenter;
+import com.example.foodplanner.authenticationandaccount.presentation.login.view.LoginFragmentDirections;
+import com.example.foodplanner.authenticationandaccount.presentation.signup.presenter.SignUpPresenter;
 import com.example.foodplanner.databinding.FragmentSignUpBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 
 public class SignUpFragment extends Fragment {
@@ -26,6 +42,22 @@ public class SignUpFragment extends Fragment {
     private FragmentSignUpBinding binding;
     private NavController controller ;
     private FirebaseAuth mAuth;
+
+    private SignUpPresenter presenter;
+
+    private final ActivityResultLauncher<Intent> signUpLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    signUpSuccess(account.getDisplayName());
+
+                } catch (ApiException e) {
+                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    enableInteraction();
+                }
+            });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,22 +79,88 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
+       presenter = new SignUpPresenter();
 
         binding.signIn.setOnClickListener(view1 -> controller.popBackStack());
         binding.backImageView.setOnClickListener(view1 ->     controller.popBackStack());
+        binding.googleButton.setOnClickListener(view1 -> signUpWithGoogle());
 
-        mAuth.createUserWithEmailAndPassword("email", "password")
+        binding.signUpButton.setOnClickListener(view1 -> signUp());
+
+
+    }
+
+    private void signUp()
+    {
+
+        disableInteraction();
+        String email = binding.emailInputLayout.getEditText().getText().toString();
+        String username = binding.usernameInputLayout.getEditText().getText().toString();
+        String password = binding.passwordInputLayout.getEditText().getText().toString();
+
+        if (!presenter.isValidEmail(email))
+        {
+            enableInteraction();
+            Toast.makeText(requireContext(), getString(R.string.please_insert_valid_email), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        if (!presenter.isValidPassword(password))
+        {
+            enableInteraction();
+            Toast.makeText(requireContext(), getString(R.string.your_password_should_have_number_capital_letter_small_letter_and_special_character), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        //updateUI(user);
+                        if (user != null) {
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(username).build();
+                            user.updateProfile(profileUpdates);
+                            signUpSuccess(username);
+                        }
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.d(TAG, "createUserWithEmail:failure", task.getException());
-
-                       // updateUI(null);
+                        Toast.makeText(requireContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                    enableInteraction();
                 });
+    }
 
+
+    private void signUpWithGoogle()
+    {
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(requireContext(),gso);
+        signUpLauncher.launch(client.getSignInIntent());
+    }
+
+    private void signUpSuccess(String username)
+    {
+        Toast.makeText(getContext(), getString(R.string.welcome)+" "+username, Toast.LENGTH_SHORT).show();
+        controller.popBackStack();
+    }
+
+
+    private void enableInteraction()
+    {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
+    }
+
+
+    private void disableInteraction()
+    {
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
     }
 }
