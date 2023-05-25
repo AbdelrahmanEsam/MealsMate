@@ -56,6 +56,10 @@
         <item name="boxStrokeWidth">1dp</item>
         <item name="boxStrokeColor">@color/gray10</item>
         <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/_10sdp</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/_10sdp</item>
+        <item name="boxCornerRadiusTopStart">@dimen/_10sdp</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/_10sdp</item>
 
     </style>
 

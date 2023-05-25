@@ -66,6 +66,7 @@
             android:paddingBottom="0dp"
             app:errorEnabled="true"
             app:hintEnabled="false"
+            app:passwordToggleEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/signInButton"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
