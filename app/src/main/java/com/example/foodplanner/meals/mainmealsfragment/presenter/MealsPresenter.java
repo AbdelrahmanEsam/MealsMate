@@ -62,19 +62,19 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
     @Override
     public void insertMealToLaunch(Meal meal) {
 
-        repository.insertMealToLaunch(meal);
+        repository.insertMealToLaunch(meal,getCurrentDay());
     }
 
     @Override
     public void insertMealToDinner(Meal meal) {
 
-        repository.insertMealToDinner(meal);
+        repository.insertMealToDinner(meal,getCurrentDay());
     }
 
     @Override
     public void insertMealToFavourite(Meal meal) {
 
-        repository.insertMealToFavourite(meal);
+        repository.insertMealToFavourite(meal,getCurrentDay());
     }
 
     @Override

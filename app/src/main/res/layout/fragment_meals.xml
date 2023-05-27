@@ -9,6 +9,8 @@
     android:fillViewport="true">
 
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -27,6 +29,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.025" />
+
+
 
         <TextView
             android:id="@+id/goodMorningTextView"
@@ -47,10 +51,10 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_25sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
             app:errorEnabled="true"
             app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/editImageView"
+            app:layout_constraintEnd_toStartOf="@+id/searchImageView"
 
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/goodMorningTextView"
@@ -78,20 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="goodMorningTextView,editImageView,searchInputLayout,searchImageView"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="237dp" />
+            app:constraint_referenced_ids="goodMorningTextView,searchInputLayout,searchImageView"
+            app:layout_constraintStart_toStartOf="parent" />
 
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/editImageView"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:scaleType="fitXY"
-            android:src="@drawable/edit"
-            app:layout_constraintBottom_toBottomOf="@+id/goodMorningTextView"
-            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
-            app:layout_constraintTop_toTopOf="@+id/goodMorningTextView" />
 
         <TextView
             android:id="@+id/dishOfTheDayTextView"
@@ -149,8 +142,7 @@
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="dishOfTheDayTextView,aboutTextView,mealImage,plusMealImage"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="237dp" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <View
@@ -171,7 +163,6 @@
             android:src="@drawable/tune"
             app:layout_constraintBottom_toBottomOf="@+id/searchInputLayout"
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
-            app:layout_constraintStart_toStartOf="@+id/editImageView"
             app:layout_constraintTop_toTopOf="@+id/searchInputLayout" />
 
 
@@ -199,6 +190,17 @@
             app:layout_constraintTop_toBottomOf="@+id/chooseYourMealTextView" />
 
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:indeterminateTint="@color/orange"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

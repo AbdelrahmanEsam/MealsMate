@@ -22,7 +22,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.RoutinesView
     @NonNull
     @Override
     public RoutinesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RoutinesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.routines_element,parent,false));
+        return new RoutinesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_element,parent,false));
     }
 
     @Override

@@ -1,5 +1,14 @@
 package com.example.foodplanner.meals.mainmealsfragment.view;
 
+import static com.example.foodplanner.R.*;
+import static com.example.foodplanner.R.id.*;
+import static com.example.foodplanner.R.id.byCategory;
+import static com.example.foodplanner.R.id.byName;
+import static com.example.foodplanner.R.string.breakfast;
+import static com.example.foodplanner.R.string.dinner;
+import static com.example.foodplanner.R.string.favourites;
+import static com.example.foodplanner.R.string.launch;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +20,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -31,17 +42,30 @@ import com.example.utils.CustomFlexLayoutManager;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class MealsFragment extends Fragment implements OnMealClickListener,OnMealAddClicked, MealsFragmentViewInterface {
 
 
     private FragmentMealsBinding binding;
     private NavController controller;
-    private MealsAdapter adapter  = new MealsAdapter();
+    private final MealsAdapter adapter  = new MealsAdapter();
     private MealsPresenter presenter;
     private Meal mealToAdd;
+
+    private FirebaseAuth mAuth ;
+
+    private FirebaseFirestore fireStore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,10 +84,14 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        disableInteraction();
+        mAuth = FirebaseAuth.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
         presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
         presenter.getAllMeals();
         presenter.getMealOfTheDay();
+        binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         addTypeObserver();
 
         binding.mealOfTheDayBarrier.setOnClickListener(view1 -> {
@@ -92,30 +120,41 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     {
         NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
         backStackEntry.getSavedStateHandle().getLiveData("type").observe(getViewLifecycleOwner(),type -> {
-
-
-
             if (type != null) {
                 switch ((Integer) type) {
-                    case R.string.breakfast: {
-                        presenter.insertMealToBreakfast(mealToAdd);
+                    case breakfast: {
+                        addRecordToFirebaseAndRoom(getString(breakfast),mealToAdd,(meal)-> {
+                            presenter.insertMealToBreakfast(meal);
+                            return null;
+
+                        });
                         break;
                     }
 
-                    case R.string.launch: {
-                        presenter.insertMealToLaunch(mealToAdd);
+                    case launch: {
+                        addRecordToFirebaseAndRoom(getString(launch),mealToAdd,(meal)-> {
+                            presenter.insertMealToLaunch(meal);
+                            return null;
+                        });
+                        break;
+                    }
+
+                    case dinner: {
+                        addRecordToFirebaseAndRoom(getString(dinner),mealToAdd,(meal)-> {
+                            presenter.insertMealToDinner(meal);
+                            return null;
+                        });
                         break;
 
                     }
 
-                    case R.string.dinner: {
-                        presenter.insertMealToDinner(mealToAdd);
-                        break;
+                    case favourites:{
+                            addRecordToFirebaseAndRoom(getString(favourites),mealToAdd,(meal)-> {
 
-                    }
+                                presenter.insertMealToFavourite(meal);
+                                return null;
 
-                    case R.string.favourites:{
-                        presenter.insertMealToFavourite(mealToAdd);
+                            });
                         break;
 
                     }
@@ -129,40 +168,52 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     }
 
 
+    private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
+    {
+
+        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                .addOnSuccessListener(documentReference -> {
+                       function.apply(mealToAdd);
+                    Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
     private void popUpMenuListener()
     {
 
         PopupMenu popupMenu = new PopupMenu(requireContext(), binding.searchImageView);
 
 
-        popupMenu.getMenuInflater().inflate(R.menu.search_popup_menu, popupMenu.getMenu());
+        popupMenu.getMenuInflater().inflate(menu.search_popup_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch (menuItem.getItemId())
             {
 
-                case  R.id.byName:{
-
-
-                    binding.searchInputLayout.getEditText().setText(R.string.type_in_your_favourite_dish);
+                case  byName:{
+                    binding.searchInputLayout.getEditText().setText(string.type_in_your_favourite_dish);
                     break;
                 }
 
-                case  R.id.byCategory:{
-                    binding.searchInputLayout.getEditText().setText(R.string.category_placeholder);
+                case  byCategory:{
+                    binding.searchInputLayout.getEditText().setText(string.category_placeholder);
 
-
-                    break;
-                }
-
-                case  R.id.byCountry:{
-                    binding.searchInputLayout.getEditText().setText(R.string.nationality_placeholder);
 
                     break;
                 }
 
+                case  byCountry:{
+                    binding.searchInputLayout.getEditText().setText(string.nationality_placeholder);
 
-                case  R.id.byIngredient:{
-                    binding.searchInputLayout.getEditText().setText(R.string.ingredient_placeholder);
+                    break;
+                }
+
+
+                case  byIngredient:{
+                    binding.searchInputLayout.getEditText().setText(string.ingredient_placeholder);
                     break;
                 }
 
@@ -173,6 +224,21 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
 
         popupMenu.show();
 
+    }
+
+
+    private void enableInteraction()
+    {
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        binding.progressBar.setVisibility(View.INVISIBLE);
+    }
+
+
+    private void disableInteraction()
+    {
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -204,6 +270,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
 
     @Override
     public void onResultSuccessAllMealsCallback(List<Meal> meals) {
+        enableInteraction();
         adapter.setMeals(meals,getContext(),MealsFragment.this,MealsFragment.this);
     }
 

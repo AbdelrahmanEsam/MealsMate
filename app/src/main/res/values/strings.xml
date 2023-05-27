@@ -23,7 +23,7 @@
     <string name="meals">meals</string>
     <string name="favourites">favourites</string>
     <string name="schedule">schedule</string>
-    <string name="good_morning">Good morning,</string>
+    <string name="good_morning">"Good morning "</string>
     <string name="dish_of_the_day">DISH OF THE DAY</string>
     <string name="type_in_your_favourite_dish">type in your favourite dish …</string>
     <string name="choose_your_meal">Meals for you</string>
@@ -53,4 +53,7 @@
     <string name="your_password_should_have_number_capital_letter_small_letter_and_special_character">your password should have number, capital letter , small letter and special character</string>
     <string name="login_as_guest">login as guest ?</string>
     <string name="welcome_our_guest">welcome our guest</string>
+    <string name="meal_added_successfully">meal added successfully</string>
+    <string name="users">users</string>
+    <string name="your_sync_is_done">your sync is done</string>
 </resources>

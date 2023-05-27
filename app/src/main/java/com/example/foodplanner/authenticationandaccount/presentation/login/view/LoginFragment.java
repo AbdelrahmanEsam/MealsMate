@@ -102,7 +102,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        mAuth.signOut();
     }
 
     private void userIsAuthenticated()

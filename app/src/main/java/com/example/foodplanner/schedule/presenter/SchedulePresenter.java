@@ -3,6 +3,7 @@ package com.example.foodplanner.schedule.presenter;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.data.dto.Day;
+import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.table.Breakfast;
 import com.example.foodplanner.data.dto.table.Dinner;
 import com.example.foodplanner.data.dto.table.Favourite;
@@ -13,13 +14,19 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class SchedulePresenter {
+public class SchedulePresenter implements  SchedulePresenterInterface{
 
     private RepositoryInterface repository;
     public SchedulePresenter(RepositoryInterface repository)
     {
         this.repository = repository;
 
+    }
+
+
+    public String  getCurrentDay()
+    {
+        return  String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
 
@@ -62,6 +69,28 @@ public class SchedulePresenter {
 
     public LiveData<List<Favourite>> getAllFavouriteMeals() {
        return repository.getAllFavouriteMeals();
+    }
+
+    @Override
+    public void syncDataWithCloud(List<Meal> breakfasts, List<Meal> launches, List<Meal> dinner, List<Meal> favourites) {
+        repository.clearAllTables();
+        breakfasts.forEach(meal -> {
+            repository.insertMealToBreakfast(meal,getCurrentDay());
+        });
+
+        launches.forEach(meal -> {
+            repository.insertMealToLaunch(meal,getCurrentDay());
+        });
+
+
+        dinner.forEach(meal -> {
+            repository.insertMealToDinner(meal,getCurrentDay());
+        });
+
+
+        favourites.forEach(meal -> {
+            repository.insertMealToFavourite(meal,getCurrentDay());
+        });
     }
 
 

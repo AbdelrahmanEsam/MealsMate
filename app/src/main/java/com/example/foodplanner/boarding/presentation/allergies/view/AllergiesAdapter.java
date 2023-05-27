@@ -24,7 +24,7 @@ public class AllergiesAdapter extends RecyclerView.Adapter<AllergiesAdapter.Alle
     @NonNull
     @Override
     public AllergiesAdapter.AllergiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AllergiesAdapter.AllergiesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.routines_element,parent,false));
+        return new AllergiesAdapter.AllergiesViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_element,parent,false));
     }
 
     @Override

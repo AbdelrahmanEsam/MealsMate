@@ -99,21 +99,21 @@ public class Repository implements RepositoryInterface{
     }
 
     @Override
-    public void insertMealToLaunch(Meal meal) {
+    public void insertMealToLaunch(Meal meal,String day) {
 
-        local.insertMealToLaunch(meal);
+        local.insertMealToLaunch(meal,day);
     }
 
     @Override
-    public void insertMealToDinner(Meal meal) {
+    public void insertMealToDinner(Meal meal,String day) {
 
-        local.insertMealToDinner(meal);
+        local.insertMealToDinner(meal,day);
     }
 
     @Override
-    public void insertMealToFavourite(Meal meal) {
+    public void insertMealToFavourite(Meal meal,String day) {
 
-        local.insertMealToFavourite(meal);
+        local.insertMealToFavourite(meal,day);
     }
 
     @Override
@@ -158,5 +158,10 @@ public class Repository implements RepositoryInterface{
     @Override
     public LiveData<List<Dinner>> getAllDinnerMeals() {
         return local.getAllDinnerMeals();
+    }
+
+    @Override
+    public void clearAllTables() {
+        local.clearAllTables();
     }
 }

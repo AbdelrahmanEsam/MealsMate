@@ -14,11 +14,11 @@ public interface LocalDataSource {
 
     public void insertMealToBreakfast(Meal meal,String day);
 
-    public void insertMealToLaunch(Meal meal);
+    public void insertMealToLaunch(Meal meal,String day);
 
-    public void insertMealToDinner(Meal meal);
+    public void insertMealToDinner(Meal meal,String day);
 
-    public void insertMealToFavourite(Meal meal);
+    public void insertMealToFavourite(Meal meal,String day);
 
 
     public void deleteMealFromBreakfast(Meal meal);
@@ -30,6 +30,8 @@ public interface LocalDataSource {
     public LiveData<List<Breakfast>> getAllBreakfastMeals();
     public LiveData<List<Launch>> getAllLaunchMeals();
     public LiveData<List<Dinner>> getAllDinnerMeals();
+
+    public  void clearAllTables();
 
 
 }

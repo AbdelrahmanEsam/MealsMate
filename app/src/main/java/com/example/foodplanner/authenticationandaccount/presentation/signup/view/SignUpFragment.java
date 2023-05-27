@@ -1,7 +1,5 @@
 package com.example.foodplanner.authenticationandaccount.presentation.signup.view;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +18,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.foodplanner.R;
-import com.example.foodplanner.authenticationandaccount.presentation.login.presenter.LoginPresenter;
-import com.example.foodplanner.authenticationandaccount.presentation.login.view.LoginFragmentDirections;
 import com.example.foodplanner.authenticationandaccount.presentation.signup.presenter.SignUpPresenter;
 import com.example.foodplanner.databinding.FragmentSignUpBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -34,6 +29,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SignUpFragment extends Fragment {
@@ -42,6 +43,8 @@ public class SignUpFragment extends Fragment {
     private FragmentSignUpBinding binding;
     private NavController controller ;
     private FirebaseAuth mAuth;
+
+    private FirebaseDatabase firebaseDatabase;
 
     private SignUpPresenter presenter;
 
@@ -79,6 +82,7 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
        presenter = new SignUpPresenter();
 
         binding.signIn.setOnClickListener(view1 -> controller.popBackStack());
@@ -122,13 +126,26 @@ public class SignUpFragment extends Fragment {
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(username).build();
                             user.updateProfile(profileUpdates);
-                            signUpSuccess(username);
+                            createNewCollectionForUser(user);
                         }
+
                     } else {
                         Toast.makeText(requireContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     enableInteraction();
                 });
+    }
+
+
+    private void createNewCollectionForUser(FirebaseUser user) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(getString(R.string.breakfast), new ArrayList<>());
+        data.put(getString(R.string.launch), new ArrayList<>());
+        data.put(getString(R.string.dinner), new ArrayList<>());
+        data.put(getString(R.string.favourites), new ArrayList<>());
+
+        firebaseDatabase.getReference(getString(R.string.users)).child(user.getUid()).setValue(null);
+        signUpSuccess(user.getDisplayName());
     }
 
 
@@ -152,14 +169,14 @@ public class SignUpFragment extends Fragment {
 
     private void enableInteraction()
     {
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
 
     private void disableInteraction()
     {
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         binding.progressBar.setVisibility(View.VISIBLE);
     }

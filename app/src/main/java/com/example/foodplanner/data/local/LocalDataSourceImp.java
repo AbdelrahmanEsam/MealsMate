@@ -45,48 +45,73 @@ public class LocalDataSourceImp implements  LocalDataSource{
 
     @Override
     public void insertMealToBreakfast(Meal meal,String day) {
-       Breakfast breakfast =  meal.mealToBreakfastMapper();
-       breakfast.setDay(day);
-        breakfastDao.insert(breakfast);
-    }
-
-    @Override
-    public void insertMealToLaunch(Meal meal) {
-
-        launchDao.insert(meal.mealToLaunchMapper());
-    }
-
-    @Override
-    public void insertMealToDinner(Meal meal) {
-
-        dinnerDao.insert(meal.mealToDinnerMapper());
+        new Thread(() -> {
+            Breakfast breakfast =  meal.mealToBreakfastMapper();
+            breakfast.setDay(day);
+            breakfastDao.insert(breakfast);
+        }).start();
 
     }
 
     @Override
-    public void insertMealToFavourite(Meal meal) {
+    public void insertMealToLaunch(Meal meal,String day) {
 
-        favouriteDao.insert(meal.mealToFavouriteMapper());
+        new Thread(() -> {
+            launchDao.insert(meal.mealToLaunchMapper());
+        }).start();
+
+    }
+
+    @Override
+    public void insertMealToDinner(Meal meal,String day) {
+        new Thread(() -> {
+            dinnerDao.insert(meal.mealToDinnerMapper());
+        }).start();
+
+
+    }
+
+    @Override
+    public void insertMealToFavourite(Meal meal,String day) {
+        new Thread(() -> {
+            favouriteDao.insert(meal.mealToFavouriteMapper());
+        }).start();
+
     }
 
     @Override
     public void deleteMealFromBreakfast(Meal meal) {
-        breakfastDao.delete(meal.mealToBreakfastMapper());
+
+        new Thread(() -> {
+            breakfastDao.delete(meal.mealToBreakfastMapper());
+        }).start();
     }
 
     @Override
     public void deleteMealFromLaunch(Meal meal) {
-        launchDao.delete(meal.mealToLaunchMapper());
+
+
+        new Thread(() -> {
+            launchDao.delete(meal.mealToLaunchMapper());
+        }).start();
     }
 
     @Override
     public void deleteMealFromDinner(Meal meal) {
-        dinnerDao.delete(meal.mealToDinnerMapper());
+
+
+        new Thread(() -> {
+            dinnerDao.delete(meal.mealToDinnerMapper());
+        }).start();
     }
 
     @Override
     public void deleteMealFromFavourite(Meal meal) {
-        favouriteDao.delete(meal.mealToFavouriteMapper());
+
+
+        new Thread(() -> {
+            favouriteDao.delete(meal.mealToFavouriteMapper());
+        }).start();
     }
 
     @Override
@@ -107,5 +132,12 @@ public class LocalDataSourceImp implements  LocalDataSource{
     @Override
     public LiveData<List<Dinner>> getAllDinnerMeals() {
         return  dinnerDao.getAllMeals();
+    }
+
+    @Override
+    public void clearAllTables() {
+        new Thread(() -> {
+            database.clearAllTables();
+        }).start();
     }
 }
