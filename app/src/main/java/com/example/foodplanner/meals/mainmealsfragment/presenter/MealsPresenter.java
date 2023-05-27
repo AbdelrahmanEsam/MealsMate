@@ -14,6 +14,28 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
     private RepositoryInterface repository;
     private MealsFragmentViewInterface viewInterface;
 
+
+    private Meal mealToAdd;
+
+    private Meal mealOfTheDay ;
+
+    public Meal getMealToAdd() {
+        return mealToAdd;
+    }
+
+    public Meal getMealOfTheDay()
+    {
+         return mealOfTheDay;
+    }
+
+    public void setMealToAdd(Meal mealToAdd) {
+        this.mealToAdd = mealToAdd;
+    }
+
+    public void setMealOfTheDay(Meal mealOfTheDay) {
+        this.mealOfTheDay = mealOfTheDay;
+    }
+
     public MealsPresenter(RepositoryInterface repository, MealsFragmentViewInterface viewInterface)
     {
 
@@ -50,7 +72,7 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
     }
 
     @Override
-    public void getMealOfTheDay() {
+    public void mealOfTheDayRequest() {
         repository.getMealOfTheDay(this);
     }
 
@@ -80,7 +102,8 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
     @Override
     public void onResultSuccessMealOfTheDayCallback(Meal meal) {
 
-        viewInterface.onResultSuccessOneMealsCallback(meal);
+        mealOfTheDay = meal;
+        viewInterface.onResultSuccessOneMealsCallback(mealOfTheDay);
     }
 
     @Override

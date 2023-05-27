@@ -75,22 +75,53 @@ public class SchedulePresenter implements  SchedulePresenterInterface{
     public void syncDataWithCloud(List<Meal> breakfasts, List<Meal> launches, List<Meal> dinner, List<Meal> favourites) {
         repository.clearAllTables();
         breakfasts.forEach(meal -> {
-            repository.insertMealToBreakfast(meal,getCurrentDay());
+            if (meal != null) {
+                repository.insertMealToBreakfast(meal, getCurrentDay());
+            }
         });
 
         launches.forEach(meal -> {
-            repository.insertMealToLaunch(meal,getCurrentDay());
+            if (meal != null) {
+                repository.insertMealToLaunch(meal, getCurrentDay());
+            }
         });
 
 
         dinner.forEach(meal -> {
-            repository.insertMealToDinner(meal,getCurrentDay());
+            if (meal != null) {
+                repository.insertMealToDinner(meal, getCurrentDay());
+            }
         });
 
 
         favourites.forEach(meal -> {
-            repository.insertMealToFavourite(meal,getCurrentDay());
+            if (meal != null) {
+                repository.insertMealToFavourite(meal, getCurrentDay());
+            }
         });
+    }
+
+    @Override
+    public void deleteBreakfastItem(Meal meal) {
+        repository.deleteMealFromBreakfast(meal);
+    }
+
+    @Override
+    public void deleteLaunchItem(Meal meal) {
+
+        repository.deleteMealFromLaunch(meal);
+    }
+
+    @Override
+    public void deleteDinnerItem(Meal meal) {
+
+        repository.deleteMealFromDinner(meal);
+    }
+
+    @Override
+    public void deleteFavouritesItem(Meal meal) {
+
+        repository.deleteMealFromFavourite(meal);
     }
 
 

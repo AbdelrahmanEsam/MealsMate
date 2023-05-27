@@ -8,7 +8,9 @@ import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
+import static com.example.foodplanner.R.string.meal;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -61,7 +63,6 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     private NavController controller;
     private final MealsAdapter adapter  = new MealsAdapter();
     private MealsPresenter presenter;
-    private Meal mealToAdd;
 
     private FirebaseAuth mAuth ;
 
@@ -81,21 +82,23 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     }
 
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        disableInteraction();
+
         mAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
         presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
         presenter.getAllMeals();
-        presenter.getMealOfTheDay();
+        presenter.mealOfTheDayRequest();
+        disableInteraction();
         binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         addTypeObserver();
 
-        binding.mealOfTheDayBarrier.setOnClickListener(view1 -> {
-            Toast.makeText(getContext(), "yes", Toast.LENGTH_SHORT).show();
+        binding.mealOfTheDayCardView.setOnClickListener(view1 -> {
+           navigateToDetails(presenter.getMealOfTheDay(),binding.mealImage);
         });
 
 
@@ -116,6 +119,8 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
         ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
+
+
     private void addTypeObserver()
     {
         NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
@@ -123,7 +128,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
             if (type != null) {
                 switch ((Integer) type) {
                     case breakfast: {
-                        addRecordToFirebaseAndRoom(getString(breakfast),mealToAdd,(meal)-> {
+                        addRecordToFirebaseAndRoom(getString(breakfast),presenter.getMealToAdd(),(meal)-> {
                             presenter.insertMealToBreakfast(meal);
                             return null;
 
@@ -132,7 +137,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
                     }
 
                     case launch: {
-                        addRecordToFirebaseAndRoom(getString(launch),mealToAdd,(meal)-> {
+                        addRecordToFirebaseAndRoom(getString(launch),presenter.getMealToAdd(),(meal)-> {
                             presenter.insertMealToLaunch(meal);
                             return null;
                         });
@@ -140,7 +145,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
                     }
 
                     case dinner: {
-                        addRecordToFirebaseAndRoom(getString(dinner),mealToAdd,(meal)-> {
+                        addRecordToFirebaseAndRoom(getString(dinner),presenter.getMealToAdd(),(meal)-> {
                             presenter.insertMealToDinner(meal);
                             return null;
                         });
@@ -149,7 +154,7 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
                     }
 
                     case favourites:{
-                            addRecordToFirebaseAndRoom(getString(favourites),mealToAdd,(meal)-> {
+                            addRecordToFirebaseAndRoom(getString(favourites),presenter.getMealToAdd(),(meal)-> {
 
                                 presenter.insertMealToFavourite(meal);
                                 return null;
@@ -173,8 +178,11 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
 
         fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
                 .addOnSuccessListener(documentReference -> {
-                       function.apply(mealToAdd);
-                    Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                    if (mealToAdd != null)
+                    {
+                        function.apply(mealToAdd);
+                        Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -254,8 +262,10 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
 
     }
 
-    @Override
-    public void onMealClicked(Meal meal, ImageView transitionView) {
+    private void navigateToDetails(Meal meal , View transitionView)
+    {
+
+
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();
@@ -263,8 +273,15 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
     }
 
     @Override
+    public void onMealClicked(Meal meal, ImageView transitionView) {
+
+        navigateToDetails(meal,transitionView);
+    }
+
+
+    @Override
     public void onMealAddClicked(Meal meal) {
-        mealToAdd = meal;
+        presenter.setMealToAdd(meal);
         controller.navigate(MealsFragmentDirections.actionMealsFragmentToAddDialogFragment(meal));
     }
 
@@ -281,13 +298,12 @@ public class MealsFragment extends Fragment implements OnMealClickListener,OnMea
 
     @Override
     public void onResultSuccessOneMealsCallback(Meal meal) {
-
+        enableInteraction();
         binding.aboutTextView.setText(meal.getStrMeal());
         Glide.with(requireContext())
                 .load(meal.getStrMealThumb())
                 .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
                 .into(binding.mealImage);
-
     }
 
     @Override

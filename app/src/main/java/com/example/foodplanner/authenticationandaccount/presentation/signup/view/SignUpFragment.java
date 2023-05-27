@@ -29,7 +29,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class SignUpFragment extends Fragment {
     private NavController controller ;
     private FirebaseAuth mAuth;
 
-    private FirebaseDatabase firebaseDatabase;
+    private FirebaseFirestore firebaseFirestore;
 
     private SignUpPresenter presenter;
 
@@ -82,7 +81,7 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
        presenter = new SignUpPresenter();
 
         binding.signIn.setOnClickListener(view1 -> controller.popBackStack());
@@ -144,8 +143,13 @@ public class SignUpFragment extends Fragment {
         data.put(getString(R.string.dinner), new ArrayList<>());
         data.put(getString(R.string.favourites), new ArrayList<>());
 
-        firebaseDatabase.getReference(getString(R.string.users)).child(user.getUid()).setValue(null);
-        signUpSuccess(user.getDisplayName());
+        firebaseFirestore.collection(getString(R.string.users)).document(user.getUid()).set(data)
+                .addOnSuccessListener(documentReference -> {
+                    signUpSuccess(user.getDisplayName());
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(),"error "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
 

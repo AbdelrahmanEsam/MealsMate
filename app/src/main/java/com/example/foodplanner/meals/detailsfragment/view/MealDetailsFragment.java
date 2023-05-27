@@ -1,6 +1,12 @@
 package com.example.foodplanner.meals.detailsfragment.view;
 
 
+import static com.example.foodplanner.R.id.byCategory;
+import static com.example.foodplanner.R.id.byCountry;
+import static com.example.foodplanner.R.id.byIngredient;
+import static com.example.foodplanner.R.id.byName;
+import static com.example.foodplanner.R.id.delete;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
@@ -13,6 +19,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -65,7 +72,6 @@ public class MealDetailsFragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -75,6 +81,9 @@ public class MealDetailsFragment extends Fragment {
         initViews(meal);
 
     }
+
+
+
 
 
     @Override
@@ -95,7 +104,6 @@ public class MealDetailsFragment extends Fragment {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initViews(Meal meal)
     {
         String transitionName = getArguments().getString(getString(R.string.transition_name));
@@ -155,7 +163,6 @@ public class MealDetailsFragment extends Fragment {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setIngredientsRecycler(Meal meal)
     {
         ingredientsAdapter.setIngredients(getIngredients(meal),getContext());
@@ -165,15 +172,9 @@ public class MealDetailsFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private List<String> getIngredients(Meal meal)
     {
-
-
-
         List<String> ingredients = Arrays.stream(meal.getClass().getMethods()).filter(method -> method.getName().toLowerCase().contains(getString(R.string.ingredient))).filter(method -> method.getName().toLowerCase().contains("get")).map(method -> {
-
-
             String ingredientName   = null;
             try {
                 ingredientName = (String) method.invoke(meal);

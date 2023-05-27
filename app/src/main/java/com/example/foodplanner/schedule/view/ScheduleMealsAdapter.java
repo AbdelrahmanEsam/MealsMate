@@ -23,9 +23,13 @@ import java.util.List;
 public class ScheduleMealsAdapter extends RecyclerView.Adapter<ScheduleMealsAdapter.CalenderMealViewHolder>  {
 
     private List<Meal> meals = new ArrayList<>();
-    private Context context;
-    private OnMealClickListener listener;
 
+    private int recyclerType;
+
+    private Context context;
+    private OnMealClickListener mealClickListener;
+
+    private OnMealLongClickedListener mealLongClickedListener;
 
 
     @NonNull
@@ -60,7 +64,12 @@ public class ScheduleMealsAdapter extends RecyclerView.Adapter<ScheduleMealsAdap
 
         holder.layout.setOnClickListener(view -> {
 
-            listener.onMealClicked(meal,holder.mealImage);
+            mealClickListener.onMealClicked(meal,holder.mealImage);
+        });
+
+        holder.layout.setOnLongClickListener(view -> {
+            mealLongClickedListener.onMealLongClicked(holder.layout,meal,recyclerType);
+            return  true;
         });
     }
 
@@ -69,9 +78,11 @@ public class ScheduleMealsAdapter extends RecyclerView.Adapter<ScheduleMealsAdap
         return meals.size();
     }
 
-    public void setMeals(List<Meal> meals, Context context, OnMealClickListener listener)
+    public void setMeals(List<Meal> meals, Context context, int recyclerType,OnMealClickListener mealClickListener,OnMealLongClickedListener mealLongClickedListener)
     {
-        this.listener = listener;
+        this.mealClickListener = mealClickListener;
+        this.mealLongClickedListener = mealLongClickedListener;
+        this.recyclerType = recyclerType;
         this.context = context;
         this.meals = meals;
         notifyDataSetChanged();

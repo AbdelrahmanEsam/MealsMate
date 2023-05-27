@@ -15,11 +15,11 @@ import java.util.List;
 public class LocalDataSourceImp implements  LocalDataSource{
 
     private static  LocalDataSourceImp localDataSourceImp;
-    private MealsDatabase database;
-    private  BreakfastDao breakfastDao ;
-    private  LaunchDao launchDao ;
-    private  DinnerDao dinnerDao ;
-    private  FavouriteDao favouriteDao ;
+    private final MealsDatabase database;
+    private final BreakfastDao breakfastDao ;
+    private final LaunchDao launchDao ;
+    private final DinnerDao dinnerDao ;
+    private final FavouriteDao favouriteDao ;
     private LocalDataSourceImp(Context context)
     {
         database = MealsDatabase.getInstance(context);
@@ -46,9 +46,9 @@ public class LocalDataSourceImp implements  LocalDataSource{
     @Override
     public void insertMealToBreakfast(Meal meal,String day) {
         new Thread(() -> {
-            Breakfast breakfast =  meal.mealToBreakfastMapper();
-            breakfast.setDay(day);
-            breakfastDao.insert(breakfast);
+                Breakfast breakfast = meal.mealToBreakfastMapper();
+                breakfast.setDay(day);
+                breakfastDao.insert(breakfast);
         }).start();
 
     }
@@ -57,7 +57,7 @@ public class LocalDataSourceImp implements  LocalDataSource{
     public void insertMealToLaunch(Meal meal,String day) {
 
         new Thread(() -> {
-            launchDao.insert(meal.mealToLaunchMapper());
+                launchDao.insert(meal.mealToLaunchMapper());
         }).start();
 
     }
@@ -65,7 +65,7 @@ public class LocalDataSourceImp implements  LocalDataSource{
     @Override
     public void insertMealToDinner(Meal meal,String day) {
         new Thread(() -> {
-            dinnerDao.insert(meal.mealToDinnerMapper());
+                dinnerDao.insert(meal.mealToDinnerMapper());
         }).start();
 
 

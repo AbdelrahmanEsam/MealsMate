@@ -39,7 +39,7 @@
     <string name="nationality_placeholder">what is your nationality ? … </string>
     <string name="category_placeholder">category of your meal ? …</string>
     <string name="ingredient_placeholder">your favourite ingredient ? …</string>
-    <string name="breakfast">Breakfast</string>
+    <string name="breakfast">breakfast</string>
     <string name="launch">launch</string>
     <string name="dinner">dinner</string>
     <string name="ingredients">ingredients</string>
@@ -56,4 +56,6 @@
     <string name="meal_added_successfully">meal added successfully</string>
     <string name="users">users</string>
     <string name="your_sync_is_done">your sync is done</string>
+    <string name="delete">delete</string>
+    <string name="meal_is_deleted_successfully">meal is deleted Successfully</string>
 </resources>

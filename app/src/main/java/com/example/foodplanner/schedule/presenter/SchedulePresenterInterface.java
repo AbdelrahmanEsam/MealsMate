@@ -18,4 +18,9 @@ public interface SchedulePresenterInterface {
    LiveData<List<Favourite>>  getAllFavouriteMeals();
 
    void syncDataWithCloud(List<Meal> breakfasts,List<Meal> launches,List<Meal> dinners,List<Meal> favourites);
+
+   void deleteBreakfastItem(Meal meal);
+   void deleteLaunchItem(Meal meal);
+   void deleteDinnerItem(Meal meal);
+   void deleteFavouritesItem(Meal meal);
 }
