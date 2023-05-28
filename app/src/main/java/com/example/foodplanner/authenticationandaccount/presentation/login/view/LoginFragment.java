@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.foodplanner.MainActivity;
 import com.example.foodplanner.R;
 import com.example.foodplanner.authenticationandaccount.presentation.login.presenter.LoginPresenter;
 import com.example.foodplanner.authenticationandaccount.presentation.login.presenter.LoginPresenterInterface;
@@ -91,7 +92,7 @@ public class LoginFragment extends Fragment {
         });
 
         binding.asGuest.setOnClickListener(view1 -> {
-            loginSuccess(getString(R.string.welcome_our_guest));
+            loginSuccess(getString(R.string.guest));
         });
 
 

@@ -23,8 +23,8 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHol
 
     private List<Meal> meals = new ArrayList<>();
     private Context context;
-    private  OnMealClickListener listener;
-    private  OnMealAddClicked addListener;
+    private  MealsFragmentViewInterface listener;
+
 
 
 
@@ -64,7 +64,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHol
 
 
         holder.addImageView.setOnClickListener(view -> {
-            addListener.onMealAddClicked(meal);
+            listener.onMealAddClicked(meal);
         });
 
     }
@@ -74,10 +74,9 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHol
         return meals.size();
     }
 
-    public void setMeals(List<Meal> meals, Context context, OnMealClickListener listener,OnMealAddClicked addListener)
+    public void setMeals(List<Meal> meals, Context context, MealsFragmentViewInterface listener)
     {
         this.listener = listener;
-        this.addListener = addListener;
         this.context = context;
         this.meals = meals;
         notifyDataSetChanged();

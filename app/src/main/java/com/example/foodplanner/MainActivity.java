@@ -9,6 +9,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.foodplanner.databinding.ActivityMainBinding;
 
@@ -23,8 +25,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
        NavHostFragment navHostFragment =  ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment));
        NavigationUI.setupWithNavController(binding.bottomNavigationView,navHostFragment.getNavController());
-
-
-
     }
 }

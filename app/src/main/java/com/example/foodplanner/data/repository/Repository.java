@@ -20,8 +20,8 @@ import java.util.List;
 
 public class Repository implements RepositoryInterface{
 
-    private RemoteDataSource remote;
-    private LocalDataSource local;
+    private final RemoteDataSource remote;
+    private final LocalDataSource local;
     private static Repository instance ;
 
     private Repository(RemoteDataSource remote, LocalDataSource local)
@@ -35,8 +35,6 @@ public class Repository implements RepositoryInterface{
 
     public  static synchronized Repository getInstance(RemoteDataSource remote,LocalDataSource local)
     {
-
-
 
         if (instance == null)
         {
@@ -80,17 +78,17 @@ public class Repository implements RepositoryInterface{
 
     @Override
     public AllCategoriesResponse getAllCategories() {
-        return null;
+        return remote.getAllCategories();
     }
 
     @Override
     public AreaResponse getAllCountries() {
-        return null;
+        return remote.getAllCountries();
     }
 
     @Override
     public IngredientsResponse getAllIngredients() {
-        return null;
+        return remote.getAllIngredients();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals;
+package com.example.foodplanner.meals.search.searchselection.view;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.foodplanner.data.dto.IngredientsResponse;
 import com.example.foodplanner.data.dto.MealCategory;
 import com.example.foodplanner.data.dto.MealsItem;
 import com.example.foodplanner.databinding.FragmentSearchBinding;
+import com.example.foodplanner.meals.detailsfragment.view.IngredientsAdapter;
 import com.example.utils.CardsAdapter;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -42,7 +44,7 @@ public class SearchFragment extends Fragment {
     private NavController controller;
     CardsAdapter countriesAdapter = new CardsAdapter();
     CardsAdapter categoriesAdapter = new CardsAdapter();
-    CardsAdapter ingredientsAdapter = new CardsAdapter();
+    IngredientsAdapter ingredientsAdapter = new IngredientsAdapter();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,6 @@ public class SearchFragment extends Fragment {
         setUpRecyclerView(countriesAdapter,binding.countriesRecyclerView);
         setUpRecyclerView(categoriesAdapter,binding.categoriesRecyclerView);
         setUpRecyclerView(ingredientsAdapter,binding.ingredientsRecyclerView);
-
     }
 
 
@@ -80,7 +81,7 @@ public class SearchFragment extends Fragment {
 
 
 
-    private void setUpRecyclerView(CardsAdapter adapter, RecyclerView recyclerView)
+    private void setUpRecyclerView(Adapter adapter, RecyclerView recyclerView)
     {
        recyclerView.setLayoutManager(setUpLayoutManager());
         recyclerView.setAdapter(adapter);

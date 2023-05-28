@@ -1,13 +1,11 @@
 package com.example.foodplanner.meals.detailsfragment.view;
 
 
-import static com.example.foodplanner.R.id.byCategory;
-import static com.example.foodplanner.R.id.byCountry;
-import static com.example.foodplanner.R.id.byIngredient;
-import static com.example.foodplanner.R.id.byName;
-import static com.example.foodplanner.R.id.delete;
+import static com.example.foodplanner.R.string.breakfast;
+import static com.example.foodplanner.R.string.dinner;
+import static com.example.foodplanner.R.string.favourites;
+import static com.example.foodplanner.R.string.launch;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -15,12 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,15 +26,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.MainActivity;
+import com.example.foodplanner.NavGraphDirections;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
+import com.example.foodplanner.data.local.LocalDataSourceImp;
+import com.example.foodplanner.data.remote.RemoteDataSourceImpl;
+import com.example.foodplanner.data.repository.Repository;
 import com.example.foodplanner.databinding.FragmentMealDetailsBinding;
+import com.example.foodplanner.meals.detailsfragment.presenter.MealDetailsPresenter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -49,6 +56,14 @@ public class MealDetailsFragment extends Fragment {
     private FragmentMealDetailsBinding binding;
     private NavController controller;
     IngredientsAdapter ingredientsAdapter = new IngredientsAdapter();
+
+    private FirebaseAuth mAuth ;
+
+    private FirebaseFirestore fireStore;
+
+    private MealDetailsPresenter presenter ;
+
+
 
 
 
@@ -76,10 +91,101 @@ public class MealDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
-       Meal meal =  getArguments().getParcelable(getString(R.string.meal));
+        initPresenterAndSendRequests(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
+        initViews(presenter.getMealToAdd());
+        binding.addToCacheFloatingButton.setOnClickListener(view1 -> {
+            controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
+            addTypeObserver();
+        });
 
-        initViews(meal);
+    }
 
+    private void initPresenterAndSendRequests(Bundle savedInstanceState)
+    {
+        if (savedInstanceState != null)
+        {
+
+            presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
+
+        }else{
+            Meal meal =  getArguments().getParcelable(getString(R.string.meal));
+            presenter = new MealDetailsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
+            presenter.setMealToAdd(meal);
+        }
+    }
+
+
+    private void addTypeObserver()
+    {
+        NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+
+        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(), type -> {
+            if (type != null) {
+                switch ((Integer) type) {
+                    case breakfast: {
+                        addRecordToFirebaseAndRoom(getString(breakfast),presenter.getMealToAdd(),(meal)-> {
+                            presenter.insertMealToBreakfast(meal);
+                            return null;
+                        });
+                        break;
+                    }
+
+                    case launch: {
+                        addRecordToFirebaseAndRoom(getString(launch),presenter.getMealToAdd(),(meal)-> {
+                            presenter.insertMealToLaunch(meal);
+                            return null;
+                        });
+                        break;
+                    }
+
+                    case dinner: {
+                        addRecordToFirebaseAndRoom(getString(dinner),presenter.getMealToAdd(),(meal)-> {
+                            presenter.insertMealToDinner(meal);
+
+                            return null;
+                        });
+                        break;
+
+                    }
+
+                    case favourites:{
+                        addRecordToFirebaseAndRoom(getString(favourites),presenter.getMealToAdd(),(meal)-> {
+
+                            presenter.insertMealToFavourite(meal);
+
+                            return null;
+
+                        });
+                        break;
+
+                    }
+                }
+
+            }
+
+
+        });
+
+
+
+    }
+
+    private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
+    {
+
+        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                .addOnSuccessListener(documentReference -> {
+                    if (mealToAdd != null)
+                    {
+                        function.apply(mealToAdd);
+                        Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
 
@@ -101,8 +207,11 @@ public class MealDetailsFragment extends Fragment {
     }
 
 
-
-
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(R.string.presenter),presenter);
+    }
 
     private void initViews(Meal meal)
     {
@@ -188,4 +297,6 @@ public class MealDetailsFragment extends Fragment {
         ingredients.removeIf(String::isEmpty);
         return ingredients;
     }
+
+
 }

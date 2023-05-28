@@ -1,6 +1,7 @@
 package com.example.foodplanner.schedule.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
 
     public void setDays(List<Day> days, Context context, OnDayListener listener)
     {
+        Log.d("day",days.size()+"");
         this.listener = listener;
         this.context = context;
         this.days = days;

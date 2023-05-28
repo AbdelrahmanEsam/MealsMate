@@ -5,6 +5,10 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
 
+    <action
+        android:id="@+id/action_to_addDialogFragment"
+        app:destination="@id/addDialogFragment" />
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.foodplanner.SplashFragment"
@@ -16,6 +20,9 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/nav_graph"
             app:destination="@id/loginFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -92,13 +99,10 @@
         <action
             android:id="@+id/action_mealsFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
-        <action
-            android:id="@+id/action_mealsFragment_to_addDialogFragment"
-            app:destination="@id/addDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.foodplanner.meals.SearchFragment"
+        android:name="com.example.foodplanner.meals.search.searchselection.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment

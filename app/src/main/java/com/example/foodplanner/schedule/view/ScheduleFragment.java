@@ -1,12 +1,12 @@
 package com.example.foodplanner.schedule.view;
 
+import static androidx.recyclerview.widget.RecyclerView.*;
 import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,14 +86,12 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
 
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
-        presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
-
-
+        initPresenterAndSendRequests(savedInstanceState);
+        setDaysAdapter();
         breakfastMealsObservers();
         launchMealsObservers();
         dinnerMealsObservers();
         favouritesMealsObservers();
-        setDaysAdapter();
         binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         binding.syncLottie.setOnClickListener(view1 -> {
             binding.syncLottie.setRepeatMode(LottieDrawable.RESTART);
@@ -108,6 +106,22 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         setRecyclerView(binding.favouritesRecycler,favouriteAdapter);
 
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(R.string.presenter),presenter);
+    }
+
+    private void initPresenterAndSendRequests(Bundle savedInstanceState)
+    {
+        if (savedInstanceState != null)
+        {
+            presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
+        }else{
+            presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
+        }
     }
 
 
@@ -190,36 +204,19 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void syncCloudWithCache()
     {
 
+        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
 
-        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-
-
-                       FirebaseMealsResponse cloudMeals = document.toObject(FirebaseMealsResponse.class);
-                        presenter.syncDataWithCloud(cloudMeals.getBreakfasts(),cloudMeals.getLaunches()
-                                ,cloudMeals.getDinners(),cloudMeals.getFavourites());
-
-
-
-
-
-                    }
-                }else{
-                    Log.d("breakfast","hhhh");
+                   FirebaseMealsResponse cloudMeals = document.toObject(FirebaseMealsResponse.class);
+                    presenter.syncDataWithCloud(cloudMeals.getBreakfasts(),cloudMeals.getLaunches()
+                            ,cloudMeals.getDinners(),cloudMeals.getFavourites());
                 }
             }
         }).addOnFailureListener(e -> {
-            Log.d("breakfast",e.getMessage());
+            Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         });
-
-
-
-
 
     }
 
@@ -227,15 +224,14 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void breakfastMealsObservers()
     {
         presenter.getAllBreakfastMeals().observe(getViewLifecycleOwner(),breakfasts -> {
+            daysRecyclerVisibility();
             if (!breakfasts.isEmpty())
             {
-                binding.breakFastTextView.setVisibility(View.VISIBLE);
-                binding.breakFastRecycler.setVisibility(View.VISIBLE);
-
+                setRecyclerVisibility(binding.breakFastTextView,binding.breakFastRecycler,View.VISIBLE);
             }else
             {
-                binding.breakFastTextView.setVisibility(View.GONE);
-                binding.breakFastRecycler.setVisibility(View.GONE);
+
+                setRecyclerVisibility(binding.breakFastTextView,binding.breakFastRecycler,View.GONE);
             }
             breakfastAdapter.setMeals(breakfasts.stream().map(Breakfast::breakFastToMealMapper).collect(Collectors.toList()), getContext(),breakfast,this,this);
         });
@@ -246,14 +242,12 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void launchMealsObservers()
     {
         presenter.getAllLaunchMeals().observe(getViewLifecycleOwner(),launches -> {
-
+            daysRecyclerVisibility();
             if (!launches.isEmpty())
             {
-                binding.launchTextView.setVisibility(View.VISIBLE);
-                binding.launchRecycler.setVisibility(View.VISIBLE);
+                setRecyclerVisibility(binding.launchTextView,binding.launchRecycler,View.VISIBLE);
             }else {
-                binding.launchTextView.setVisibility(View.GONE);
-                binding.launchRecycler.setVisibility(View.GONE);
+                setRecyclerVisibility(binding.launchTextView,binding.launchRecycler,View.GONE);
             }
             launchAdapter.setMeals(launches.stream().map(Launch::launchToMealMapper).collect(Collectors.toList()), getContext(),launch,this,this);
         });
@@ -264,13 +258,13 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void dinnerMealsObservers()
     {
         presenter.getAllDinnerMeals().observe(getViewLifecycleOwner(),dinners -> {
+            daysRecyclerVisibility();
             if (!dinners.isEmpty())
             {
-                binding.dinnerTextView.setVisibility(View.VISIBLE);
-                binding.dinnerRecycler.setVisibility(View.VISIBLE);
+
+                setRecyclerVisibility(binding.dinnerTextView,binding.dinnerRecycler,View.VISIBLE);
             }else {
-                binding.dinnerTextView.setVisibility(View.GONE);
-                binding.dinnerRecycler.setVisibility(View.GONE);
+                setRecyclerVisibility(binding.dinnerTextView,binding.dinnerRecycler,View.GONE);
             }
             dinnerAdapter.setMeals(dinners.stream().map(Dinner::dinnerToMealMapper).collect(Collectors.toList()), getContext(),dinner,this,this);
 
@@ -279,17 +273,17 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     }
 
 
+
+
     private void favouritesMealsObservers()
     {
         presenter.getAllFavouriteMeals().observe(getViewLifecycleOwner(),favourites -> {
-
+            daysRecyclerVisibility();
             if (!favourites.isEmpty())
             {
-                binding.favouritesTextView.setVisibility(View.VISIBLE);
-                binding.favouritesRecycler.setVisibility(View.VISIBLE);
+                setRecyclerVisibility(binding.favouritesTextView,binding.favouritesRecycler,View.VISIBLE);
             }else {
-                binding.favouritesTextView.setVisibility(View.GONE);
-                binding.favouritesRecycler.setVisibility(View.GONE);
+                setRecyclerVisibility(binding.favouritesTextView,binding.favouritesRecycler,View.GONE);
             }
             favouriteAdapter.setMeals(favourites.stream().map(Favourite::favouriteToMealMapper).collect(Collectors.toList()), getContext(), R.string.favourites,this,this);
 
@@ -298,7 +292,14 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     }
 
 
-    private void setRecyclerView(RecyclerView recyclerView,RecyclerView.Adapter adapter)
+    private void setRecyclerVisibility(View recyclerTitle ,View recycler, int visible)
+    {
+
+        recyclerTitle.setVisibility(visible);
+        recycler.setVisibility(visible);
+    }
+
+    private void setRecyclerView(RecyclerView recyclerView, Adapter adapter)
     {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(layoutManager);
@@ -309,6 +310,20 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void setDaysAdapter()
     {
         daysAdapter.setDays(Arrays.asList(presenter.getWeekDays()),getContext(),this);
+
+    }
+
+    private void daysRecyclerVisibility()
+    {
+        if (binding.breakFastRecycler.getVisibility() ==  VISIBLE || binding.launchRecycler.getVisibility() == VISIBLE
+                || binding.dinnerRecycler.getVisibility() == VISIBLE || binding.favouritesRecycler .getVisibility() == VISIBLE)
+        {
+            binding.daysRecycler.setVisibility(View.VISIBLE);
+        }else{
+
+            binding.daysRecycler.setVisibility(View.GONE);
+        }
+
     }
 
 
@@ -319,7 +334,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     @Override
     public void onDayClicked(Day day,int prevPosition) {
 
-        Log.d("position",prevPosition+"");
         daysAdapter.notifyDataSetChanged();
     }
 

@@ -10,7 +10,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".meals.SearchFragment">
+    tools:context=".meals.search.searchselection.view.SearchFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vGuideline97.5percent"
@@ -47,7 +47,6 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/select_country"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
         app:layout_constraintStart_toStartOf="@+id/filtersTextView"
         app:layout_constraintTop_toBottomOf="@+id/filtersTextView" />
 
@@ -70,19 +69,23 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/select_ingredient"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
         app:layout_constraintStart_toStartOf="@+id/filtersTextView"
         app:layout_constraintTop_toBottomOf="@+id/countriesRecyclerView" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginVertical="@dimen/_25sdp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/ingredients_item"
         app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredientsTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsTextView"
+        />
 
 
     <TextView
@@ -93,7 +96,6 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/select_category"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
         app:layout_constraintStart_toStartOf="@+id/filtersTextView"
         app:layout_constraintTop_toBottomOf="@+id/ingredientsRecyclerView" />
 
@@ -101,11 +103,17 @@
         android:id="@+id/categoriesRecyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginVertical="@dimen/_25sdp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/ingredients_item"
         app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryTextView"
+        />
+
+
 
 
 

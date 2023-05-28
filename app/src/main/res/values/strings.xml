@@ -58,4 +58,9 @@
     <string name="your_sync_is_done">your sync is done</string>
     <string name="delete">delete</string>
     <string name="meal_is_deleted_successfully">meal is deleted Successfully</string>
+    <string name="type">type</string>
+    <string name="usertype">userType</string>
+    <string name="guest">guest</string>
+    <string name="this_feature_is_for_registered_users_only_please_login_to_use_it">this feature is for registered users only please login to use it</string>
+    <string name="presenter">presenter</string>
 </resources>

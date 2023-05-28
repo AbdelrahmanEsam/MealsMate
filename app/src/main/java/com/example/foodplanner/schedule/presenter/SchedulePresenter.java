@@ -1,5 +1,9 @@
 package com.example.foodplanner.schedule.presenter;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplanner.data.dto.Day;
@@ -14,43 +18,76 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class SchedulePresenter implements  SchedulePresenterInterface{
+public class SchedulePresenter implements  SchedulePresenterInterface, Parcelable {
 
-    private RepositoryInterface repository;
+    private final RepositoryInterface repository;
+
+    private  Day[] days;
     public SchedulePresenter(RepositoryInterface repository)
     {
         this.repository = repository;
-
     }
 
 
-    public String  getCurrentDay()
-    {
-        return  String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-    }
+
 
 
     public Day[] getWeekDays()
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        if (days == null){
+            days = new Day[7];
+            Log.d("day","not lol");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            for (int i = 0; i < 7; i++)
+            {
+                Day day = new Day();
+                String dayName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
+                int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                day.setDayName(dayName);
+                day.setDayNumber(String.valueOf(dayOfMonth));
+                days[i] = day;
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
 
-        Day[] days = new Day[7];
-        for (int i = 0; i < 7; i++)
-        {
-            Day day = new Day();
-            String dayName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            day.setDayName(dayName);
-            day.setDayNumber(String.valueOf(dayOfMonth));
-            days[i] = day;
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            days[0].setSelected(true);
+        }else{
+            Log.d("day","lol");
+        }
+        return this.days;
+    }
+
+
+    protected SchedulePresenter(Parcel in) {
+        repository = in.readParcelable(RepositoryInterface.class.getClassLoader());
+        days = in.createTypedArray(Day.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedArray(days, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<SchedulePresenter> CREATOR = new Creator<SchedulePresenter>() {
+        @Override
+        public SchedulePresenter createFromParcel(Parcel in) {
+            return new SchedulePresenter(in);
         }
 
-        days[0].setSelected(true);
+        @Override
+        public SchedulePresenter[] newArray(int size) {
+            return new SchedulePresenter[size];
+        }
+    };
 
-        return days;
+    public String getCurrentDay() {
+        return String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
     public LiveData<List<Breakfast>> getAllBreakfastMeals() {
