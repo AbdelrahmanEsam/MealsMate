@@ -1,9 +1,8 @@
 package com.example.foodplanner.data.remote;
 
-import com.example.foodplanner.data.dto.AllCategoriesResponse;
-import com.example.foodplanner.data.dto.AreaResponse;
-import com.example.foodplanner.data.dto.IngredientsResponse;
-import com.example.foodplanner.data.dto.MealsResponse;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
+import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
 public interface RemoteDataSource {
 
@@ -12,20 +11,21 @@ public interface RemoteDataSource {
 
     public  void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback);
 
-    public MealsResponse filterMealsByCountry();
+    public void filterMealsByCountry(String country, SearchResultsPresenterInterface presenterInterface);
 
-    public MealsResponse filterMealsByIngredient();
+    public void filterMealsByIngredient(String ingredients, SearchResultsPresenterInterface presenterInterface);
 
-    public MealsResponse filterMealsByCategory();
+    public void  filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface);
 
+    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface);
     public MealsResponse searchMealsByName();
 
 
-    public AllCategoriesResponse getAllCategories();
+    public void getAllCategories(SearchSelectionPresenterInterface presenterInterface);
 
 
-    public AreaResponse getAllCountries();
+    public void getAllCountries(SearchSelectionPresenterInterface presenterInterface);
 
-    public IngredientsResponse getAllIngredients();
+    public void getAllIngredients(SearchSelectionPresenterInterface presenterInterface);
 
 }

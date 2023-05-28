@@ -9,6 +9,11 @@
         android:id="@+id/action_to_addDialogFragment"
         app:destination="@id/addDialogFragment" />
 
+
+    <action
+        android:id="@+id/action_to_mealDetailsFragment"
+        app:destination="@id/mealDetailsFragment" />
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.foodplanner.SplashFragment"
@@ -45,9 +50,6 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/nav_graph"
             />
-        <action
-            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
-            app:destination="@id/resetPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -96,15 +98,16 @@
         <action
             android:id="@+id/action_mealsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_mealsFragment_to_mealDetailsFragment"
-            app:destination="@id/mealDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.foodplanner.meals.search.searchselection.view.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mealDetailsFragment"
         android:name="com.example.foodplanner.meals.detailsfragment.view.MealDetailsFragment"
@@ -128,11 +131,6 @@
             app:destination="@id/mealDetailsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/resetPasswordFragment"
-        android:name="com.example.foodplanner.authenticationandaccount.presentation.forgetpassword.view.ResetPasswordFragment"
-        android:label="fragment_reset_password"
-        tools:layout="@layout/fragment_reset_password" />
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.foodplanner.authenticationandaccount.presentation.settings.view.SettingsFragment"
         android:label="fragment_settings"
@@ -146,4 +144,16 @@
             android:name="meal"
             app:argType="com.example.foodplanner.data.dto.Meal" />
     </dialog>
+    <fragment
+        android:id="@+id/searchResultsFragment"
+        android:name="com.example.foodplanner.meals.search.searchresults.view.SearchResultsFragment"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" >
+        <argument
+            android:name="searchWord"
+            app:argType="string" />
+        <argument
+            android:name="searchType"
+            app:argType="integer" />
+    </fragment>
 </navigation>

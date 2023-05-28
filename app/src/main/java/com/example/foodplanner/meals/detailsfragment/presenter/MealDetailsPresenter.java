@@ -41,8 +41,6 @@ public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Par
 
     protected MealDetailsPresenter(Parcel in) {
         repository = in.readParcelable(RepositoryInterface.class.getClassLoader());
-        Continuation:
-
         mealToAdd = in.readParcelable(Meal.class.getClassLoader());
     }
 

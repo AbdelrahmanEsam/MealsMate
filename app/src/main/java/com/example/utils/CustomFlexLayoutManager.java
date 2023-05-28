@@ -17,9 +17,13 @@ public class CustomFlexLayoutManager extends FlexboxLayoutManager {
     @Override
     public void addView(View child) {
         super.addView(child);
-        Animation animation = AnimationUtils.loadAnimation(child.getContext(), android.R.anim.slide_in_left);
-        child.setAnimation(animation);
+
     }
+
+
+
+
+
 
 
 

@@ -2,17 +2,15 @@ package com.example.foodplanner.data.repository;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodplanner.data.dto.AllCategoriesResponse;
-import com.example.foodplanner.data.dto.AreaResponse;
-import com.example.foodplanner.data.dto.IngredientsResponse;
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.dto.MealsResponse;
 import com.example.foodplanner.data.dto.table.Breakfast;
 import com.example.foodplanner.data.dto.table.Dinner;
 import com.example.foodplanner.data.dto.table.Favourite;
 import com.example.foodplanner.data.dto.table.Launch;
 import com.example.foodplanner.data.remote.AllMealsCallback;
 import com.example.foodplanner.data.remote.MealOfTheDayCallback;
+import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
+import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
 import java.util.List;
 
@@ -22,21 +20,24 @@ public interface RepositoryInterface {
 
     public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback);
 
-    public MealsResponse filterMealsByCountry();
+    public void filterMealsByCountry(String country, SearchResultsPresenterInterface presenterInterface);
 
-    public MealsResponse filterMealsByIngredient();
+    public void filterMealsByIngredient(String ingredients, SearchResultsPresenterInterface presenterInterface);
 
-    public MealsResponse filterMealsByCategory();
-
-    public MealsResponse searchMealsByName();
+    public void  filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface);
 
 
-    public AllCategoriesResponse getAllCategories();
+    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface);
+
+    public void searchMealsByName();
 
 
-    public AreaResponse getAllCountries();
+    public void getAllCategories(SearchSelectionPresenterInterface presenterInterface);
 
-    public IngredientsResponse getAllIngredients();
+
+    public void getAllCountries(SearchSelectionPresenterInterface presenterInterface);
+
+    public void getAllIngredients(SearchSelectionPresenterInterface presenterInterface);
 
 
 

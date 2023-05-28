@@ -3,8 +3,6 @@ package com.example.foodplanner.meals.mainmealsfragment.presenter;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.remote.AllMealsCallback;
 import com.example.foodplanner.data.remote.MealOfTheDayCallback;
@@ -125,7 +123,6 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
 
     @Override
     public void onResultFailureMealOfTheDayCallback(String error) {
-
         viewInterface.onResultFailureOneMealCallback(error);
     }
 

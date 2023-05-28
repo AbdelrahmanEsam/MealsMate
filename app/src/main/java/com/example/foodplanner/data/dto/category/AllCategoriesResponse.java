@@ -1,4 +1,4 @@
-package com.example.foodplanner.data.dto;
+package com.example.foodplanner.data.dto.category;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;

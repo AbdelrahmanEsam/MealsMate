@@ -1,4 +1,6 @@
-package com.example.foodplanner.data.dto;
+package com.example.foodplanner.data.dto.firebase;
+
+import com.example.foodplanner.data.dto.Meal;
 
 import java.util.List;
 

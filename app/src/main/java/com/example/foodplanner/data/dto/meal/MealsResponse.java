@@ -1,6 +1,8 @@
-package com.example.foodplanner.data.dto;
+package com.example.foodplanner.data.dto.meal;
 
 import java.util.List;
+
+import com.example.foodplanner.data.dto.Meal;
 import com.google.gson.annotations.SerializedName;
 
 public class MealsResponse{

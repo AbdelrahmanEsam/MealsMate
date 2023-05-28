@@ -4,8 +4,6 @@ import android.widget.ImageView;
 
 import com.example.foodplanner.data.dto.Meal;
 
-import java.util.List;
-
 public interface MealsFragmentViewInterface {
     public void onResultSuccessAllMealsCallback();
     public void onResultFailureAllMealsCallback(String error);

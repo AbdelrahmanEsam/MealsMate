@@ -1,9 +1,12 @@
 package com.example.foodplanner.data.remote;
 
-import com.example.foodplanner.data.dto.AllCategoriesResponse;
-import com.example.foodplanner.data.dto.AreaResponse;
-import com.example.foodplanner.data.dto.IngredientsResponse;
-import com.example.foodplanner.data.dto.MealsResponse;
+import com.example.foodplanner.data.dto.category.AllCategoriesResponse;
+import com.example.foodplanner.data.dto.area.AreaResponse;
+import com.example.foodplanner.data.dto.ingredients.IngredientsResponse;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.data.dto.search.FilterMealResponse;
+import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
+import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +63,6 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
 
     @Override
     public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback) {
-
         retrofit.getMealOfTheDay().enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
@@ -76,19 +78,67 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
     }
 
     @Override
-    public MealsResponse filterMealsByCountry() {
-        return null;
+    public void filterMealsByCountry(String country, SearchResultsPresenterInterface presenterInterface) {
+        retrofit.filterMealsByCountry(country).enqueue(new Callback<FilterMealResponse>() {
+            @Override
+            public void onResponse(Call<FilterMealResponse> call, Response<FilterMealResponse> response) {
+                presenterInterface.onFilterCountrySuccessCallback(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<FilterMealResponse> call, Throwable t) {
+                presenterInterface.onFilterCountryFailureCallback(t.getMessage());
+            }
+        });
     }
 
     @Override
-    public MealsResponse filterMealsByIngredient() {
-        return null;
+    public void filterMealsByIngredient(String ingredients, SearchResultsPresenterInterface presenterInterface) {
+        retrofit.filterMealsByIngredient(ingredients).enqueue(new Callback<FilterMealResponse>() {
+            @Override
+            public void onResponse(Call<FilterMealResponse> call, Response<FilterMealResponse> response) {
+                presenterInterface.onFilterIngredientSuccessCallback(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<FilterMealResponse> call, Throwable t) {
+
+                presenterInterface.onFilterIngredientFailureCallback(t.getMessage());
+            }
+        });
     }
 
     @Override
-    public MealsResponse filterMealsByCategory() {
-        return null;
+    public void filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface) {
+     retrofit.filterMealsByCategory(category).enqueue(new Callback<FilterMealResponse>() {
+         @Override
+         public void onResponse(Call<FilterMealResponse> call, Response<FilterMealResponse> response) {
+             presenterInterface.onFilterCategorySuccessCallback(response.body().getMeals());
+         }
+
+         @Override
+         public void onFailure(Call<FilterMealResponse> call, Throwable t) {
+
+             presenterInterface.onFilterCategoryFailureCallback(t.getMessage());
+         }
+     });
     }
+
+    @Override
+    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface) {
+        retrofit.getFullDetailsById(id).enqueue(new Callback<MealsResponse>() {
+            @Override
+            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                presenterInterface.onGetItemFullDetailsSuccessCallback(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<MealsResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     @Override
     public MealsResponse searchMealsByName() {
@@ -96,17 +146,52 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
     }
 
     @Override
-    public AllCategoriesResponse getAllCategories() {
-        return null;
+    public void getAllCategories(SearchSelectionPresenterInterface presenterInterface) {
+       retrofit.getAllCategories().enqueue(new Callback<AllCategoriesResponse>() {
+            @Override
+            public void onResponse(Call<AllCategoriesResponse> call, Response<AllCategoriesResponse> response) {
+                presenterInterface.onGetAllCategoriesSuccessCallback(response.body().getMealCategories());
+            }
+
+            @Override
+            public void onFailure(Call<AllCategoriesResponse> call, Throwable t) {
+                   presenterInterface.onGetAllCountriesFailureCallback(t.getMessage());
+            }
+        });
     }
 
     @Override
-    public AreaResponse getAllCountries() {
-        return null;
+    public void getAllCountries(SearchSelectionPresenterInterface presenterInterface) {
+
+        retrofit.getAllCountries().enqueue(new Callback<AreaResponse>() {
+            @Override
+            public void onResponse(Call<AreaResponse> call, Response<AreaResponse> response) {
+                presenterInterface.onGetAllCountriesSuccessCallback(response.body().getAreas());
+            }
+
+            @Override
+            public void onFailure(Call<AreaResponse> call, Throwable t) {
+
+                presenterInterface.onGetAllCountriesFailureCallback(t.getMessage());
+            }
+        });
+
     }
 
     @Override
-    public IngredientsResponse getAllIngredients() {
-        return null;
+    public void getAllIngredients(SearchSelectionPresenterInterface presenterInterface) {
+
+        retrofit.getAllIngredients().enqueue(new Callback<IngredientsResponse>() {
+            @Override
+            public void onResponse(Call<IngredientsResponse> call, Response<IngredientsResponse> response) {
+                presenterInterface.onGetAllIngredientsSuccessCallback(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<IngredientsResponse> call, Throwable t) {
+
+                presenterInterface.onGetAllIngredientsFailureCallback(t.getMessage());
+            }
+        });
     }
 }

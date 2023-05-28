@@ -8,9 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.table.Favourite;
-import com.example.foodplanner.data.dto.table.Launch;
 
 import java.util.List;
 

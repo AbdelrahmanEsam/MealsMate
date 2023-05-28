@@ -274,7 +274,7 @@ public class MealDetailsFragment extends Fragment {
 
     private void setIngredientsRecycler(Meal meal)
     {
-        ingredientsAdapter.setIngredients(getIngredients(meal),getContext());
+        ingredientsAdapter.setData(getIngredients(meal),getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         binding.ingredientsRecyclerView.setLayoutManager(layoutManager);
         binding.ingredientsRecyclerView.setAdapter(ingredientsAdapter);

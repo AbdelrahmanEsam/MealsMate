@@ -1,10 +1,11 @@
 package com.example.foodplanner.data.remote;
 
 
-import com.example.foodplanner.data.dto.AllCategoriesResponse;
-import com.example.foodplanner.data.dto.AreaResponse;
-import com.example.foodplanner.data.dto.IngredientsResponse;
-import com.example.foodplanner.data.dto.MealsResponse;
+import com.example.foodplanner.data.dto.category.AllCategoriesResponse;
+import com.example.foodplanner.data.dto.area.AreaResponse;
+import com.example.foodplanner.data.dto.ingredients.IngredientsResponse;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.data.dto.search.FilterMealResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -23,13 +24,16 @@ public interface ApiProvider {
     Call<MealsResponse> searchMealsByName(@Query("s") String name);
 
     @GET("filter.php")
-    Call<MealsResponse> filterMealsByIngredient(@Query("i") String IngredientName);
+    Call<FilterMealResponse> filterMealsByIngredient(@Query("i") String IngredientName);
 
     @GET("filter.php")
-    Call<MealsResponse> filterMealsByCategory(@Query("c") String categoryName);
+    Call<FilterMealResponse> filterMealsByCategory(@Query("c") String categoryName);
 
     @GET("filter.php")
-    Call<MealsResponse> filterMealsByCountry(@Query("a") String countryName);
+    Call<FilterMealResponse> filterMealsByCountry(@Query("a") String countryName);
+
+    @GET("lookup.php")
+    Call<MealsResponse> getFullDetailsById(@Query("i") String id);
 
 
 

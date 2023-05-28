@@ -9,6 +9,7 @@ import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -110,6 +111,10 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
 
         binding.searchImageView.setOnClickListener(view12 -> {
             popUpMenuListener();
+        });
+
+        binding.searchImageView.setOnClickListener(view1 -> {
+            controller.navigate(MealsFragmentDirections.actionMealsFragmentToSearchFragment());
         });
 
         setRecyclerView();
@@ -259,6 +264,7 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     private void enableInteraction()
     {
         requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -267,6 +273,7 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     {
         requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         binding.progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -290,23 +297,26 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();
-        controller.navigate(MealsFragmentDirections.actionMealsFragmentToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
+        controller.navigate(NavGraphDirections.actionToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
     }
 
     private void setMealOfTheDay()
     {
         Meal meal = presenter.getMealOfTheDay();
         enableInteraction();
-        binding.aboutTextView.setText(meal.getStrMeal());
-        Glide.with(requireContext())
-                .load(meal.getStrMealThumb())
-                .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
-                .into(binding.mealImage);
+        if (meal != null)
+        {
+            binding.aboutTextView.setText(meal.getStrMeal());
+            Glide.with(requireContext())
+                    .load(meal.getStrMealThumb())
+                    .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
+                    .into(binding.mealImage);
+        }
+
     }
 
     @Override
     public void onMealClicked(Meal meal, ImageView transitionView) {
-
         navigateToDetails(meal,transitionView);
     }
 

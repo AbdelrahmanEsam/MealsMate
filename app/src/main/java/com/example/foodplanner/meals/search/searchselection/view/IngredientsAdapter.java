@@ -1,4 +1,4 @@
-package com.example.foodplanner.meals.detailsfragment.view;
+package com.example.foodplanner.meals.search.searchselection.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +22,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     private List<String> ingredients = new ArrayList<>();
     private Context context;
+
+    private OnIngredientClickedListener listener;
 
 
 
@@ -41,6 +44,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                    .load("https://www.themealdb.com/images/ingredients/"+ingredientName+".png")
                    .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
                    .into(holder.ingredientImageView);
+
+           holder.layout.setOnClickListener(view -> {
+
+              listener.onIngredientClicked(ingredientName);
+           });
        }
     }
 
@@ -49,9 +57,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         return ingredients.size();
     }
 
-    public void setData(List<String> ingredients, Context context)
+    public void setData(List<String> ingredients, Context context,OnIngredientClickedListener listener)
     {
 
+        this.listener = listener;
         this.context = context;
         this.ingredients = ingredients;
         notifyDataSetChanged();
@@ -65,9 +74,11 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         TextView ingredientTextView;
         ImageView ingredientImageView;
 
+        CardView layout;
         public IngredientsViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            layout = itemView.findViewById(R.id.strokeCardView);
             ingredientImageView =  itemView.findViewById(R.id.ingredientImageView);
             ingredientTextView = itemView.findViewById(R.id.ingredientTextView);
         }

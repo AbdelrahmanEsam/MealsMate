@@ -9,7 +9,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.foodplanner.data.dto.table.Breakfast;
-import com.example.foodplanner.data.dto.Meal;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.example.foodplanner.meals.search.searchselection.presenter;
 
-import com.example.foodplanner.data.dto.Area;
-import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.dto.MealCategory;
+import com.example.foodplanner.data.dto.area.Area;
+import com.example.foodplanner.data.dto.category.MealCategory;
+import com.example.foodplanner.data.dto.ingredients.Ingredient;
 
 import java.util.List;
 
@@ -15,9 +15,14 @@ public interface SearchSelectionPresenterInterface {
 
     void getAllCountries();
 
-    void onGetAllCategoriesCallback(List<MealCategory> categories);
-    void onGetAllIngredientsCallback(List<Meal> ingredients);
-    void onGetAllCountriesCallback(List<Area> countries);
+    void onGetAllCategoriesSuccessCallback(List<MealCategory> categories);
+    void onGetAllIngredientsSuccessCallback(List<Ingredient> ingredients);
+    void onGetAllCountriesSuccessCallback(List<Area> countries);
+
+
+    void onGetAllCategoriesFailureCallback(String error);
+    void onGetAllIngredientsFailureCallback(String error);
+    void onGetAllCountriesFailureCallback(String error);
 
     
 }
