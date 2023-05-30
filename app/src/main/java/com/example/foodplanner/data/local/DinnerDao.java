@@ -12,6 +12,9 @@ import com.example.foodplanner.data.dto.table.Dinner;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 
 @Dao
 public interface DinnerDao {
@@ -19,15 +22,15 @@ public interface DinnerDao {
 
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insert(Dinner meal);
+        Completable insert(Dinner meal);
 
         @Update
-        void update(Dinner meal);
+        Completable  update(Dinner meal);
 
         @Delete
-        void delete(Dinner meal);
+        Completable  delete(Dinner meal);
 
         @Query("SELECT * FROM Dinner")
-        LiveData<List<Dinner>> getAllMeals();
+        Observable<List<Dinner>> getAllMeals();
 
 }

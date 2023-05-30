@@ -1,17 +1,20 @@
 package com.example.foodplanner.data.remote;
 
-import com.example.foodplanner.data.dto.category.AllCategoriesResponse;
 import com.example.foodplanner.data.dto.area.AreaResponse;
+import com.example.foodplanner.data.dto.category.AllCategoriesResponse;
 import com.example.foodplanner.data.dto.ingredients.IngredientsResponse;
 import com.example.foodplanner.data.dto.meal.MealsResponse;
 import com.example.foodplanner.data.dto.search.FilterMealResponse;
+import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
 import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteDataSourceImpl implements RemoteDataSource{
@@ -28,6 +31,7 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
             retrofit = new Retrofit.Builder()
                     .baseUrl("https://www.themealdb.com/api/json/v1/1/")
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .build().create(ApiProvider.class);
         }
     }
@@ -43,22 +47,9 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
 
 
 
-
-
     @Override
-    public void getAllMealsResponse(AllMealsCallback networkCallback) {
-        retrofit.searchMealsByName("").enqueue(new Callback<MealsResponse>() {
-            @Override
-            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-
-               networkCallback.onResultSuccessAllMealsCallback(response.body().getMeals());
-            }
-
-            @Override
-            public void onFailure(Call<MealsResponse> call, Throwable t) {
-              networkCallback.onResultFailureAllMealsCallback(t.getMessage());
-            }
-        });
+    public Observable<MealsResponse> searchByNameMealRequest(String prefix) {
+        return retrofit.searchMealsByName(prefix);
     }
 
     @Override
@@ -125,11 +116,11 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
     }
 
     @Override
-    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface) {
+    public void getFullDetailsById(String id,String requester, SearchResultsPresenterInterface presenterInterface) {
         retrofit.getFullDetailsById(id).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                presenterInterface.onGetItemFullDetailsSuccessCallback(response.body().getMeals());
+                presenterInterface.onGetItemFullDetailsSuccessCallback(response.body().getMeals(),requester);
             }
 
             @Override
@@ -140,10 +131,9 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
     }
 
 
-    @Override
-    public MealsResponse searchMealsByName() {
-        return null;
-    }
+
+
+
 
     @Override
     public void getAllCategories(SearchSelectionPresenterInterface presenterInterface) {

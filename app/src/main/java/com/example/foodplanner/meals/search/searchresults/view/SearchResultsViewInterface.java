@@ -9,6 +9,6 @@ public interface SearchResultsViewInterface {
 
     public  void onResultsSuccessCallback(List<FilterMeal> meals);
     public  void onResultsFailureCallback(String error);
-    public  void onGetDetailsSuccessCallback(Meal meal);
+    public  void onGetDetailsSuccessCallback(Meal meal,String requester);
     public  void onGetDetailsFailureCallback(String error);
 }

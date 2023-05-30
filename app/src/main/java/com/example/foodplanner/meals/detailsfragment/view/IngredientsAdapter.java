@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.R;
 
@@ -39,6 +40,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
            holder.ingredientTextView.setText(ingredientName);
            Glide.with(context)
                    .load("https://www.themealdb.com/images/ingredients/"+ingredientName+".png")
+                   .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                    .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
                    .into(holder.ingredientImageView);
        }

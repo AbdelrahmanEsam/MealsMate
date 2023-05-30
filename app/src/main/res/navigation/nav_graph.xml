@@ -14,6 +14,11 @@
         android:id="@+id/action_to_mealDetailsFragment"
         app:destination="@id/mealDetailsFragment" />
 
+
+    <action
+        android:id="@+id/action_to_scheduleFragment"
+        app:destination="@id/scheduleFragment" />
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.foodplanner.SplashFragment"
@@ -25,6 +30,9 @@
             app:popUpToInclusive="true"
             app:popUpTo="@id/nav_graph"
             app:destination="@id/loginFragment" />
+
+
+
 
 
 

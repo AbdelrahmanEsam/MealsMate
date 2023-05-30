@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
@@ -59,6 +60,7 @@ public class ScheduleMealsAdapter extends RecyclerView.Adapter<ScheduleMealsAdap
         holder.mealImage.setTransitionName("mealImage"+position+meal.getStrMeal());
         Glide.with(context)
                 .load(meal.getStrMealThumb())
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
                 .into(holder.mealImage);
 

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplanner.databinding.FragmentSplashBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class SplashFragment extends Fragment {
@@ -26,6 +27,8 @@ public class SplashFragment extends Fragment {
     private FragmentSplashBinding binding;
 
     private NavController controller ;
+
+    private FirebaseAuth mAuth ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,7 @@ public class SplashFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
+        mAuth = FirebaseAuth.getInstance();
         binding.motionLayout.transitionToStart();
       binding.lottieSplash.addAnimatorListener(new Animator.AnimatorListener() {
           @Override
@@ -53,7 +57,15 @@ public class SplashFragment extends Fragment {
 
           @Override
           public void onAnimationEnd(@NonNull Animator animator) {
-              controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
+              if (mAuth.getCurrentUser() ==null){
+                  controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
+                  return;
+              }
+              if (((MainActivity)requireActivity()).internetState){
+                  controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
+                  return;
+              }
+                  controller.navigate(NavGraphDirections.actionToScheduleFragment());
           }
 
           @Override
@@ -72,6 +84,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.GONE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

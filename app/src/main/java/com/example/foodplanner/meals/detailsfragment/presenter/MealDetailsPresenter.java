@@ -8,6 +8,8 @@ import com.example.foodplanner.data.repository.RepositoryInterface;
 
 import java.util.Calendar;
 
+import io.reactivex.rxjava3.core.Completable;
+
 public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Parcelable {
 
 
@@ -68,22 +70,22 @@ public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Par
 
 
     @Override
-    public void insertMealToBreakfast(Meal meal) {
-        repository.insertMealToBreakfast(meal,getCurrentDay());
+    public Completable insertMealToBreakfast(Meal meal) {
+      return   repository.insertMealToBreakfast(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToLaunch(Meal meal) {
-        repository.insertMealToLaunch(meal,getCurrentDay());
+    public Completable insertMealToLaunch(Meal meal) {
+      return   repository.insertMealToLaunch(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToDinner(Meal meal) {
-        repository.insertMealToDinner(meal,getCurrentDay());
+    public Completable insertMealToDinner(Meal meal) {
+       return repository.insertMealToDinner(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToFavourite(Meal meal) {
-        repository.insertMealToFavourite(meal,getCurrentDay());
+    public Completable insertMealToFavourite(Meal meal) {
+       return repository.insertMealToFavourite(meal,getCurrentDay());
     }
 }

@@ -12,6 +12,9 @@ import com.example.foodplanner.data.dto.table.Launch;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 
 @Dao
 public interface LaunchDao {
@@ -19,16 +22,16 @@ public interface LaunchDao {
 
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insert(Launch meal);
+        Completable  insert(Launch meal);
 
         @Update
-        void update(Launch meal);
+        Completable update(Launch meal);
 
         @Delete
-        void delete(Launch meal);
+        Completable  delete(Launch meal);
 
         @Query("SELECT * FROM Launch")
-        LiveData<List<Launch>> getAllMeals();
+        Observable<List<Launch>> getAllMeals();
 
 
 }

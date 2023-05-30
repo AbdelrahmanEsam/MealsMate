@@ -27,7 +27,6 @@ public abstract class MealsDatabase extends RoomDatabase {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             MealsDatabase.class, "meals_database")
-                    .allowMainThreadQueries()
                     .build();
         }
         return instance;

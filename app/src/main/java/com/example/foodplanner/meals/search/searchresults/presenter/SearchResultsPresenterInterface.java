@@ -7,6 +7,8 @@ import com.example.foodplanner.data.dto.search.FilterMeal;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+
 public interface SearchResultsPresenterInterface {
 
     void filterMealsByCategory(String category);
@@ -15,18 +17,24 @@ public interface SearchResultsPresenterInterface {
 
     void filterMealsByCountry(String country);
 
-    void getFullDetailsMealRequest(String id);
+    void getFullDetailsMealRequest(String id,String requester);
 
 
     void onFilterCategorySuccessCallback(List<FilterMeal> categories);
     void onFilterIngredientSuccessCallback(List<FilterMeal> ingredients);
     void onFilterCountrySuccessCallback(List<FilterMeal> countries);
-    void onGetItemFullDetailsSuccessCallback(List<Meal> meals);
+    void onGetItemFullDetailsSuccessCallback(List<Meal> meals,String requester);
 
 
 
     void onFilterCategoryFailureCallback(String error);
     void onFilterIngredientFailureCallback(String error);
     void onFilterCountryFailureCallback(String error);
+
+
+    public Completable insertMealToBreakfast(Meal meal);
+    public  Completable insertMealToLaunch(Meal meal);
+    public  Completable insertMealToDinner(Meal meal);
+    public Completable insertMealToFavourite(Meal meal);
 
 }

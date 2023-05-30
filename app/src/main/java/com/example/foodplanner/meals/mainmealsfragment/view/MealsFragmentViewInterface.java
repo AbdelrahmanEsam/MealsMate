@@ -5,10 +5,13 @@ import android.widget.ImageView;
 import com.example.foodplanner.data.dto.Meal;
 
 public interface MealsFragmentViewInterface {
-    public void onResultSuccessAllMealsCallback();
-    public void onResultFailureAllMealsCallback(String error);
     public void onResultSuccessOneMealsCallback();
     public void onResultFailureOneMealCallback(String error);
+
+    public void onSearchSuccessResult();
+
+
+    public void onSearchErrorResult(String error);
 
     void onMealAddClicked(Meal meal);
 

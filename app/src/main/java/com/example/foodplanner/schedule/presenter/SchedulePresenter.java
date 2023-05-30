@@ -18,6 +18,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SchedulePresenter implements  SchedulePresenterInterface, Parcelable {
 
     private final RepositoryInterface repository;
@@ -90,21 +95,21 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         return String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
-    public LiveData<List<Breakfast>> getAllBreakfastMeals() {
+    public Observable<List<Breakfast>> getAllBreakfastMeals() {
        return repository.getAllBreakfastMeals();
     }
 
 
-    public LiveData<List<Launch>> getAllLaunchMeals() {
+    public Observable<List<Launch>> getAllLaunchMeals() {
        return repository.getAllLaunchMeals();
     }
 
 
-    public LiveData<List<Dinner>> getAllDinnerMeals() {
+    public Observable<List<Dinner>> getAllDinnerMeals() {
         return repository.getAllDinnerMeals();
     }
 
-    public LiveData<List<Favourite>> getAllFavouriteMeals() {
+    public Observable<List<Favourite>> getAllFavouriteMeals() {
        return repository.getAllFavouriteMeals();
     }
 
@@ -113,52 +118,52 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         repository.clearAllTables();
         breakfasts.forEach(meal -> {
             if (meal != null) {
-                repository.insertMealToBreakfast(meal, getCurrentDay());
+                repository.insertMealToBreakfast(meal, getCurrentDay()).subscribeOn(Schedulers.io()).subscribe();
             }
         });
 
         launches.forEach(meal -> {
             if (meal != null) {
-                repository.insertMealToLaunch(meal, getCurrentDay());
+                repository.insertMealToLaunch(meal, getCurrentDay()).subscribeOn(Schedulers.io()).subscribe();
             }
         });
 
 
         dinner.forEach(meal -> {
             if (meal != null) {
-                repository.insertMealToDinner(meal, getCurrentDay());
+                repository.insertMealToDinner(meal, getCurrentDay()).subscribeOn(Schedulers.io()).subscribe();
             }
         });
 
 
         favourites.forEach(meal -> {
             if (meal != null) {
-                repository.insertMealToFavourite(meal, getCurrentDay());
+                repository.insertMealToFavourite(meal, getCurrentDay()).subscribeOn(Schedulers.io()).subscribe();
             }
         });
     }
 
     @Override
-    public void deleteBreakfastItem(Meal meal) {
-        repository.deleteMealFromBreakfast(meal);
+    public Completable deleteBreakfastItem(Meal meal) {
+      return   repository.deleteMealFromBreakfast(meal);
     }
 
     @Override
-    public void deleteLaunchItem(Meal meal) {
+    public Completable deleteLaunchItem(Meal meal) {
 
-        repository.deleteMealFromLaunch(meal);
+      return   repository.deleteMealFromLaunch(meal);
     }
 
     @Override
-    public void deleteDinnerItem(Meal meal) {
+    public Completable deleteDinnerItem(Meal meal) {
 
-        repository.deleteMealFromDinner(meal);
+      return   repository.deleteMealFromDinner(meal);
     }
 
     @Override
-    public void deleteFavouritesItem(Meal meal) {
+    public Completable deleteFavouritesItem(Meal meal) {
 
-        repository.deleteMealFromFavourite(meal);
+       return repository.deleteMealFromFavourite(meal);
     }
 
 

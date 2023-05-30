@@ -1,22 +1,22 @@
 package com.example.foodplanner.data.repository;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.dto.Meal;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
 import com.example.foodplanner.data.dto.table.Breakfast;
 import com.example.foodplanner.data.dto.table.Dinner;
 import com.example.foodplanner.data.dto.table.Favourite;
 import com.example.foodplanner.data.dto.table.Launch;
-import com.example.foodplanner.data.remote.AllMealsCallback;
-import com.example.foodplanner.data.remote.MealOfTheDayCallback;
+import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
 import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 public interface RepositoryInterface {
 
-    public void getAllMealsResponse(AllMealsCallback networkCallback);
 
     public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback);
 
@@ -27,9 +27,11 @@ public interface RepositoryInterface {
     public void  filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface);
 
 
-    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface);
+    public void getFullDetailsById(String id,String requester, SearchResultsPresenterInterface presenterInterface);
 
-    public void searchMealsByName();
+
+    public Observable<MealsResponse> searchByNameMealRequest(String prefix);
+
 
 
     public void getAllCategories(SearchSelectionPresenterInterface presenterInterface);
@@ -41,24 +43,24 @@ public interface RepositoryInterface {
 
 
 
-    public void insertMealToBreakfast(Meal meal,String day);
+    public Completable insertMealToBreakfast(Meal meal,String day);
 
-    public void insertMealToLaunch(Meal meal,String day);
+    public Completable insertMealToLaunch(Meal meal,String day);
 
-    public void insertMealToDinner(Meal meal,String day);
+    public Completable insertMealToDinner(Meal meal,String day);
 
-    public void insertMealToFavourite(Meal meal,String day);
+    public Completable insertMealToFavourite(Meal meal,String day);
 
 
-    public void deleteMealFromBreakfast(Meal meal);
-    public void deleteMealFromLaunch(Meal meal);
-    public void deleteMealFromDinner(Meal meal);
-    public void deleteMealFromFavourite(Meal meal);
+    public Completable deleteMealFromBreakfast(Meal meal);
+    public Completable deleteMealFromLaunch(Meal meal);
+    public Completable deleteMealFromDinner(Meal meal);
+    public Completable deleteMealFromFavourite(Meal meal);
 
-    public LiveData<List<Favourite>> getAllFavouriteMeals();
-    public LiveData<List<Breakfast>> getAllBreakfastMeals();
-    public LiveData<List<Launch>> getAllLaunchMeals();
-    public LiveData<List<Dinner>> getAllDinnerMeals();
+    public Observable<List<Favourite>> getAllFavouriteMeals();
+    public Observable<List<Breakfast>> getAllBreakfastMeals();
+    public Observable<List<Launch>> getAllLaunchMeals();
+    public Observable<List<Dinner>> getAllDinnerMeals();
 
     public void clearAllTables();
 

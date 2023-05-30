@@ -51,11 +51,10 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_25sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
             app:errorEnabled="true"
             app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/searchImageView"
 
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/goodMorningTextView"
             app:startIconDrawable="@drawable/search"
@@ -68,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/type_in_your_favourite_dish"
-
+                android:drawableStart="@drawable/search"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -82,9 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="goodMorningTextView,searchInputLayout,searchImageView"
+            app:constraint_referenced_ids="goodMorningTextView,searchInputLayout"
             app:layout_constraintStart_toStartOf="parent" />
-
 
 
         <androidx.constraintlayout.widget.Barrier
@@ -93,8 +91,8 @@
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="mealOfTheDayCardView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <View
@@ -106,16 +104,6 @@
             app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
             app:layout_constraintStart_toStartOf="@+id/vGuideline2.5percent"
             app:layout_constraintTop_toBottomOf="@+id/mealOfTheDayBarrier" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/searchImageView"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:scaleType="fitXY"
-            android:src="@drawable/tune"
-            app:layout_constraintBottom_toBottomOf="@+id/searchInputLayout"
-            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
-            app:layout_constraintTop_toTopOf="@+id/searchInputLayout" />
 
 
         <TextView

@@ -5,6 +5,7 @@ import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
+import static com.example.foodplanner.R.string.meal;
 
 import android.os.Bundle;
 import android.transition.Transition;
@@ -47,6 +48,9 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class MealDetailsFragment extends Fragment {
@@ -95,9 +99,10 @@ public class MealDetailsFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
         initViews(presenter.getMealToAdd());
+        addTypeObserver();
         binding.addToCacheFloatingButton.setOnClickListener(view1 -> {
             controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
-            addTypeObserver();
+
         });
 
     }
@@ -123,10 +128,12 @@ public class MealDetailsFragment extends Fragment {
 
         backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(), type -> {
             if (type != null) {
+                Log.d("null Meal","null");
                 switch ((Integer) type) {
                     case breakfast: {
                         addRecordToFirebaseAndRoom(getString(breakfast),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToBreakfast(meal);
+                            presenter.insertMealToBreakfast(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                             return null;
                         });
                         break;
@@ -134,7 +141,8 @@ public class MealDetailsFragment extends Fragment {
 
                     case launch: {
                         addRecordToFirebaseAndRoom(getString(launch),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToLaunch(meal);
+                            presenter.insertMealToLaunch(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                             return null;
                         });
                         break;
@@ -142,7 +150,8 @@ public class MealDetailsFragment extends Fragment {
 
                     case dinner: {
                         addRecordToFirebaseAndRoom(getString(dinner),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToDinner(meal);
+                            presenter.insertMealToDinner(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
 
                             return null;
                         });
@@ -153,7 +162,8 @@ public class MealDetailsFragment extends Fragment {
                     case favourites:{
                         addRecordToFirebaseAndRoom(getString(favourites),presenter.getMealToAdd(),(meal)-> {
 
-                            presenter.insertMealToFavourite(meal);
+                            presenter.insertMealToFavourite(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
 
                             return null;
 
@@ -163,8 +173,11 @@ public class MealDetailsFragment extends Fragment {
                     }
                 }
 
-            }
+            }else{
 
+                Log.d("null Meal","null");
+
+            }
 
         });
 
@@ -181,8 +194,10 @@ public class MealDetailsFragment extends Fragment {
                     {
                         function.apply(mealToAdd);
                         Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
-                    }
-                })
+                    }else {
+
+                    Log.d("null Meal","null");
+                    }                })
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 });

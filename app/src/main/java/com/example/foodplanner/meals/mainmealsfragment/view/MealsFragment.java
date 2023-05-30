@@ -9,6 +9,7 @@ import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -21,10 +22,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import android.os.IBinder;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,16 +52,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-public class MealsFragment extends Fragment implements  MealsFragmentViewInterface {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class MealsFragment extends Fragment implements MealsFragmentViewInterface {
 
 
     private FragmentMealsBinding binding;
     private NavController controller;
-    private final MealsAdapter adapter  = new MealsAdapter();
+    private final MealsAdapter adapter = new MealsAdapter();
     private MealsPresenter presenter;
-    private FirebaseAuth mAuth ;
+    private FirebaseAuth mAuth;
     private FirebaseFirestore fireStore;
 
     @Override
@@ -73,7 +85,6 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     }
 
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,21 +93,18 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
         fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
 
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             presenter = savedInstanceState.getParcelable(getString(string.presenter));
-            if (presenter != null){
-                adapter.setMeals(presenter.getAllMeals(),getContext(),MealsFragment.this);
+            if (presenter != null) {
+                adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
                 setMealOfTheDay();
-            }else {
+            } else {
                 initPresenterAndSendRequests();
             }
 
-        }else{
-           initPresenterAndSendRequests();
+        } else {
+            initPresenterAndSendRequests();
         }
-
-
 
 
         if (mAuth.getCurrentUser() != null) {
@@ -104,31 +112,66 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
         }
         addTypeObserver();
         binding.mealOfTheDayCardView.setOnClickListener(view1 -> {
-           navigateToDetails(presenter.getMealOfTheDay(),binding.mealImage);
-        });
-
-
-
-        binding.searchImageView.setOnClickListener(view12 -> {
-            popUpMenuListener();
-        });
-
-        binding.searchImageView.setOnClickListener(view1 -> {
-            controller.navigate(MealsFragmentDirections.actionMealsFragmentToSearchFragment());
+            navigateToDetails(presenter.getMealOfTheDay(), binding.mealImage);
         });
 
         setRecyclerView();
+        searchObserverAndObservable();
 
     }
 
+
+    private void searchObserverAndObservable() {
+        Observable<String> textChangeObservable = Observable.create(emitter ->
+                binding.searchInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        emitter.onNext(s.toString());
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                }));
+
+
+        textChangeObservable
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+
+                    @Override
+                    public void onNext(String text) {
+
+                        disableInteraction();
+                        presenter.searchByNameMealRequest(text);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+
+
+    }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mAuth.getCurrentUser() != null) {
-            ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
-        }
 
     }
 
@@ -136,56 +179,57 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(getString(string.presenter),presenter);
+        outState.putParcelable(getString(string.presenter), presenter);
     }
 
-    private void initPresenterAndSendRequests()
-    {
-        presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
-        presenter.getAllMealsRequest();
+    private void initPresenterAndSendRequests() {
+        presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())), this);
+        presenter.searchByNameMealRequest("");
         presenter.mealOfTheDayRequest();
         disableInteraction();
     }
 
-    private void addTypeObserver()
-    {
+    private void addTypeObserver() {
         NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
-        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(),type -> {
+        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(), type -> {
             if (type != null) {
                 switch ((Integer) type) {
                     case breakfast: {
-                        addRecordToFirebaseAndRoom(getString(breakfast),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToBreakfast(meal);
+                        addRecordToFirebaseAndRoom(getString(breakfast), presenter.getMealToAdd(), (meal) -> {
+                            presenter.insertMealToBreakfast(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                             return null;
-
                         });
                         break;
                     }
 
                     case launch: {
-                        addRecordToFirebaseAndRoom(getString(launch),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToLaunch(meal);
+                        addRecordToFirebaseAndRoom(getString(launch), presenter.getMealToAdd(), (meal) -> {
+                            presenter.insertMealToLaunch(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                             return null;
                         });
                         break;
                     }
 
                     case dinner: {
-                        addRecordToFirebaseAndRoom(getString(dinner),presenter.getMealToAdd(),(meal)-> {
-                            presenter.insertMealToDinner(meal);
+                        addRecordToFirebaseAndRoom(getString(dinner), presenter.getMealToAdd(), (meal) -> {
+                            presenter.insertMealToDinner(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
                             return null;
                         });
                         break;
 
                     }
 
-                    case favourites:{
-                            addRecordToFirebaseAndRoom(getString(favourites),presenter.getMealToAdd(),(meal)-> {
+                    case favourites: {
+                        addRecordToFirebaseAndRoom(getString(favourites), presenter.getMealToAdd(), (meal) -> {
 
-                                presenter.insertMealToFavourite(meal);
-                                return null;
+                            presenter.insertMealToFavourite(meal).subscribeOn(Schedulers.io())
+                                    .subscribeOn(AndroidSchedulers.mainThread()).subscribe();
+                            return null;
 
-                            });
+                        });
                         break;
 
                     }
@@ -195,17 +239,14 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
         });
 
 
-
     }
 
 
-    private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
-    {
+    private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal, Void> function) {
 
         fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
                 .addOnSuccessListener(documentReference -> {
-                    if (mealToAdd != null)
-                    {
+                    if (mealToAdd != null) {
                         function.apply(mealToAdd);
                         Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
                     }
@@ -216,70 +257,30 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     }
 
 
-    private void popUpMenuListener()
-    {
-
-        PopupMenu popupMenu = new PopupMenu(requireContext(), binding.searchImageView);
-
-
-        popupMenu.getMenuInflater().inflate(menu.search_popup_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId())
-            {
-
-                case  byName:{
-                    binding.searchInputLayout.getEditText().setText(string.type_in_your_favourite_dish);
-                    break;
-                }
-
-                case  byCategory:{
-                    binding.searchInputLayout.getEditText().setText(string.category_placeholder);
-
-
-                    break;
-                }
-
-                case  byCountry:{
-                    binding.searchInputLayout.getEditText().setText(string.nationality_placeholder);
-
-                    break;
-                }
-
-
-                case  byIngredient:{
-                    binding.searchInputLayout.getEditText().setText(string.ingredient_placeholder);
-                    break;
-                }
-
-
-            }
-            return true;
-        });
-
-        popupMenu.show();
-
-    }
-
-
-    private void enableInteraction()
-    {
+    private void enableInteraction() {
         requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
 
-    private void disableInteraction()
-    {
+    private void disableInteraction() {
         requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         binding.progressBar.setVisibility(View.VISIBLE);
     }
 
+    private void closeKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputManager.isAcceptingText()){
 
-    private void setRecyclerView()
-    {
+        inputManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+
+    private void setRecyclerView() {
         FlexboxLayoutManager layoutManager = new CustomFlexLayoutManager(getContext());
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.SPACE_EVENLY);
@@ -290,22 +291,19 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
 
     }
 
-    private void navigateToDetails(Meal meal , View transitionView)
-    {
+    private void navigateToDetails(Meal meal, View transitionView) {
 
 
         FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                 .addSharedElement(transitionView, transitionView.getTransitionName())
                 .build();
-        controller.navigate(NavGraphDirections.actionToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
+        controller.navigate(NavGraphDirections.actionToMealDetailsFragment(transitionView.getTransitionName(), meal), extras);
     }
 
-    private void setMealOfTheDay()
-    {
+    private void setMealOfTheDay() {
         Meal meal = presenter.getMealOfTheDay();
         enableInteraction();
-        if (meal != null)
-        {
+        if (meal != null) {
             binding.aboutTextView.setText(meal.getStrMeal());
             Glide.with(requireContext())
                     .load(meal.getStrMealThumb())
@@ -317,7 +315,7 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
 
     @Override
     public void onMealClicked(Meal meal, ImageView transitionView) {
-        navigateToDetails(meal,transitionView);
+        navigateToDetails(meal, transitionView);
     }
 
 
@@ -325,17 +323,6 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     public void onMealAddClicked(Meal meal) {
         presenter.setMealToAdd(meal);
         controller.navigate(NavGraphDirections.actionToAddDialogFragment(meal));
-    }
-
-    @Override
-    public void onResultSuccessAllMealsCallback() {
-        enableInteraction();
-        adapter.setMeals(presenter.getAllMeals(),getContext(),MealsFragment.this);
-    }
-
-    @Override
-    public void onResultFailureAllMealsCallback(String error) {
-
     }
 
     @Override
@@ -347,5 +334,18 @@ public class MealsFragment extends Fragment implements  MealsFragmentViewInterfa
     @Override
     public void onResultFailureOneMealCallback(String error) {
 
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSearchSuccessResult() {
+        closeKeyboard();
+        enableInteraction();
+        adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
+    }
+
+    @Override
+    public void onSearchErrorResult(String error) {
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
     }
 }

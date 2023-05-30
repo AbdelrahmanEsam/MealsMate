@@ -1,4 +1,4 @@
-package com.example.foodplanner.data.remote;
+package com.example.foodplanner.meals.mainmealsfragment.view;
 
 import com.example.foodplanner.data.dto.Meal;
 

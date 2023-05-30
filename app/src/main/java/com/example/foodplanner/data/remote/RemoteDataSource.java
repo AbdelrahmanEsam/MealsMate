@@ -1,13 +1,16 @@
 package com.example.foodplanner.data.remote;
 
 import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
 import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
+
+import io.reactivex.rxjava3.core.Observable;
 
 public interface RemoteDataSource {
 
 
-    public void getAllMealsResponse(AllMealsCallback networkCallback);
+
 
     public  void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback);
 
@@ -17,8 +20,8 @@ public interface RemoteDataSource {
 
     public void  filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface);
 
-    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface);
-    public MealsResponse searchMealsByName();
+    public void getFullDetailsById(String id,String requester, SearchResultsPresenterInterface presenterInterface);
+    public Observable<MealsResponse> searchByNameMealRequest(String prefix);
 
 
     public void getAllCategories(SearchSelectionPresenterInterface presenterInterface);

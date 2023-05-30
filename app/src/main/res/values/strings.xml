@@ -69,7 +69,9 @@
     <string name="results">results</string>
     <string name="searchword">searchWord</string>
     <string name="searchtype">searchType</string>
-
+    <string name="search">search</string>
+    <string name="add">add</string>
+    <string name="details">details</string>
 
 
     <string-array name="flag_urls">

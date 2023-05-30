@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
@@ -34,8 +35,12 @@ import com.example.utils.CustomFlexLayoutManager;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
+import java.util.function.Function;
 
 
 public class SearchResultsFragment extends Fragment
@@ -53,6 +58,9 @@ public class SearchResultsFragment extends Fragment
 
     private NavController controller;
 
+    private FirebaseAuth mAuth ;
+    private FirebaseFirestore fireStore;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +77,9 @@ public class SearchResultsFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
 
        String searchWord =  getArguments().getString(getString(searchword));
@@ -83,7 +94,7 @@ public class SearchResultsFragment extends Fragment
             presenter = new SearchResultsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
             sendDataRequest(searchWord,searchType);
         }
-
+        addTypeObserver();
         setRecyclerView();
     }
 
@@ -110,6 +121,75 @@ public class SearchResultsFragment extends Fragment
                 break;
             }
         }
+    }
+
+
+    private void addTypeObserver()
+    {
+        NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(),type -> {
+            if (type != null) {
+                switch ((Integer) type) {
+                    case breakfast: {
+                        addRecordToFirebaseAndRoom(getString(breakfast),presenter.getFullDetailedMeal(),(meal)-> {
+                            presenter.insertMealToBreakfast(meal);
+                            return null;
+
+                        });
+                        break;
+                    }
+
+                    case launch: {
+                        addRecordToFirebaseAndRoom(getString(launch),presenter.getFullDetailedMeal(),(meal)-> {
+                            presenter.insertMealToLaunch(meal);
+                            return null;
+                        });
+                        break;
+                    }
+
+                    case dinner: {
+                        addRecordToFirebaseAndRoom(getString(dinner),presenter.getFullDetailedMeal(),(meal)-> {
+                            presenter.insertMealToDinner(meal);
+                            return null;
+                        });
+                        break;
+
+                    }
+
+                    case favourites:{
+                        addRecordToFirebaseAndRoom(getString(favourites),presenter.getFullDetailedMeal(),(meal)-> {
+
+                            presenter.insertMealToFavourite(meal);
+                            return null;
+
+                        });
+                        break;
+
+                    }
+                }
+            }
+
+        });
+
+
+
+    }
+
+
+    private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
+    {
+
+        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                .addOnSuccessListener(documentReference -> {
+                    if (mealToAdd != null)
+                    {
+                        function.apply(mealToAdd);
+                        Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
 
@@ -145,12 +225,18 @@ public class SearchResultsFragment extends Fragment
     }
 
     @Override
-    public void onGetDetailsSuccessCallback(Meal meal) {
+    public void onGetDetailsSuccessCallback(Meal meal,String requester) {
 
-        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
-                .addSharedElement(transitionView, transitionView.getTransitionName())
-                .build();
-        controller.navigate(NavGraphDirections.actionToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
+        Log.d("requester",requester);
+        if (requester.equals(getString(add))){
+            controller.navigate(NavGraphDirections.actionToAddDialogFragment(meal));
+        }else{
+            FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+                    .addSharedElement(transitionView, transitionView.getTransitionName())
+                    .build();
+            controller.navigate(NavGraphDirections.actionToMealDetailsFragment(transitionView.getTransitionName(),meal),extras);
+
+        }
     }
 
     @Override
@@ -161,7 +247,7 @@ public class SearchResultsFragment extends Fragment
 
     @Override
     public void onFilterMealAddClicked(FilterMeal meal) {
-
+        presenter.getFullDetailsMealRequest(meal.getIdMeal(),getString(R.string.add));
     }
 
     @Override
@@ -169,6 +255,6 @@ public class SearchResultsFragment extends Fragment
 
 
         this.transitionView = transitionView;
-        presenter.getFullDetailsMealRequest(meal.getIdMeal());
+        presenter.getFullDetailsMealRequest(meal.getIdMeal(),getString(R.string.details));
     }
 }

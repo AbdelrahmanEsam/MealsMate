@@ -1,20 +1,21 @@
 package com.example.foodplanner.data.repository;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.foodplanner.data.dto.Meal;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
 import com.example.foodplanner.data.dto.table.Breakfast;
 import com.example.foodplanner.data.dto.table.Dinner;
 import com.example.foodplanner.data.dto.table.Favourite;
 import com.example.foodplanner.data.dto.table.Launch;
 import com.example.foodplanner.data.local.LocalDataSource;
-import com.example.foodplanner.data.remote.AllMealsCallback;
-import com.example.foodplanner.data.remote.MealOfTheDayCallback;
+import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.data.remote.RemoteDataSource;
 import com.example.foodplanner.meals.search.searchresults.presenter.SearchResultsPresenterInterface;
 import com.example.foodplanner.meals.search.searchselection.presenter.SearchSelectionPresenterInterface;
 
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class Repository implements RepositoryInterface{
 
@@ -44,10 +45,7 @@ public class Repository implements RepositoryInterface{
     }
 
 
-    @Override
-    public void getAllMealsResponse(AllMealsCallback networkCallback) {
-        remote.getAllMealsResponse(networkCallback);
-    }
+
 
     @Override
     public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback) {
@@ -73,16 +71,18 @@ public class Repository implements RepositoryInterface{
     }
 
     @Override
-    public void getFullDetailsById(String id, SearchResultsPresenterInterface presenterInterface) {
+    public void getFullDetailsById(String id,String requester, SearchResultsPresenterInterface presenterInterface) {
 
-        remote.getFullDetailsById(id,presenterInterface);
+        remote.getFullDetailsById(id,requester,presenterInterface);
     }
-
 
     @Override
-    public void searchMealsByName() {
-
+    public Observable<MealsResponse> searchByNameMealRequest(String prefix) {
+        return remote.searchByNameMealRequest(prefix);
     }
+
+
+
 
     @Override
     public void getAllCategories(SearchSelectionPresenterInterface presenterInterface) {
@@ -100,69 +100,69 @@ public class Repository implements RepositoryInterface{
     }
 
     @Override
-    public void insertMealToBreakfast(Meal meal,String day) {
-        local.insertMealToBreakfast(meal,day);
+    public Completable insertMealToBreakfast(Meal meal,String day) {
+        return local.insertMealToBreakfast(meal,day);
     }
 
     @Override
-    public void insertMealToLaunch(Meal meal,String day) {
+    public Completable insertMealToLaunch(Meal meal,String day) {
 
-        local.insertMealToLaunch(meal,day);
+        return  local.insertMealToLaunch(meal,day);
     }
 
     @Override
-    public void insertMealToDinner(Meal meal,String day) {
+    public Completable insertMealToDinner(Meal meal,String day) {
 
-        local.insertMealToDinner(meal,day);
+        return local.insertMealToDinner(meal,day);
     }
 
     @Override
-    public void insertMealToFavourite(Meal meal,String day) {
+    public Completable insertMealToFavourite(Meal meal,String day) {
 
-        local.insertMealToFavourite(meal,day);
+        return local.insertMealToFavourite(meal,day);
     }
 
     @Override
-    public void deleteMealFromBreakfast(Meal meal) {
+    public Completable deleteMealFromBreakfast(Meal meal) {
 
-        local.deleteMealFromBreakfast(meal);
+       return local.deleteMealFromBreakfast(meal);
     }
 
     @Override
-    public void deleteMealFromLaunch(Meal meal) {
+    public Completable deleteMealFromLaunch(Meal meal) {
 
-        local.deleteMealFromLaunch(meal);
+        return   local.deleteMealFromLaunch(meal);
     }
 
     @Override
-    public void deleteMealFromDinner(Meal meal) {
+    public Completable deleteMealFromDinner(Meal meal) {
 
-        local.deleteMealFromDinner(meal);
+        return local.deleteMealFromDinner(meal);
     }
 
     @Override
-    public void deleteMealFromFavourite(Meal meal) {
+    public Completable deleteMealFromFavourite(Meal meal) {
 
-        local.deleteMealFromFavourite(meal);
+        return local.deleteMealFromFavourite(meal);
     }
 
     @Override
-    public LiveData<List<Favourite>> getAllFavouriteMeals() {
+    public Observable<List<Favourite>> getAllFavouriteMeals() {
         return local.getAllFavouriteMeals();
     }
 
     @Override
-    public LiveData<List<Breakfast>> getAllBreakfastMeals() {
+    public Observable<List<Breakfast>> getAllBreakfastMeals() {
         return local.getAllBreakfastMeals();
     }
 
     @Override
-    public LiveData<List<Launch>> getAllLaunchMeals() {
+    public Observable<List<Launch>> getAllLaunchMeals() {
         return local.getAllLaunchMeals();
     }
 
     @Override
-    public LiveData<List<Dinner>> getAllDinnerMeals() {
+    public Observable<List<Dinner>> getAllDinnerMeals() {
         return local.getAllDinnerMeals();
     }
 

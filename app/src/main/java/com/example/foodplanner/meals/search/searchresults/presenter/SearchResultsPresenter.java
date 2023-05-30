@@ -10,7 +10,10 @@ import com.example.foodplanner.data.repository.RepositoryInterface;
 import com.example.foodplanner.meals.search.searchresults.view.SearchResultsViewInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import io.reactivex.rxjava3.core.Completable;
 
 public class SearchResultsPresenter implements SearchResultsPresenterInterface, Parcelable {
 
@@ -20,14 +23,16 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
 
     private List<FilterMeal>  results = new ArrayList<>();
 
-    private Meal navigateToDetailsMeal = null ;
+    private Meal fullDetailedMeal = null ;
 
-    public Meal getNavigateToDetailsMeal() {
-        return navigateToDetailsMeal;
+
+
+    public Meal getFullDetailedMeal() {
+        return fullDetailedMeal;
     }
 
-    public void setNavigateToDetailsMeal(Meal navigateToDetailsMeal) {
-        this.navigateToDetailsMeal = navigateToDetailsMeal;
+    public void setFullDetailedMeal(Meal fullDetailedMeal) {
+        this.fullDetailedMeal = fullDetailedMeal;
     }
 
     public SearchResultsPresenter(RepositoryInterface repository, SearchResultsViewInterface viewInterface) {
@@ -46,9 +51,14 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
 
     protected SearchResultsPresenter(Parcel in) {
         results = in.createTypedArrayList(FilterMeal.CREATOR);
-        navigateToDetailsMeal = in.readParcelable(Meal.class.getClassLoader());
+        fullDetailedMeal = in.readParcelable(Meal.class.getClassLoader());
     }
 
+
+    public String  getCurrentDay()
+    {
+        return  String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+    }
     public static final Creator<SearchResultsPresenter> CREATOR = new Creator<SearchResultsPresenter>() {
         @Override
         public SearchResultsPresenter createFromParcel(Parcel in) {
@@ -72,7 +82,7 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(results);
-        dest.writeParcelable(navigateToDetailsMeal, flags);
+        dest.writeParcelable(fullDetailedMeal, flags);
     }
 
 
@@ -97,8 +107,8 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
     }
 
     @Override
-    public void getFullDetailsMealRequest(String id) {
-        repository.getFullDetailsById(id,this);
+    public void getFullDetailsMealRequest(String id,String requester) {
+        repository.getFullDetailsById(id,requester,this);
     }
 
     @Override
@@ -120,9 +130,9 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
     }
 
     @Override
-    public void onGetItemFullDetailsSuccessCallback(List<Meal> meals) {
-        navigateToDetailsMeal = meals.get(0);
-        viewInterface.onGetDetailsSuccessCallback(navigateToDetailsMeal);
+    public void onGetItemFullDetailsSuccessCallback(List<Meal> meals,String requester) {
+        fullDetailedMeal = meals.get(0);
+        viewInterface.onGetDetailsSuccessCallback(fullDetailedMeal,requester);
     }
 
     @Override
@@ -141,5 +151,28 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
     public void onFilterCountryFailureCallback(String error) {
 
         viewInterface.onResultsFailureCallback(error);
+    }
+
+    @Override
+    public Completable insertMealToBreakfast(Meal meal) {
+       return repository.insertMealToBreakfast(meal,getCurrentDay());
+    }
+
+    @Override
+    public Completable insertMealToLaunch(Meal meal) {
+
+      return   repository.insertMealToLaunch(meal,getCurrentDay());
+    }
+
+    @Override
+    public Completable insertMealToDinner(Meal meal) {
+
+      return   repository.insertMealToDinner(meal,getCurrentDay());
+    }
+
+    @Override
+    public Completable insertMealToFavourite(Meal meal) {
+
+      return   repository.insertMealToFavourite(meal,getCurrentDay());
     }
 }

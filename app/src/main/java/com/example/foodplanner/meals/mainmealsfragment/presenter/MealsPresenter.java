@@ -4,15 +4,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.foodplanner.data.dto.Meal;
-import com.example.foodplanner.data.remote.AllMealsCallback;
-import com.example.foodplanner.data.remote.MealOfTheDayCallback;
+import com.example.foodplanner.data.dto.meal.MealsResponse;
 import com.example.foodplanner.data.repository.RepositoryInterface;
+import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.meals.mainmealsfragment.view.MealsFragmentViewInterface;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface, MealOfTheDayCallback,Parcelable {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCallback,Parcelable {
 
     private final RepositoryInterface repository;
     private final MealsFragmentViewInterface viewInterface;
@@ -22,39 +30,46 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
 
     private Meal mealOfTheDay ;
 
-    public List<Meal> getAllMeals() {
-        return allMeals;
-    }
+
 
     private List<Meal> allMeals ;
 
 
-    public void setAllMeals(List<Meal> allMeals) {
-        this.allMeals = allMeals;
-    }
+
+
+
 
     public MealsPresenter(RepositoryInterface repository, MealsFragmentViewInterface viewInterface)
     {
 
         this.repository = repository;
         this.viewInterface = viewInterface;
+        allMeals = new ArrayList<>();
 
     }
 
+    public List<Meal> getAllMeals() {
+        return allMeals;
+    }
 
-
+    public void setAllMeals(List<Meal> allMeals) {
+        this.allMeals = allMeals;
+    }
     public Meal getMealToAdd() {
         return mealToAdd;
     }
+
+    public void setMealToAdd(Meal mealToAdd) {
+        this.mealToAdd = mealToAdd;
+    }
+
 
     public Meal getMealOfTheDay()
     {
         return mealOfTheDay;
     }
 
-    public void setMealToAdd(Meal mealToAdd) {
-        this.mealToAdd = mealToAdd;
-    }
+
 
 
     public String  getCurrentDay()
@@ -69,49 +84,66 @@ public class MealsPresenter implements AllMealsCallback, MealsPresenterInterface
 
 
     @Override
-    public void onResultSuccessAllMealsCallback(List<Meal> meals) {
-        this.allMeals = meals;
-        viewInterface.onResultSuccessAllMealsCallback();
-    }
-
-    @Override
-    public void onResultFailureAllMealsCallback(String error) {
-
-        viewInterface.onResultFailureAllMealsCallback(error);
-    }
-
-    @Override
-    public void getAllMealsRequest() {
-
-        repository.getAllMealsResponse(this);
-    }
-
-    @Override
     public void mealOfTheDayRequest() {
         repository.getMealOfTheDay(this);
     }
 
     @Override
-    public void insertMealToBreakfast(Meal meal) {
-        repository.insertMealToBreakfast(meal,getCurrentDay());
+    public void searchByNameMealRequest(String prefix) {
+
+        repository.searchByNameMealRequest(prefix).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<MealsResponse>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull MealsResponse mealsResponse) {
+                allMeals.clear();
+                if (mealsResponse.getMeals() != null){
+                    allMeals.addAll(mealsResponse.getMeals());
+                }else{
+                    allMeals.clear();
+                }
+                viewInterface.onSearchSuccessResult();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+
+
+
+    @Override
+    public Completable insertMealToBreakfast(Meal meal) {
+      return   repository.insertMealToBreakfast(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToLaunch(Meal meal) {
+    public Completable insertMealToLaunch(Meal meal) {
 
-        repository.insertMealToLaunch(meal,getCurrentDay());
+      return   repository.insertMealToLaunch(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToDinner(Meal meal) {
+    public Completable insertMealToDinner(Meal meal) {
 
-        repository.insertMealToDinner(meal,getCurrentDay());
+      return   repository.insertMealToDinner(meal,getCurrentDay());
     }
 
     @Override
-    public void insertMealToFavourite(Meal meal) {
+    public Completable insertMealToFavourite(Meal meal) {
 
-        repository.insertMealToFavourite(meal,getCurrentDay());
+       return repository.insertMealToFavourite(meal,getCurrentDay());
     }
 
     @Override

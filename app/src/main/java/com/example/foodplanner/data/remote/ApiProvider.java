@@ -7,6 +7,7 @@ import com.example.foodplanner.data.dto.ingredients.IngredientsResponse;
 import com.example.foodplanner.data.dto.meal.MealsResponse;
 import com.example.foodplanner.data.dto.search.FilterMealResponse;
 
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -21,7 +22,7 @@ public interface ApiProvider {
     Call<MealsResponse> searchMealsByFirstLetter(@Query("f") String letter);
 
     @GET("search.php")
-    Call<MealsResponse> searchMealsByName(@Query("s") String name);
+    Observable<MealsResponse> searchMealsByName(@Query("s") String name);
 
     @GET("filter.php")
     Call<FilterMealResponse> filterMealsByIngredient(@Query("i") String IngredientName);

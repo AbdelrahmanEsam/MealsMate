@@ -12,6 +12,9 @@ import com.example.foodplanner.data.dto.table.Launch;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 public class LocalDataSourceImp implements  LocalDataSource{
 
     private static  LocalDataSourceImp localDataSourceImp;
@@ -44,93 +47,77 @@ public class LocalDataSourceImp implements  LocalDataSource{
     }
 
     @Override
-    public void insertMealToBreakfast(Meal meal,String day) {
-        new Thread(() -> {
+    public Completable insertMealToBreakfast(Meal meal,String day) {
+
                 Breakfast breakfast = meal.mealToBreakfastMapper();
                 breakfast.setDay(day);
-                breakfastDao.insert(breakfast);
-        }).start();
+          return  breakfastDao.insert(breakfast);
+    }
+
+    @Override
+    public Completable insertMealToLaunch(Meal meal,String day) {
+            return     launchDao.insert(meal.mealToLaunchMapper());
+    }
+
+    @Override
+    public Completable insertMealToDinner(Meal meal,String day) {
+
+        return     dinnerDao.insert(meal.mealToDinnerMapper());
 
     }
 
     @Override
-    public void insertMealToLaunch(Meal meal,String day) {
+    public Completable  insertMealToFavourite(Meal meal,String day) {
+           return favouriteDao.insert(meal.mealToFavouriteMapper());
+    }
 
-        new Thread(() -> {
-                launchDao.insert(meal.mealToLaunchMapper());
-        }).start();
+    @Override
+    public Completable deleteMealFromBreakfast(Meal meal) {
+
+
+        return  breakfastDao.delete(meal.mealToBreakfastMapper());
 
     }
 
     @Override
-    public void insertMealToDinner(Meal meal,String day) {
-        new Thread(() -> {
-                dinnerDao.insert(meal.mealToDinnerMapper());
-        }).start();
+    public Completable  deleteMealFromLaunch(Meal meal) {
 
 
-    }
 
-    @Override
-    public void insertMealToFavourite(Meal meal,String day) {
-        new Thread(() -> {
-            favouriteDao.insert(meal.mealToFavouriteMapper());
-        }).start();
+        return  launchDao.delete(meal.mealToLaunchMapper());
 
     }
 
     @Override
-    public void deleteMealFromBreakfast(Meal meal) {
+    public Completable  deleteMealFromDinner(Meal meal) {
 
-        new Thread(() -> {
-            breakfastDao.delete(meal.mealToBreakfastMapper());
-        }).start();
+        return   dinnerDao.delete(meal.mealToDinnerMapper());
+
     }
 
     @Override
-    public void deleteMealFromLaunch(Meal meal) {
+    public Completable  deleteMealFromFavourite(Meal meal) {
 
-
-        new Thread(() -> {
-            launchDao.delete(meal.mealToLaunchMapper());
-        }).start();
+        return    favouriteDao.delete(meal.mealToFavouriteMapper());
     }
 
     @Override
-    public void deleteMealFromDinner(Meal meal) {
-
-
-        new Thread(() -> {
-            dinnerDao.delete(meal.mealToDinnerMapper());
-        }).start();
-    }
-
-    @Override
-    public void deleteMealFromFavourite(Meal meal) {
-
-
-        new Thread(() -> {
-            favouriteDao.delete(meal.mealToFavouriteMapper());
-        }).start();
-    }
-
-    @Override
-    public LiveData<List<Favourite>> getAllFavouriteMeals() {
+    public Observable<List<Favourite>> getAllFavouriteMeals() {
         return favouriteDao.getAllMeals();
     }
 
     @Override
-    public LiveData<List<Breakfast>> getAllBreakfastMeals() {
+    public Observable<List<Breakfast>> getAllBreakfastMeals() {
         return  breakfastDao.getAllMeals();
     }
 
     @Override
-    public LiveData<List<Launch>> getAllLaunchMeals() {
+    public Observable<List<Launch>> getAllLaunchMeals() {
         return launchDao.getAllMeals();
     }
 
     @Override
-    public LiveData<List<Dinner>> getAllDinnerMeals() {
+    public Observable<List<Dinner>> getAllDinnerMeals() {
         return  dinnerDao.getAllMeals();
     }
 

@@ -12,6 +12,9 @@ import com.example.foodplanner.data.dto.table.Favourite;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 
 @Dao
 public interface FavouriteDao {
@@ -19,15 +22,15 @@ public interface FavouriteDao {
 
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insert(Favourite meal);
+        Completable  insert(Favourite meal);
 
         @Update
-        void update(Favourite meal);
+        Completable update(Favourite meal);
 
         @Delete
-        void delete(Favourite meal);
+        Completable  delete(Favourite meal);
 
         @Query("SELECT * FROM Favourite")
-        LiveData<List<Favourite>> getAllMeals();
+        Observable<List<Favourite>> getAllMeals();
 
 }
