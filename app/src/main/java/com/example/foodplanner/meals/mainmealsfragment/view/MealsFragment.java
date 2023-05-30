@@ -99,11 +99,16 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
                 adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
                 setMealOfTheDay();
             } else {
+
+
                 initPresenterAndSendRequests();
+
             }
 
         } else {
-            initPresenterAndSendRequests();
+
+                initPresenterAndSendRequests();
+
         }
 
 
@@ -152,7 +157,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
                     @Override
                     public void onNext(String text) {
 
-                        disableInteraction();
+
                         presenter.searchByNameMealRequest(text);
                     }
 
@@ -170,8 +175,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     }
 
 
-
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -182,7 +185,8 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())), this);
         presenter.searchByNameMealRequest("");
         presenter.mealOfTheDayRequest();
-        disableInteraction();
+         disableInteraction();
+
     }
 
     private void addTypeObserver() {
@@ -269,9 +273,9 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     private void closeKeyboard() {
         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputManager.isAcceptingText()){
+        if (inputManager.isAcceptingText()) {
 
-        inputManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            inputManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
@@ -298,14 +302,17 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     private void setMealOfTheDay() {
         Meal meal = presenter.getMealOfTheDay();
-        enableInteraction();
-        if (meal != null) {
-            binding.aboutTextView.setText(meal.getStrMeal());
-            Glide.with(requireContext())
-                    .load(meal.getStrMealThumb())
-                    .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
-                    .into(binding.mealImage);
-        }
+
+            enableInteraction();
+
+            if (meal != null) {
+                binding.aboutTextView.setText(meal.getStrMeal());
+                Glide.with(requireContext())
+                        .load(meal.getStrMealThumb())
+                        .override(300, 200).downsample(DownsampleStrategy.CENTER_INSIDE)
+                        .into(binding.mealImage);
+            }
+
 
     }
 
@@ -334,8 +341,9 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     @Override
     public void onSearchSuccessResult() {
-        closeKeyboard();
-        enableInteraction();
+
+            closeKeyboard();
+            enableInteraction();
         adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
     }
 

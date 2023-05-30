@@ -54,6 +54,7 @@ public class RemoteDataSourceImpl implements RemoteDataSource{
 
     @Override
     public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback) {
+
         retrofit.getMealOfTheDay().enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {

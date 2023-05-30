@@ -57,11 +57,12 @@ public class SplashFragment extends Fragment {
 
           @Override
           public void onAnimationEnd(@NonNull Animator animator) {
-              if (mAuth.getCurrentUser() ==null || !((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
-                  controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
+              if (((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
+                  controller.navigate(NavGraphDirections.actionToScheduleFragment());
                   return;
               }
-                  controller.navigate(NavGraphDirections.actionToScheduleFragment());
+              controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
+
           }
 
           @Override
@@ -87,6 +88,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 }
