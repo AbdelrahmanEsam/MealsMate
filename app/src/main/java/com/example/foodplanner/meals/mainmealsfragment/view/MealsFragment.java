@@ -158,6 +158,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
                     @Override
                     public void onError(Throwable e) {
+
                     }
 
                     @Override
@@ -169,11 +170,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
 
 
     @Override
@@ -334,7 +330,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     @Override
     public void onResultFailureOneMealCallback(String error) {
 
-        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -346,6 +341,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     @Override
     public void onSearchErrorResult(String error) {
-        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+
     }
 }

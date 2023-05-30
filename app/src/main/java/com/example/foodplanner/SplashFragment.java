@@ -57,11 +57,7 @@ public class SplashFragment extends Fragment {
 
           @Override
           public void onAnimationEnd(@NonNull Animator animator) {
-              if (mAuth.getCurrentUser() ==null){
-                  controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
-                  return;
-              }
-              if (((MainActivity)requireActivity()).internetState){
+              if (mAuth.getCurrentUser() ==null || !((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
                   controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
                   return;
               }

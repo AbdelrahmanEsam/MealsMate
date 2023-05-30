@@ -6,10 +6,12 @@ import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -116,9 +118,20 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        enableInteraction();
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.presenter),presenter);
+    }
+
+    private void enableInteraction() {
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
     private void initPresenterAndSendRequests(Bundle savedInstanceState)
@@ -130,6 +143,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
             presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())));
         }
     }
+
+
 
 
 

@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
    private NavHostFragment navHostFragment;
 
-   public  boolean internetState;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private void connectivityObserve()
     {
 
-        Observable.combineLatest(connectivityObserver.Observe(), fragmentObservable, (networkStatus, fragmentStatus) -> networkStatus).subscribe(new Observer<Object>() {
+        Observable.combineLatest(connectivityObserver.Observe(), fragmentObservable, (networkStatus, fragmentStatus) -> networkStatus)
+                .observeOn(AndroidSchedulers.mainThread()).distinctUntilChanged().subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
@@ -78,14 +78,13 @@ public class MainActivity extends AppCompatActivity {
                     case Lost:
                     case Unavailable: {
                         binding.bottomNavigationView.setVisibility(View.GONE);
-                        internetState = false;
+                       navHostFragment.getNavController().navigate(NavGraphDirections.actionToScheduleFragment());
                         break;
                     }
 
                     case Available:{
                         if (mAuth.getCurrentUser() != null)
                         {
-                            internetState = true;
                             binding.bottomNavigationView.setVisibility(View.VISIBLE);
                             showBottomNavigation(isInSplash());
                             break;

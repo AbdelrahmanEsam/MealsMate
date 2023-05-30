@@ -5,7 +5,6 @@ import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
-import static com.example.foodplanner.R.string.meal;
 
 import android.os.Bundle;
 import android.transition.Transition;
@@ -104,7 +103,16 @@ public class MealDetailsFragment extends Fragment {
             controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
 
         });
+        setYoutubeVideoVisibility();
 
+    }
+
+    private void setYoutubeVideoVisibility()
+    {
+     if (((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
+
+        binding.youtubePlayerView.setVisibility(View.GONE);
+     }
     }
 
     private void initPresenterAndSendRequests(Bundle savedInstanceState)
@@ -207,12 +215,7 @@ public class MealDetailsFragment extends Fragment {
 
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((MainActivity) requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
 
-    }
 
 
     @Override

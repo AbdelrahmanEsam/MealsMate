@@ -64,7 +64,7 @@ public class NetworkConnectivityObserver  implements ConnectivityObserver{
 
             };
             connectivityManager.registerNetworkCallback(networkRequest,networkCallback);
-        }).observeOn(AndroidSchedulers.mainThread());
+        });
     }
 
     @Override

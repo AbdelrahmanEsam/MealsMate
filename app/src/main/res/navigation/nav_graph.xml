@@ -17,6 +17,9 @@
 
     <action
         android:id="@+id/action_to_scheduleFragment"
+        app:launchSingleTop="true"
+        app:popUpToInclusive="true"
+        app:popUpTo="@id/nav_graph"
         app:destination="@id/scheduleFragment" />
 
     <fragment
