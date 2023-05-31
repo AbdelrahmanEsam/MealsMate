@@ -20,4 +20,7 @@ public interface MealsPresenterInterface {
     public  Completable insertMealToDinner(Meal meal);
     public Completable insertMealToFavourite(Meal meal);
 
+
+    public void clearAllTables();
+
 }

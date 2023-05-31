@@ -134,6 +134,7 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
                 },throwable -> {
                     viewInterface.onResultFailureOneMealCallback(throwable.getMessage());
                });
+
     }
 
 
@@ -160,6 +161,11 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
     public Completable insertMealToFavourite(Meal meal) {
 
        return repository.insertMealToFavourite(meal);
+    }
+
+    @Override
+    public void clearAllTables() {
+        repository.clearAllTables();
     }
 
     @Override

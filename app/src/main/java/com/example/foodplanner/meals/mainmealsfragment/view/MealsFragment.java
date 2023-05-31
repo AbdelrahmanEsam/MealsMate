@@ -106,6 +106,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
         binding.logoutImageView.setOnClickListener(view1 -> {
             mAuth.signOut();
+            presenter.clearAllTables();
             ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.GONE);
             controller.navigate(NavGraphDirections.actionToLoginFragment());
         });
@@ -146,7 +147,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         if (mAuth.getCurrentUser() == null){
             binding.logoutImageView.setVisibility(View.GONE);
            ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
-       ((MainActivity)requireActivity()).binding.bottomNavigationView.getMenu().getItem(2).setEnabled(false);
+          ((MainActivity)requireActivity()).binding.bottomNavigationView.getMenu().getItem(2).setEnabled(false);
 
         }
     }

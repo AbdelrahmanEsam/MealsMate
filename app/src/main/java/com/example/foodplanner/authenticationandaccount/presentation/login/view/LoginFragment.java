@@ -1,5 +1,7 @@
 package com.example.foodplanner.authenticationandaccount.presentation.login.view;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -31,9 +33,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginFragment extends Fragment {
@@ -42,6 +54,8 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private NavController controller ;
     private FirebaseAuth mAuth;
+
+    private FirebaseFirestore firebaseFirestore ;
     private LoginPresenter presenter;
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -50,7 +64,9 @@ public class LoginFragment extends Fragment {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
-                  loginSuccess(account.getDisplayName());
+                    //Log.d("google",mAuth.getCurrentUser().getDisplayName());
+                  googleLoginSuccess(account.getIdToken());
+
                 } catch (ApiException e) {
 
                     enableInteraction();
@@ -77,6 +93,7 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         if (savedInstanceState == null){
 
             presenter = new LoginPresenter();
@@ -222,6 +239,7 @@ public class LoginFragment extends Fragment {
     {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_id))
                 .requestEmail()
                 .build();
 
@@ -229,9 +247,39 @@ public class LoginFragment extends Fragment {
         signInLauncher.launch(client.getSignInIntent());
     }
 
+    private void googleLoginSuccess(String idToken)
+    {
+        AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(firebaseCredential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                       createNewCollectionForUser(user);
+
+                    }
+                });
+    }
+
+
+    private void createNewCollectionForUser(FirebaseUser user) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(getString(R.string.breakfast), new ArrayList<>());
+        data.put(getString(R.string.launch), new ArrayList<>());
+        data.put(getString(R.string.dinner), new ArrayList<>());
+        data.put(getString(R.string.favourites), new ArrayList<>());
+
+        firebaseFirestore.collection(getString(R.string.users)).document(user.getUid()).set(data)
+                .addOnSuccessListener(documentReference -> {
+                    loginSuccess(user.getDisplayName());
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(requireContext(),"error "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
     private void loginSuccess(String username )
     {
-        if (!((MainActivity)getActivity()).connectivityObserver.networkStatus()){
+        if (!((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
 
         Toast.makeText(getContext(), getString(R.string.welcome)+" "+username, Toast.LENGTH_SHORT).show();
         controller.navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment());

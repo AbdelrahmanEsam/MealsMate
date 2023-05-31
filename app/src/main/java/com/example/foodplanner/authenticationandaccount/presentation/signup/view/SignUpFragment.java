@@ -28,8 +28,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -55,7 +57,7 @@ public class SignUpFragment extends Fragment {
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
-                    signUpSuccess(account.getDisplayName());
+                    googleSignUpSuccess(account.getIdToken());
 
                 } catch (ApiException e) {
                     Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -240,6 +242,7 @@ public class SignUpFragment extends Fragment {
     {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_id))
                 .requestEmail()
                 .build();
 
@@ -247,6 +250,18 @@ public class SignUpFragment extends Fragment {
         signUpLauncher.launch(client.getSignInIntent());
     }
 
+
+    private void googleSignUpSuccess(String idToken)
+    {
+        AuthCredential firebaseCredential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(firebaseCredential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        createNewCollectionForUser(user);
+                    }
+                });
+    }
     private void signUpSuccess(String username)
     {
         Toast.makeText(getContext(), getString(R.string.welcome)+" "+username, Toast.LENGTH_SHORT).show();
