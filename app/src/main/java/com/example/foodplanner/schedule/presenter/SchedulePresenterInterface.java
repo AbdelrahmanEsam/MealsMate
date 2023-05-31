@@ -15,10 +15,10 @@ import io.reactivex.rxjava3.core.Observable;
 
 public interface SchedulePresenterInterface {
 
-   Observable<List<Breakfast>> getAllBreakfastMeals();
-   Observable<List<Launch>>  getAllLaunchMeals();
-   Observable<List<Dinner>> getAllDinnerMeals();
-   Observable<List<Favourite>>  getAllFavouriteMeals();
+  void getAllBreakfastMeals();
+   void  getAllLaunchMeals();
+  void getAllDinnerMeals();
+   void  getAllFavouriteMeals();
 
    void syncDataWithCloud(List<Meal> breakfasts,List<Meal> launches,List<Meal> dinners,List<Meal> favourites);
 

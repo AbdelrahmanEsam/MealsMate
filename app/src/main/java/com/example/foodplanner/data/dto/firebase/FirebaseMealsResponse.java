@@ -9,6 +9,7 @@ public class FirebaseMealsResponse {
     public List<Meal> breakfast;
     public List<Meal> launch;
     public List<Meal> dinner;
+    public List<Meal> favourites;
 
     public List<Meal> getLaunches() {
         return launch;
@@ -34,7 +35,7 @@ public class FirebaseMealsResponse {
         this.favourites = favourites;
     }
 
-    public List<Meal> favourites;
+
 
     public FirebaseMealsResponse()
     {

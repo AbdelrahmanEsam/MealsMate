@@ -43,13 +43,13 @@ public interface RepositoryInterface {
 
 
 
-    public Completable insertMealToBreakfast(Meal meal,String day);
+    public Completable insertMealToBreakfast(Meal meal);
 
-    public Completable insertMealToLaunch(Meal meal,String day);
+    public Completable insertMealToLaunch(Meal meal);
 
-    public Completable insertMealToDinner(Meal meal,String day);
+    public Completable insertMealToDinner(Meal meal);
 
-    public Completable insertMealToFavourite(Meal meal,String day);
+    public Completable insertMealToFavourite(Meal meal);
 
 
     public Completable deleteMealFromBreakfast(Meal meal);

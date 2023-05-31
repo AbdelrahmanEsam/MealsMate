@@ -47,27 +47,24 @@ public class LocalDataSourceImp implements  LocalDataSource{
     }
 
     @Override
-    public Completable insertMealToBreakfast(Meal meal,String day) {
-
-                Breakfast breakfast = meal.mealToBreakfastMapper();
-                breakfast.setDay(day);
-          return  breakfastDao.insert(breakfast);
+    public Completable insertMealToBreakfast(Meal meal) {
+          return  breakfastDao.insert(meal.mealToBreakfastMapper());
     }
 
     @Override
-    public Completable insertMealToLaunch(Meal meal,String day) {
+    public Completable insertMealToLaunch(Meal meal) {
             return     launchDao.insert(meal.mealToLaunchMapper());
     }
 
     @Override
-    public Completable insertMealToDinner(Meal meal,String day) {
+    public Completable insertMealToDinner(Meal meal) {
 
         return     dinnerDao.insert(meal.mealToDinnerMapper());
 
     }
 
     @Override
-    public Completable  insertMealToFavourite(Meal meal,String day) {
+    public Completable  insertMealToFavourite(Meal meal) {
            return favouriteDao.insert(meal.mealToFavouriteMapper());
     }
 

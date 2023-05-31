@@ -35,11 +35,6 @@ public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Par
 
     }
 
-    public String  getCurrentDay()
-    {
-        return  String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-    }
-
 
     protected MealDetailsPresenter(Parcel in) {
         repository = in.readParcelable(RepositoryInterface.class.getClassLoader());
@@ -71,21 +66,21 @@ public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Par
 
     @Override
     public Completable insertMealToBreakfast(Meal meal) {
-      return   repository.insertMealToBreakfast(meal,getCurrentDay());
+      return   repository.insertMealToBreakfast(meal);
     }
 
     @Override
     public Completable insertMealToLaunch(Meal meal) {
-      return   repository.insertMealToLaunch(meal,getCurrentDay());
+      return   repository.insertMealToLaunch(meal);
     }
 
     @Override
     public Completable insertMealToDinner(Meal meal) {
-       return repository.insertMealToDinner(meal,getCurrentDay());
+       return repository.insertMealToDinner(meal);
     }
 
     @Override
     public Completable insertMealToFavourite(Meal meal) {
-       return repository.insertMealToFavourite(meal,getCurrentDay());
+       return repository.insertMealToFavourite(meal);
     }
 }

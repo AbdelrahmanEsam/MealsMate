@@ -7,6 +7,7 @@ import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -98,11 +99,13 @@ public class MealDetailsFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
         initViews(presenter.getMealToAdd());
-        addTypeObserver();
+
         binding.addToCacheFloatingButton.setOnClickListener(view1 -> {
-            controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
+            controller.navigate(NavGraphDirections.actionToDatePickerFragment(presenter.getMealToAdd()));
 
         });
+        addTypeObserver();
+        datePickerResultObserver();
         setYoutubeVideoVisibility();
 
     }
@@ -136,7 +139,6 @@ public class MealDetailsFragment extends Fragment {
 
         backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(), type -> {
             if (type != null) {
-                Log.d("null Meal","null");
                 switch ((Integer) type) {
                     case breakfast: {
                         addRecordToFirebaseAndRoom(getString(breakfast),presenter.getMealToAdd(),(meal)-> {
@@ -180,10 +182,7 @@ public class MealDetailsFragment extends Fragment {
 
                     }
                 }
-
-            }else{
-
-                Log.d("null Meal","null");
+                controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),null);
 
             }
 
@@ -191,6 +190,25 @@ public class MealDetailsFragment extends Fragment {
 
 
 
+    }
+
+
+    private void datePickerResultObserver()
+    {
+        NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.date)).observe(getViewLifecycleOwner(), type -> {
+            if (type != null) {
+                Log.d("dateListener", type.toString());
+
+                new Handler().postDelayed(() -> {
+                    presenter.getMealToAdd().setDay(type.toString());
+                    controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
+                    controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.date), null);
+                }, 50);
+
+            }
+
+        });
     }
 
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
@@ -234,9 +252,7 @@ public class MealDetailsFragment extends Fragment {
     private void initViews(Meal meal)
     {
         String transitionName = getArguments().getString(getString(R.string.transition_name));
-        Log.d("transitionName",transitionName);
         binding.mealImage.setTransitionName(transitionName);
-        Log.d("transitionName",binding.mealImage.getTransitionName());
         setUpYoutubeVideo(meal.getStrYoutube());
 
         Glide.with(requireContext())

@@ -13,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,6 +96,7 @@ public class SearchResultsFragment extends Fragment
             sendDataRequest(searchWord,searchType);
         }
         addTypeObserver();
+        datePickerResultObserver();
         setRecyclerView();
     }
 
@@ -176,6 +178,25 @@ public class SearchResultsFragment extends Fragment
     }
 
 
+    private void datePickerResultObserver()
+    {
+        NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+        backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.date)).observe(getViewLifecycleOwner(), type -> {
+            if (type != null) {
+                Log.d("dateListener", type.toString());
+
+                new Handler().postDelayed(() -> {
+                    presenter.getFullDetailedMeal().setDay(type.toString());
+                    controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getFullDetailedMeal()));
+                    controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.date), null);
+                }, 50);
+
+            }
+
+        });
+    }
+
+
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
     {
 
@@ -227,9 +248,10 @@ public class SearchResultsFragment extends Fragment
     @Override
     public void onGetDetailsSuccessCallback(Meal meal,String requester) {
 
-        Log.d("requester",requester);
+
         if (requester.equals(getString(add))){
             controller.navigate(NavGraphDirections.actionToAddDialogFragment(meal));
+
         }else{
             FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
                     .addSharedElement(transitionView, transitionView.getTransitionName())
@@ -248,6 +270,7 @@ public class SearchResultsFragment extends Fragment
     @Override
     public void onFilterMealAddClicked(FilterMeal meal) {
         presenter.getFullDetailsMealRequest(meal.getIdMeal(),getString(R.string.add));
+
     }
 
     @Override

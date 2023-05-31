@@ -100,26 +100,26 @@ public class Repository implements RepositoryInterface{
     }
 
     @Override
-    public Completable insertMealToBreakfast(Meal meal,String day) {
-        return local.insertMealToBreakfast(meal,day);
+    public Completable insertMealToBreakfast(Meal meal) {
+        return local.insertMealToBreakfast(meal);
     }
 
     @Override
-    public Completable insertMealToLaunch(Meal meal,String day) {
+    public Completable insertMealToLaunch(Meal meal) {
 
-        return  local.insertMealToLaunch(meal,day);
+        return  local.insertMealToLaunch(meal);
     }
 
     @Override
-    public Completable insertMealToDinner(Meal meal,String day) {
+    public Completable insertMealToDinner(Meal meal) {
 
-        return local.insertMealToDinner(meal,day);
+        return local.insertMealToDinner(meal);
     }
 
     @Override
-    public Completable insertMealToFavourite(Meal meal,String day) {
+    public Completable insertMealToFavourite(Meal meal) {
 
-        return local.insertMealToFavourite(meal,day);
+        return local.insertMealToFavourite(meal);
     }
 
     @Override
