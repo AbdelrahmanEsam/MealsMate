@@ -1,7 +1,11 @@
 package com.example.foodplanner.data.repository;
 
 import com.example.foodplanner.data.dto.Meal;
+import com.example.foodplanner.data.dto.area.AreaResponse;
+import com.example.foodplanner.data.dto.category.AllCategoriesResponse;
+import com.example.foodplanner.data.dto.ingredients.IngredientsResponse;
 import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.data.dto.search.FilterMealResponse;
 import com.example.foodplanner.data.dto.table.Breakfast;
 import com.example.foodplanner.data.dto.table.Dinner;
 import com.example.foodplanner.data.dto.table.Favourite;
@@ -48,32 +52,32 @@ public class Repository implements RepositoryInterface{
 
 
     @Override
-    public void getMealOfTheDay(MealOfTheDayCallback mealOfTheDayCallback) {
-        remote.getMealOfTheDay(mealOfTheDayCallback);
+    public Observable<MealsResponse>  getMealOfTheDay() {
+       return remote.getMealOfTheDay();
     }
 
     @Override
-    public void filterMealsByCountry(String country, SearchResultsPresenterInterface presenterInterface) {
+    public Observable<FilterMealResponse> filterMealsByCountry(String country) {
 
-        remote.filterMealsByCountry(country,presenterInterface);
+       return remote.filterMealsByCountry(country);
     }
 
     @Override
-    public void filterMealsByIngredient(String ingredients, SearchResultsPresenterInterface presenterInterface) {
+    public Observable<FilterMealResponse> filterMealsByIngredient(String ingredients ) {
 
-        remote.filterMealsByIngredient(ingredients,presenterInterface);
+        return  remote.filterMealsByIngredient(ingredients);
     }
 
     @Override
-    public void filterMealsByCategory(String category, SearchResultsPresenterInterface presenterInterface) {
+    public Observable<FilterMealResponse> filterMealsByCategory(String category) {
 
-        remote.filterMealsByCategory(category,presenterInterface);
+      return  remote.filterMealsByCategory(category);
     }
 
     @Override
-    public void getFullDetailsById(String id,String requester, SearchResultsPresenterInterface presenterInterface) {
+    public Observable<MealsResponse> getFullDetailsById(String id,String requester) {
 
-        remote.getFullDetailsById(id,requester,presenterInterface);
+        return  remote.getFullDetailsById(id,requester);
     }
 
     @Override
@@ -85,18 +89,18 @@ public class Repository implements RepositoryInterface{
 
 
     @Override
-    public void getAllCategories(SearchSelectionPresenterInterface presenterInterface) {
-       remote.getAllCategories(presenterInterface);
+    public Observable<AllCategoriesResponse> getAllCategories() {
+       return  remote.getAllCategories();
     }
 
     @Override
-    public void getAllCountries(SearchSelectionPresenterInterface presenterInterface) {
-        remote.getAllCountries(presenterInterface);
+    public Observable<AreaResponse> getAllCountries() {
+       return remote.getAllCountries();
     }
 
     @Override
-    public void getAllIngredients(SearchSelectionPresenterInterface presenterInterface) {
-        remote.getAllIngredients(presenterInterface);
+    public Observable<IngredientsResponse> getAllIngredients() {
+       return remote.getAllIngredients();
     }
 
     @Override

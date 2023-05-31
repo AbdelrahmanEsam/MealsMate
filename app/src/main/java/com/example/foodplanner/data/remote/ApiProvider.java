@@ -16,35 +16,35 @@ import retrofit2.http.Query;
 public interface ApiProvider {
 
     @GET("random.php")
-    Call<MealsResponse> getMealOfTheDay();
+    Observable<MealsResponse> getMealOfTheDay();
 
     @GET("search.php")
     Observable<MealsResponse> searchMealsByName(@Query("s") String name);
 
     @GET("filter.php")
-    Call<FilterMealResponse> filterMealsByIngredient(@Query("i") String IngredientName);
+    Observable<FilterMealResponse> filterMealsByIngredient(@Query("i") String IngredientName);
 
     @GET("filter.php")
-    Call<FilterMealResponse> filterMealsByCategory(@Query("c") String categoryName);
+    Observable<FilterMealResponse> filterMealsByCategory(@Query("c") String categoryName);
 
     @GET("filter.php")
-    Call<FilterMealResponse> filterMealsByCountry(@Query("a") String countryName);
+    Observable<FilterMealResponse> filterMealsByCountry(@Query("a") String countryName);
 
     @GET("lookup.php")
-    Call<MealsResponse> getFullDetailsById(@Query("i") String id);
+    Observable<MealsResponse> getFullDetailsById(@Query("i") String id);
 
 
 
     @GET("list.php?c=list")
-    Call<AllCategoriesResponse> getAllCategories();
+    Observable<AllCategoriesResponse> getAllCategories();
 
 
     @GET("list.php?a=list")
-    Call<AreaResponse> getAllCountries();
+    Observable<AreaResponse> getAllCountries();
 
 
     @GET("list.php?i=list")
-    Call<IngredientsResponse> getAllIngredients();
+    Observable<IngredientsResponse> getAllIngredients();
 
 }
 

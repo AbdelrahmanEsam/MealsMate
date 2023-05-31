@@ -1,5 +1,6 @@
 package com.example.foodplanner.meals.search.searchresults.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchResultsPresenter implements SearchResultsPresenterInterface, Parcelable {
 
@@ -88,69 +91,55 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
 
 
 
+    @SuppressLint("CheckResult")
     @Override
     public void filterMealsByCategory(String category) {
 
-        repository.filterMealsByCategory(category,this);
+        repository.filterMealsByCategory(category).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filterMealResponse -> {
+                    results.addAll(filterMealResponse.getMeals());
+                    viewInterface.onResultsSuccessCallback(results);
+                },throwable -> {
+                    viewInterface.onResultsFailureCallback(throwable.getMessage());
+                });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void filterMealsByIngredient(String ingredient) {
 
-        repository.filterMealsByIngredient(ingredient,this);
+        repository.filterMealsByIngredient(ingredient).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filterMealResponse -> {
+                    results.addAll(filterMealResponse.getMeals());
+                    viewInterface.onResultsSuccessCallback(results);
+        },throwable -> {
+                    viewInterface.onResultsFailureCallback(throwable.getMessage());
+                });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void filterMealsByCountry(String country) {
-        Log.d("searchResult","request from presenter");
-        repository.filterMealsByCountry(country,this);
+        repository.filterMealsByCountry(country).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(filterMealResponse -> {
+                    results.addAll(filterMealResponse.getMeals());
+                    viewInterface.onResultsSuccessCallback(results);
+                },throwable -> {
+                    viewInterface.onResultsFailureCallback(throwable.getMessage());
+                });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getFullDetailsMealRequest(String id,String requester) {
-        repository.getFullDetailsById(id,requester,this);
-    }
-
-    @Override
-    public void onFilterCategorySuccessCallback(List<FilterMeal> categories) {
-        results.addAll(categories);
-        viewInterface.onResultsSuccessCallback(results);
-    }
-
-    @Override
-    public void onFilterIngredientSuccessCallback(List<FilterMeal> ingredients) {
-        results.addAll(ingredients);
-        viewInterface.onResultsSuccessCallback(results);
-    }
-
-    @Override
-    public void onFilterCountrySuccessCallback(List<FilterMeal> countries) {
-        results.addAll(countries);
-        viewInterface.onResultsSuccessCallback(results);
-    }
-
-    @Override
-    public void onGetItemFullDetailsSuccessCallback(List<Meal> meals,String requester) {
-        fullDetailedMeal = meals.get(0);
-        viewInterface.onGetDetailsSuccessCallback(fullDetailedMeal,requester);
-    }
-
-    @Override
-    public void onFilterCategoryFailureCallback(String error) {
-
-        viewInterface.onResultsFailureCallback(error);
-    }
-
-    @Override
-    public void onFilterIngredientFailureCallback(String error) {
-
-        viewInterface.onResultsFailureCallback(error);
-    }
-
-    @Override
-    public void onFilterCountryFailureCallback(String error) {
-
-        viewInterface.onResultsFailureCallback(error);
+        repository.getFullDetailsById(id,requester).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> {
+                    fullDetailedMeal = mealsResponse.getMeals().get(0);
+                    viewInterface.onGetDetailsSuccessCallback(fullDetailedMeal,requester);
+                },throwable -> {
+                    viewInterface.onGetDetailsFailureCallback(throwable.getMessage());
+                });
     }
 
     @Override

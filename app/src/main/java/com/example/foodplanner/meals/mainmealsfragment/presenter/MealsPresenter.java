@@ -1,5 +1,6 @@
 package com.example.foodplanner.meals.mainmealsfragment.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -105,11 +106,19 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
 
 
 
+    @SuppressLint("CheckResult")
     @Override
     public void mealOfTheDayRequest() {
-        repository.getMealOfTheDay(this);
+        repository.getMealOfTheDay()
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> {
+                    mealOfTheDay = mealsResponse.getMeals().get(0);
+                    viewInterface.onResultSuccessOneMealsCallback();
+                },throwable -> {
+                    viewInterface.onResultFailureOneMealCallback(throwable.getMessage());
+                });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void searchByNameMealRequest(String prefix) {
 
@@ -155,13 +164,12 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
     @Override
     public void onResultSuccessMealOfTheDayCallback(Meal meal) {
 
-        mealOfTheDay = meal;
-        viewInterface.onResultSuccessOneMealsCallback();
+
     }
 
     @Override
     public void onResultFailureMealOfTheDayCallback(String error) {
-        viewInterface.onResultFailureOneMealCallback(error);
+
     }
 
 

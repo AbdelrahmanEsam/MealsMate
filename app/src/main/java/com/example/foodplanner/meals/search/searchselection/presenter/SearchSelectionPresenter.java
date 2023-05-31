@@ -1,5 +1,6 @@
 package com.example.foodplanner.meals.search.searchselection.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +13,9 @@ import com.example.foodplanner.meals.search.searchselection.view.SearchFragmentV
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchSelectionPresenter implements SearchSelectionPresenterInterface, Parcelable {
 
@@ -80,60 +84,42 @@ public class SearchSelectionPresenter implements SearchSelectionPresenterInterfa
 
 
 
-
+    @SuppressLint("CheckResult")
     @Override
     public void getAllCategories() {
 
-        repository.getAllCategories(this);
+        repository.getAllCategories().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(allCategoriesResponse -> {
+            this.categories.addAll(allCategoriesResponse.getMealCategories().stream().map(MealCategory::getCategory).collect(Collectors.toList()));
+            viewInterface.onGetAllCategoriesCallback(this.categories);
+        },throwable -> {
+
+            viewInterface.onGetAllCategoriesFailureCallback(throwable.getMessage());
+        });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getAllIngredients() {
-          repository.getAllIngredients(this);
-    }
+          repository.getAllIngredients()
+                  .subscribeOn(Schedulers.io())
+                  .observeOn(AndroidSchedulers.mainThread()).subscribe(ingredientsResponse -> {
+                      this.ingredients.addAll(ingredientsResponse.getMeals().stream()
+                              .map(Ingredient::getStrIngredient).collect(Collectors.toList()));
+                      viewInterface.onGetAllIngredientsCallback(this.ingredients);
+          },throwable -> {
 
+                      viewInterface.onGetAllIngredientsFailureCallback(throwable.getMessage());
+                  });
+    }
+    @SuppressLint("CheckResult")
     @Override
     public void getAllCountries() {
-        repository.getAllCountries(this);
-    }
-
-    @Override
-    public void onGetAllCategoriesSuccessCallback(List<MealCategory> categories) {
-
-        this.categories.addAll(categories.stream().map(MealCategory::getCategory).collect(Collectors.toList()));
-        viewInterface.onGetAllCategoriesCallback(this.categories);
-    }
-
-    @Override
-    public void onGetAllIngredientsSuccessCallback(List<Ingredient> ingredients) {
-
-        this.ingredients.addAll(ingredients.stream().map(Ingredient::getStrIngredient).collect(Collectors.toList()));
-        viewInterface.onGetAllIngredientsCallback(this.ingredients);
-    }
-
-    @Override
-    public void onGetAllCountriesSuccessCallback(List<Area> countries) {
-
-        this.countries.addAll(countries.stream().map(Area::getArea).filter(s -> !s.equals("Unknown")).collect(Collectors.toList()));
-        viewInterface.onGetAllCountriesCallback(this.countries);
-
-    }
-
-    @Override
-    public void onGetAllCategoriesFailureCallback(String error) {
-
-        viewInterface.onGetAllCategoriesFailureCallback(error);
-    }
-
-    @Override
-    public void onGetAllIngredientsFailureCallback(String error) {
-
-        viewInterface.onGetAllIngredientsFailureCallback(error);
-    }
-
-    @Override
-    public void onGetAllCountriesFailureCallback(String error) {
-
-        viewInterface.onGetAllCountriesFailureCallback(error);
+        repository.getAllCountries()  .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(areaResponse -> {
+                    this.countries.addAll(areaResponse.getAreas().stream().map(Area::getArea).filter(s -> !s.equals("Unknown")).collect(Collectors.toList()));
+                    viewInterface.onGetAllCountriesCallback(this.countries);
+                },throwable -> {
+                    viewInterface.onGetAllCountriesFailureCallback(throwable.getMessage());
+                });
     }
 }

@@ -20,17 +20,6 @@ public interface SearchResultsPresenterInterface {
     void getFullDetailsMealRequest(String id,String requester);
 
 
-    void onFilterCategorySuccessCallback(List<FilterMeal> categories);
-    void onFilterIngredientSuccessCallback(List<FilterMeal> ingredients);
-    void onFilterCountrySuccessCallback(List<FilterMeal> countries);
-    void onGetItemFullDetailsSuccessCallback(List<Meal> meals,String requester);
-
-
-
-    void onFilterCategoryFailureCallback(String error);
-    void onFilterIngredientFailureCallback(String error);
-    void onFilterCountryFailureCallback(String error);
-
 
     public Completable insertMealToBreakfast(Meal meal);
     public  Completable insertMealToLaunch(Meal meal);

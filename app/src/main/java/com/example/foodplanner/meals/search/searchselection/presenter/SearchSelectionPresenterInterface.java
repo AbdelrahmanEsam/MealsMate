@@ -15,14 +15,7 @@ public interface SearchSelectionPresenterInterface {
 
     void getAllCountries();
 
-    void onGetAllCategoriesSuccessCallback(List<MealCategory> categories);
-    void onGetAllIngredientsSuccessCallback(List<Ingredient> ingredients);
-    void onGetAllCountriesSuccessCallback(List<Area> countries);
 
-
-    void onGetAllCategoriesFailureCallback(String error);
-    void onGetAllIngredientsFailureCallback(String error);
-    void onGetAllCountriesFailureCallback(String error);
 
     
 }
