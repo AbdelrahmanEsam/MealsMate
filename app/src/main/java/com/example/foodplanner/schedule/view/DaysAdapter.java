@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodplanner.R;
@@ -17,28 +18,42 @@ import com.example.foodplanner.data.dto.Day;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder>  {
+public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder> {
 
     private List<Day> days = new ArrayList<>();
-    private Context context;
     private OnDayListener listener;
-    private static  int selectedDay = 0 ;
 
 
-
+    private int prevSelected = 0;
 
 
     @NonNull
     @Override
     public DaysViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DaysViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.day_item,parent,false));
+        return new DaysViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.day_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull DaysViewHolder holder, int position) {
 
 
-        holder.bind(days.get(position),listener);
+        holder.dayTextView.setText(days.get(position).getDayName());
+        holder.numberTextView.setText(days.get(position).getDayNumber());
+
+        if (days.get(position).getSelected()) {
+            holder.selectedSate();
+
+        } else {
+            holder.initState();
+        }
+
+        holder.dayCard.setOnClickListener(view -> {
+            days.get(prevSelected).setSelected(false);
+            prevSelected = holder.getAdapterPosition();
+            listener.onDayClicked(days.get(position), 0);
+            notifyItemChanged(position);
+            notifyItemChanged(prevSelected);
+        });
 
     }
 
@@ -47,24 +62,23 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
         return days.size();
     }
 
-    public void setDays(List<Day> days, Context context, OnDayListener listener)
-    {
-        Log.d("day",days.size()+"");
+    public void setDays(List<Day> days, Context context, OnDayListener listener) {
+        Log.d("day", days.size() + "");
         this.listener = listener;
-        this.context = context;
         this.days = days;
         notifyDataSetChanged();
     }
 
 
-
-
-    static class DaysViewHolder extends  RecyclerView.ViewHolder {
+    static class DaysViewHolder extends RecyclerView.ViewHolder {
 
 
         TextView dayTextView, numberTextView;
 
         CardView dayCard;
+
+
+        private int selectedDay = 0;
 
         public DaysViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,38 +90,17 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
         }
 
 
-        public void bind(Day day, OnDayListener listener) {
-
-            dayTextView.setText(day.getDayName());
-            numberTextView.setText(day.getDayNumber());
-
-
-            if (selectedDay != getAdapterPosition()) {
-                initState();
-            } else {
-                selectedSate();
-            }
-
-
-            dayCard.setOnClickListener(view -> {
-                selectedDay = getAdapterPosition();
-                listener.onDayClicked(day, selectedDay);
-
-            });
-        }
-
-
         private void initState() {
-            dayCard.setCardBackgroundColor(itemView.getContext().getResources().getColor(R.color.gray));
-            dayTextView.setTextColor(itemView.getContext().getResources().getColor(R.color.gray20));
-            numberTextView.setTextColor(itemView.getContext().getResources().getColor(R.color.black));
+            dayCard.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+            dayTextView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray20));
+            numberTextView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.black));
         }
 
 
         private void selectedSate() {
-            dayCard.setCardBackgroundColor(itemView.getContext().getResources().getColor(R.color.orange));
-            dayTextView.setTextColor(itemView.getContext().getResources().getColor(R.color.white));
-            numberTextView.setTextColor(itemView.getContext().getResources().getColor(R.color.white));
+            dayCard.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.orange));
+            dayTextView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
+            numberTextView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.white));
         }
     }
 }

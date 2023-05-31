@@ -73,7 +73,7 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private final ScheduleMealsAdapter launchAdapter = new ScheduleMealsAdapter();
     private final ScheduleMealsAdapter dinnerAdapter = new ScheduleMealsAdapter();
     private final ScheduleMealsAdapter favouriteAdapter = new ScheduleMealsAdapter();
-    private final DaysAdapter daysAdapter = new DaysAdapter();
+    private final  DaysAdapter daysAdapter = new DaysAdapter();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         initPresenterAndSendRequests(savedInstanceState);
-        setDaysAdapter();
+
         if (mAuth.getCurrentUser() != null){
             binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         }
@@ -111,6 +111,7 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         setRecyclerView(binding.launchRecycler,launchAdapter);
         setRecyclerView(binding.dinnerRecycler,dinnerAdapter);
         setRecyclerView(binding.favouritesRecycler,favouriteAdapter);
+        setDaysAdapter();
 
 
     }
@@ -138,6 +139,7 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
             getDataFromPresenter(presenter.getSelectedDay().getDayNumber());
+            Log.d("presenter","reuse presenter");
 
         }else{
             presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
@@ -145,6 +147,9 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
             presenter.getAllLaunchMeals();
             presenter.getAllDinnerMeals();
             presenter.getAllFavouriteMeals();
+
+            Log.d("presenter","new presenter");
+
         }
     }
 
@@ -326,7 +331,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
 
     @Override
     public void onDayClicked(Day day,int prevPosition) {
-
           day.setSelected(true);
           presenter.setSelectedDay(day);
           getDataFromPresenter(day.getDayNumber());
