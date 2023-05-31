@@ -215,5 +215,14 @@
 
         </androidx.cardview.widget.CardView>
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logoutImageView"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/logout"
+            app:layout_constraintBottom_toBottomOf="@+id/goodMorningTextView"
+            app:layout_constraintEnd_toStartOf="@+id/vGuideline97.5percent"
+            app:layout_constraintTop_toTopOf="@+id/goodMorningTextView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

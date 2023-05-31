@@ -122,7 +122,6 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
     @Override
     public void searchByNameMealRequest(String prefix) {
 
-
        repository.searchByNameMealRequest(prefix).subscribeOn(Schedulers.io())
                 .distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> {
                     allMeals.clear();
@@ -132,7 +131,9 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
                         allMeals.clear();
                     }
                     viewInterface.onSearchSuccessResult();
-                });
+                },throwable -> {
+                    viewInterface.onResultFailureOneMealCallback(throwable.getMessage());
+               });
     }
 
 

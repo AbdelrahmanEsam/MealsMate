@@ -22,6 +22,14 @@ public class SearchResultsPresenter implements SearchResultsPresenterInterface, 
 
     private RepositoryInterface repository;
 
+    public SearchResultsViewInterface getViewInterface() {
+        return viewInterface;
+    }
+
+    public void setViewInterface(SearchResultsViewInterface viewInterface) {
+        this.viewInterface = viewInterface;
+    }
+
     private SearchResultsViewInterface viewInterface;
 
     private List<FilterMeal>  results = new ArrayList<>();

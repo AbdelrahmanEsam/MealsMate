@@ -11,7 +11,7 @@ public interface MealsFragmentViewInterface {
     public void onSearchSuccessResult();
 
 
-    public void onSearchErrorResult(String error);
+
 
     void onMealAddClicked(Meal meal);
 

@@ -1,22 +1,19 @@
 package com.example.foodplanner.meals.mainmealsfragment.view;
 
 import static com.example.foodplanner.R.*;
-import static com.example.foodplanner.R.id.*;
-import static com.example.foodplanner.R.id.byCategory;
-import static com.example.foodplanner.R.id.byName;
 import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
+import static com.example.foodplanner.R.string.you_need_to_be_authenticated_to_do_this_action_please_login;
 
-import android.app.DatePickerDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
@@ -24,7 +21,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
 import android.os.Handler;
-import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -58,14 +53,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.logging.LogRecord;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealsFragment extends Fragment implements MealsFragmentViewInterface{
@@ -96,12 +86,40 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("watcher",this.hashCode() +"fragment success");
         mAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
         adapter = new MealsAdapter();
         setRecyclerView();
+        initState(savedInstanceState);
+
+
+
+        if (mAuth.getCurrentUser() != null) {
+            binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
+        }
+
+        binding.mealOfTheDayCardView.setOnClickListener(view1 -> {
+            navigateToDetails(presenter.getMealOfTheDay(), binding.mealImage);
+        });
+
+
+        binding.logoutImageView.setOnClickListener(view1 -> {
+            mAuth.signOut();
+            ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.GONE);
+            controller.navigate(NavGraphDirections.actionToLoginFragment());
+        });
+
+        addTypeObserver();
+
+        datePickerResultObserver();
+        searchObserverAndObservable();
+
+    }
+
+
+    private void initState(Bundle savedInstanceState)
+    {
         if (savedInstanceState != null) {
             presenter = savedInstanceState.getParcelable(getString(string.presenter));
             if (presenter != null) {
@@ -118,23 +136,26 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
         } else {
 
-                initPresenterAndSendRequests();
+            initPresenterAndSendRequests();
 
         }
+    }
 
+    private void initViews()
+    {
+        if (mAuth.getCurrentUser() == null){
+            binding.logoutImageView.setVisibility(View.GONE);
+           ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
+       ((MainActivity)requireActivity()).binding.bottomNavigationView.getMenu().getItem(2).setEnabled(false);
 
-        if (mAuth.getCurrentUser() != null) {
-            binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         }
+    }
 
-        binding.mealOfTheDayCardView.setOnClickListener(view1 -> {
-            navigateToDetails(presenter.getMealOfTheDay(), binding.mealImage);
-        });
 
-        addTypeObserver();
-        datePickerResultObserver();
-        searchObserverAndObservable();
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        initViews();
     }
 
     @Override
@@ -149,6 +170,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         closeKeyboard();
     }
 
+    @SuppressLint("CheckResult")
     private void searchObserverAndObservable() {
 
 
@@ -251,16 +273,18 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal, Void> function) {
 
-        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
-                .addOnSuccessListener(documentReference -> {
-                    if (mealToAdd != null) {
-                        function.apply(mealToAdd);
-                        Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+
+            fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                    .addOnSuccessListener(documentReference -> {
+                        if (mealToAdd != null) {
+                            function.apply(mealToAdd);
+                            Toast.makeText(requireContext(), string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+
     }
     private void datePickerResultObserver()
     {
@@ -348,24 +372,31 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     public void onMealClicked(Meal meal, ImageView transitionView) {
 
         navigateToDetails(meal, transitionView);
+
     }
 
 
     @Override
     public void onMealAddClicked(Meal meal) {
         presenter.setMealToAdd(meal);
-        controller.navigate(NavGraphDirections.actionToDatePickerFragment(meal));
+        if (mAuth.getCurrentUser() != null) {
+            controller.navigate(NavGraphDirections.actionToDatePickerFragment(meal));
+        }else{
+            Toast.makeText(getContext(), getString(you_need_to_be_authenticated_to_do_this_action_please_login), Toast.LENGTH_SHORT).show();
+        }
+
     }
+
 
     @Override
     public void onResultSuccessOneMealsCallback() {
-
         setMealOfTheDay();
     }
 
     @Override
     public void onResultFailureOneMealCallback(String error) {
 
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -375,10 +406,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
     }
 
-    @Override
-    public void onSearchErrorResult(String error) {
 
-    }
 
 
 }

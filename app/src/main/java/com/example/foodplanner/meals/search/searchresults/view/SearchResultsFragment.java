@@ -3,6 +3,7 @@ package com.example.foodplanner.meals.search.searchresults.view;
 import static com.example.foodplanner.R.string.*;
 import static com.example.foodplanner.R.string.country;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -83,21 +85,30 @@ public class SearchResultsFragment extends Fragment
         fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
 
-       String searchWord =  getArguments().getString(getString(searchword));
-       int  searchType = getArguments().getInt(getString(searchtype));
+        initPresenterAndSendRequests(savedInstanceState);
+        addTypeObserver();
+        datePickerResultObserver();
+        setRecyclerView();
+    }
 
-
+    private void initPresenterAndSendRequests(Bundle savedInstanceState)
+    {
+        String searchWord =  getArguments().getString(getString(searchword));
+        int  searchType = getArguments().getInt(getString(searchtype));
         if (savedInstanceState != null)
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
-            mealsAdapter.setMeals(presenter.getResults(),getContext(),this,this);
+            if (presenter != null){
+                presenter.setViewInterface(this);
+                mealsAdapter.setMeals(presenter.getResults(),getContext(),this,this);
+            }else{
+                presenter = new SearchResultsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
+                sendDataRequest(searchWord,searchType);
+            }
         }else {
             presenter = new SearchResultsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
             sendDataRequest(searchWord,searchType);
         }
-        addTypeObserver();
-        datePickerResultObserver();
-        setRecyclerView();
     }
 
 
@@ -200,17 +211,33 @@ public class SearchResultsFragment extends Fragment
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
     {
 
-        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
-                .addOnSuccessListener(documentReference -> {
-                    if (mealToAdd != null)
-                    {
-                        function.apply(mealToAdd);
-                        Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+
+            fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                    .addOnSuccessListener(documentReference -> {
+                        if (mealToAdd != null) {
+                            function.apply(mealToAdd);
+                            Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+
+    }
+
+
+    private void enableInteraction() {
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        binding.progressBar2.setVisibility(View.INVISIBLE);
+    }
+
+
+    private void disableInteraction() {
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+        binding.progressBar2.setVisibility(View.VISIBLE);
     }
 
 
@@ -249,8 +276,14 @@ public class SearchResultsFragment extends Fragment
     public void onGetDetailsSuccessCallback(Meal meal,String requester) {
 
 
+        enableInteraction();
         if (requester.equals(getString(add))){
-            controller.navigate(NavGraphDirections.actionToAddDialogFragment(meal));
+            if (mAuth.getCurrentUser() !=null) {
+                controller.navigate(NavGraphDirections.actionToDatePickerFragment(meal));
+            }else{
+                Toast.makeText(getContext(), getString(you_need_to_be_authenticated_to_do_this_action_please_login), Toast.LENGTH_SHORT).show();
+            }
+
 
         }else{
             FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
@@ -270,6 +303,7 @@ public class SearchResultsFragment extends Fragment
     @Override
     public void onFilterMealAddClicked(FilterMeal meal) {
         presenter.getFullDetailsMealRequest(meal.getIdMeal(),getString(R.string.add));
+        disableInteraction();
 
     }
 

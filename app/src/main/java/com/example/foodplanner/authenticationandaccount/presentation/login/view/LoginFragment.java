@@ -231,8 +231,13 @@ public class LoginFragment extends Fragment {
 
     private void loginSuccess(String username )
     {
+        if (!((MainActivity)getActivity()).connectivityObserver.networkStatus()){
+
         Toast.makeText(getContext(), getString(R.string.welcome)+" "+username, Toast.LENGTH_SHORT).show();
         controller.navigate(LoginFragmentDirections.actionLoginFragmentToMainFragment());
+        }else{
+            Toast.makeText(getContext(), getString(R.string.you_need_internet_to_login_as_guest), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void enableInteraction()

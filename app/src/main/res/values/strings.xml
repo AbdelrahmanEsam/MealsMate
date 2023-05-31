@@ -73,6 +73,8 @@
     <string name="add">add</string>
     <string name="details">details</string>
     <string name="date">date</string>
+    <string name="you_need_to_be_authenticated_to_do_this_action_please_login">you need to be authenticated to do this action please login</string>
+    <string name="you_need_internet_to_login_as_guest">you need internet to login as guest</string>
 
 
     <string-array name="flag_urls">

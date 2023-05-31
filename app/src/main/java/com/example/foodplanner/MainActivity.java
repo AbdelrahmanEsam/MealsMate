@@ -72,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
                     case Lost:
                     case Unavailable: {
                         binding.bottomNavigationView.setVisibility(View.GONE);
-                       navHostFragment.getNavController().navigate(NavGraphDirections.actionToScheduleFragment());
+                        if (mAuth.getCurrentUser() != null) {
+                            navHostFragment.getNavController().navigate(NavGraphDirections.actionToScheduleFragment());
+                        }else{
+                            navHostFragment.getNavController().navigate(NavGraphDirections.actionToLoginFragment());
+                        }
                         break;
                     }
 

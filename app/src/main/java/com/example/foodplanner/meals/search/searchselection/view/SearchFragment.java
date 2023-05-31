@@ -57,24 +57,33 @@ public class SearchFragment extends Fragment implements  SearchFragmentViewInter
         if (savedInstanceState != null)
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
-            ingredientsAdapter.setData(presenter.getIngredients(),getContext(),this);
-            categoriesAdapter.setData(presenter.getCategories(),getContext(),this);
-            countriesAdapter.setData(presenter.getCountries(),getContext(),this);
-
+            if (presenter != null){
+                ingredientsAdapter.setData(presenter.getIngredients(),getContext(),this);
+                categoriesAdapter.setData(presenter.getCategories(),getContext(),this);
+                countriesAdapter.setData(presenter.getCountries(),getContext(),this);
+            }  else{
+                initPresenterAndSendRequests();
+            }
         }else {
 
 
-            presenter = new SearchSelectionPresenter(
-                    Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
-            presenter.getAllCategories();
-            presenter.getAllCountries();
-            presenter.getAllIngredients();
+            initPresenterAndSendRequests();
+
         }
 
 
         setUpRecyclerView(countriesAdapter,binding.countriesRecyclerView);
         setUpRecyclerView(categoriesAdapter,binding.categoriesRecyclerView);
         setUpRecyclerView(ingredientsAdapter,binding.ingredientsRecyclerView);
+    }
+
+    private void initPresenterAndSendRequests()
+    {
+        presenter = new SearchSelectionPresenter(
+                Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
+        presenter.getAllCategories();
+        presenter.getAllCountries();
+        presenter.getAllIngredients();
     }
 
 

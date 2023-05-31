@@ -5,6 +5,7 @@ import static com.example.foodplanner.R.string.breakfast;
 import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
+import static com.example.foodplanner.R.string.you_need_to_be_authenticated_to_do_this_action_please_login;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -101,13 +102,25 @@ public class MealDetailsFragment extends Fragment {
         initViews(presenter.getMealToAdd());
 
         binding.addToCacheFloatingButton.setOnClickListener(view1 -> {
+
+
+            if (mAuth.getCurrentUser() !=null) {
             controller.navigate(NavGraphDirections.actionToDatePickerFragment(presenter.getMealToAdd()));
+            }else{
+                Toast.makeText(getContext(), getString(you_need_to_be_authenticated_to_do_this_action_please_login), Toast.LENGTH_SHORT).show();
+            }
 
         });
         addTypeObserver();
         datePickerResultObserver();
-        setYoutubeVideoVisibility();
 
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setYoutubeVideoVisibility();
     }
 
     private void setYoutubeVideoVisibility()
@@ -123,7 +136,11 @@ public class MealDetailsFragment extends Fragment {
         if (savedInstanceState != null)
         {
 
+            Log.d("presenter","not null");
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
+            if (presenter == null){
+
+            }
 
         }else{
             Meal meal =  getArguments().getParcelable(getString(R.string.meal));
@@ -214,19 +231,20 @@ public class MealDetailsFragment extends Fragment {
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal,Void> function)
     {
 
-        fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
-                .addOnSuccessListener(documentReference -> {
-                    if (mealToAdd != null)
-                    {
-                        function.apply(mealToAdd);
-                        Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
-                    }else {
+            fireStore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayUnion(mealToAdd))
+                    .addOnSuccessListener(documentReference -> {
+                        if (mealToAdd != null) {
+                            function.apply(mealToAdd);
+                            Toast.makeText(requireContext(), R.string.meal_added_successfully, Toast.LENGTH_SHORT).show();
+                        } else {
 
-                    Log.d("null Meal","null");
-                    }                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                            Log.d("null Meal", "null");
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+
     }
 
 
@@ -280,7 +298,7 @@ public class MealDetailsFragment extends Fragment {
         binding.youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(getYouTubeId(url), 0);
+                youTubePlayer.loadVideo(presenter.getYouTubeId(url), 0);
             }
         });
 
@@ -289,48 +307,16 @@ public class MealDetailsFragment extends Fragment {
     }
 
 
-    private String getYouTubeId (String youTubeUrl) {
-        String pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
-        Pattern compiledPattern = Pattern.compile(pattern);
-        Matcher matcher = compiledPattern.matcher(youTubeUrl);
-        if(matcher.find()){
-            return matcher.group();
-        } else {
-            return "error";
-        }
-    }
-
-
-
-
-
-
-
     private void setIngredientsRecycler(Meal meal)
     {
-        ingredientsAdapter.setData(getIngredients(meal),getContext());
+        ingredientsAdapter.setData(presenter.getIngredients(meal),getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
         binding.ingredientsRecyclerView.setLayoutManager(layoutManager);
         binding.ingredientsRecyclerView.setAdapter(ingredientsAdapter);
 
     }
 
-    private List<String> getIngredients(Meal meal)
-    {
-        List<String> ingredients = Arrays.stream(meal.getClass().getMethods()).filter(method -> method.getName().toLowerCase().contains(getString(R.string.ingredient))).filter(method -> method.getName().toLowerCase().contains("get")).map(method -> {
-            String ingredientName   = null;
-            try {
-                ingredientName = (String) method.invoke(meal);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return ingredientName;
-        }).collect(Collectors.toList());
-        ingredients.removeIf(String::isEmpty);
-        return ingredients;
-    }
+
 
 
 }

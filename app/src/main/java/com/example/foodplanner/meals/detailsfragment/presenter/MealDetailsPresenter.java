@@ -3,10 +3,17 @@ package com.example.foodplanner.meals.detailsfragment.presenter;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.foodplanner.R;
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.repository.RepositoryInterface;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Completable;
 
@@ -33,6 +40,36 @@ public class MealDetailsPresenter implements  MealDetailsPresenterInterface, Par
         this.repository = repository;
 
 
+    }
+
+
+    public List<String> getIngredients(Meal meal)
+    {
+        List<String> ingredients = Arrays.stream(meal.getClass().getMethods()).filter(method -> method.getName().toLowerCase().contains("ingredient")).filter(method -> method.getName().toLowerCase().contains("get")).map(method -> {
+            String ingredientName   = null;
+            try {
+                ingredientName = (String) method.invoke(meal);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            return ingredientName;
+        }).collect(Collectors.toList());
+        ingredients.removeIf(String::isEmpty);
+        return ingredients;
+    }
+
+
+    public String getYouTubeId (String youTubeUrl) {
+        String pattern = "(?<=youtu.be/|watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(youTubeUrl);
+        if(matcher.find()){
+            return matcher.group();
+        } else {
+            return "error";
+        }
     }
 
 
