@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashFragment extends Fragment {
 
-  //  private FragmentJavaPracticeBinding binding;
     private FragmentSplashBinding binding;
 
     private NavController controller ;
@@ -39,7 +38,6 @@ public class SplashFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSplashBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -57,12 +55,11 @@ public class SplashFragment extends Fragment {
 
           @Override
           public void onAnimationEnd(@NonNull Animator animator) {
-              if (((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
+              if (((MainActivity)requireActivity()).connectivityObserver.networkStatus() && mAuth.getCurrentUser() != null){
                   controller.navigate(NavGraphDirections.actionToScheduleFragment());
                   return;
               }
               controller.navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment());
-
           }
 
           @Override
@@ -81,14 +78,12 @@ public class SplashFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.GONE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
     }
 }

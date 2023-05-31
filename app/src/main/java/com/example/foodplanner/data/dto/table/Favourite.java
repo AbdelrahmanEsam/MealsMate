@@ -604,7 +604,7 @@ public class Favourite  {
     }
 
 
-    public Favourite(String strImageSource, String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, Object strCreativeCommonsConfirmed, String strIngredient19, String strTags, @NotNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, Object dateModified, Object strDrinkAlternate, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14, String strMeasure15) {
+    public Favourite(String strImageSource, String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, Object strCreativeCommonsConfirmed, String strIngredient19, String strTags, @NotNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, Object dateModified, Object strDrinkAlternate, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14, String strMeasure15,String day) {
         this.strImageSource = strImageSource;
         this.strIngredient10 = strIngredient10;
         this.strIngredient12 = strIngredient12;
@@ -658,10 +658,21 @@ public class Favourite  {
         this.strMeasure17 = strMeasure17;
         this.strMeasure14 = strMeasure14;
         this.strMeasure15 = strMeasure15;
+        this.day = day;
     }
     public Favourite()
     {
 
+    }
+
+    private String day;
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
 

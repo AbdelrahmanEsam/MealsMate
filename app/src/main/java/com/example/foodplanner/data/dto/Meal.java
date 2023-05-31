@@ -22,6 +22,16 @@ public class Meal implements Parcelable {
 	@SerializedName("strImageSource")
 	private String strImageSource;
 
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
+	}
+
+	private String day ;
+
 	public void setStrImageSource(String strImageSource) {
 		this.strImageSource = strImageSource;
 	}
@@ -161,6 +171,8 @@ public class Meal implements Parcelable {
 	public void setStrMeasure11(String strMeasure11) {
 		this.strMeasure11 = strMeasure11;
 	}
+
+
 
 	public void setDateModified(Object dateModified) {
 		this.dateModified = dateModified;
@@ -816,7 +828,7 @@ public class Meal implements Parcelable {
 				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
 				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
 				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
-				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
 				);
 	}
 
@@ -830,7 +842,7 @@ public class Meal implements Parcelable {
 				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
 				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
 				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
-				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
 		);
 	}
 
@@ -844,7 +856,7 @@ public class Meal implements Parcelable {
 				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
 				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
 				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
-				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
 		);
 	}
 
@@ -857,7 +869,7 @@ public class Meal implements Parcelable {
 				,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
 				,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
 				strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
-				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15
+				strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
 		);
 	}
 

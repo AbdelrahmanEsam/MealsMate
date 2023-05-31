@@ -2,6 +2,7 @@ package com.example.foodplanner.meals.mainmealsfragment.presenter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.meal.MealsResponse;
@@ -17,22 +18,41 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCallback,Parcelable {
 
     private final RepositoryInterface repository;
-    private final MealsFragmentViewInterface viewInterface;
+    private MealsFragmentViewInterface viewInterface;
 
 
     private Meal mealToAdd;
 
     private Meal mealOfTheDay ;
 
+    private String searchPrefix;
 
+    public CompositeDisposable getDisposable() {
+        return disposable;
+    }
 
-    private List<Meal> allMeals ;
+    public void setDisposable(CompositeDisposable disposable) {
+        this.disposable = disposable;
+    }
+
+    private CompositeDisposable disposable = new CompositeDisposable();
+
+    public String getSearchPrefix() {
+        return searchPrefix;
+    }
+
+    public void setSearchPrefix(String searchPrefix) {
+        this.searchPrefix = searchPrefix;
+    }
+
+    private List<Meal> allMeals;
 
 
 
@@ -48,6 +68,13 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
 
     }
 
+    public MealsFragmentViewInterface getViewInterface() {
+        return viewInterface;
+    }
+
+    public void setViewInterface(MealsFragmentViewInterface viewInterface) {
+        this.viewInterface = viewInterface;
+    }
     public List<Meal> getAllMeals() {
         return allMeals;
     }
@@ -91,33 +118,19 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
     @Override
     public void searchByNameMealRequest(String prefix) {
 
-        repository.searchByNameMealRequest(prefix).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<MealsResponse>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
 
-            }
-
-            @Override
-            public void onNext(@NonNull MealsResponse mealsResponse) {
-                allMeals.clear();
-                if (mealsResponse.getMeals() != null){
-                    allMeals.addAll(mealsResponse.getMeals());
-                }else{
+       repository.searchByNameMealRequest(prefix).subscribeOn(Schedulers.io())
+                .distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> {
                     allMeals.clear();
-                }
-                viewInterface.onSearchSuccessResult();
-            }
+                    if (mealsResponse.getMeals() != null){
 
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
+                        allMeals.addAll(mealsResponse.getMeals());
+                        Log.d("watcher",allMeals.size() +"presenter success");
+                    }else{
+                        allMeals.clear();
+                    }
+                    viewInterface.onSearchSuccessResult();
+                });
     }
 
 
@@ -167,6 +180,8 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
         mealToAdd = in.readParcelable(Meal.class.getClassLoader());
         mealOfTheDay = in.readParcelable(Meal.class.getClassLoader());
         allMeals = in.createTypedArrayList(Meal.CREATOR);
+        searchPrefix = in.readString();
+
     }
 
     public static final Creator<MealsPresenter> CREATOR = new Creator<MealsPresenter>() {
@@ -191,7 +206,11 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
         dest.writeParcelable(mealToAdd, flags);
         dest.writeParcelable(mealOfTheDay, flags);
         dest.writeTypedList(allMeals);
+        dest.writeString(searchPrefix);
     }
+
+
+
 
 
 }

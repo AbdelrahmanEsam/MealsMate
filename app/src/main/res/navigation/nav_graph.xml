@@ -11,6 +11,11 @@
 
 
     <action
+        android:id="@+id/action_to_datePickerFragment"
+        app:destination="@id/datePickerFragment" />
+
+
+    <action
         android:id="@+id/action_to_mealDetailsFragment"
         app:destination="@id/mealDetailsFragment" />
 
@@ -155,6 +160,22 @@
             android:name="meal"
             app:argType="com.example.foodplanner.data.dto.Meal" />
     </dialog>
+
+    <dialog
+        android:id="@+id/datePickerFragment"
+        android:name="com.example.foodplanner.meals.mainmealsfragment.view.DatePickerFragment"
+        android:label="fragment_date_picker"
+        tools:layout="@layout/fragment_date_picker">
+        <argument
+            android:name="meal"
+            app:argType="com.example.foodplanner.data.dto.Meal" />
+    </dialog>
+
+
+
+
+
+
     <fragment
         android:id="@+id/searchResultsFragment"
         android:name="com.example.foodplanner.meals.search.searchresults.view.SearchResultsFragment"
@@ -167,4 +188,5 @@
             android:name="searchType"
             app:argType="integer" />
     </fragment>
+
 </navigation>

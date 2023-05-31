@@ -9,6 +9,7 @@ import static com.example.foodplanner.R.string.dinner;
 import static com.example.foodplanner.R.string.favourites;
 import static com.example.foodplanner.R.string.launch;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -22,14 +23,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.FragmentNavigator;
 
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -54,22 +58,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.logging.LogRecord;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class MealsFragment extends Fragment implements MealsFragmentViewInterface {
+public class MealsFragment extends Fragment implements MealsFragmentViewInterface{
 
 
     private FragmentMealsBinding binding;
     private NavController controller;
-    private final MealsAdapter adapter = new MealsAdapter();
+    private  MealsAdapter adapter;
     private MealsPresenter presenter;
     private FirebaseAuth mAuth;
     private FirebaseFirestore fireStore;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,16 +96,19 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("watcher",this.hashCode() +"fragment success");
         mAuth = FirebaseAuth.getInstance();
         fireStore = FirebaseFirestore.getInstance();
         controller = Navigation.findNavController(view);
-
+        adapter = new MealsAdapter();
+        setRecyclerView();
         if (savedInstanceState != null) {
             presenter = savedInstanceState.getParcelable(getString(string.presenter));
             if (presenter != null) {
+                presenter.setViewInterface(this);
                 adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
                 setMealOfTheDay();
+                binding.searchInputLayout.getEditText().setText(presenter.getSearchPrefix());
             } else {
 
 
@@ -115,18 +126,32 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         if (mAuth.getCurrentUser() != null) {
             binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
         }
-        addTypeObserver();
+
         binding.mealOfTheDayCardView.setOnClickListener(view1 -> {
             navigateToDetails(presenter.getMealOfTheDay(), binding.mealImage);
         });
 
-        setRecyclerView();
+        addTypeObserver();
+        datePickerResultObserver();
         searchObserverAndObservable();
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(string.presenter), presenter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        closeKeyboard();
+    }
 
     private void searchObserverAndObservable() {
+
+
         Observable<String> textChangeObservable = Observable.create(emitter ->
                 binding.searchInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
                     @Override
@@ -135,7 +160,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        emitter.onNext(s.toString());
+                         emitter.onNext(s.toString());
                     }
 
                     @Override
@@ -144,42 +169,24 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
                 }));
 
 
+
         textChangeObservable
                 .debounce(1000, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(text -> {
+               presenter.setSearchPrefix(text);
+
+               presenter.searchByNameMealRequest(text);
+           });
 
 
-                    @Override
-                    public void onNext(String text) {
 
-
-                        presenter.searchByNameMealRequest(text);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
 
 
     }
 
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(getString(string.presenter), presenter);
-    }
+
 
     private void initPresenterAndSendRequests() {
         presenter = new MealsPresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())), this);
@@ -191,6 +198,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     private void addTypeObserver() {
         NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+
         backStackEntry.getSavedStateHandle().getLiveData(getString(R.string.type)).observe(getViewLifecycleOwner(), type -> {
             if (type != null) {
                 switch ((Integer) type) {
@@ -234,13 +242,12 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
                     }
                 }
+                controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),null);
             }
-
         });
 
 
     }
-
 
     private void addRecordToFirebaseAndRoom(String collectionName, Meal mealToAdd, Function<Meal, Void> function) {
 
@@ -255,6 +262,28 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
                     Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    private void datePickerResultObserver()
+    {
+        NavBackStackEntry backStackEntry = controller.getCurrentBackStackEntry();
+        backStackEntry.getSavedStateHandle().getLiveData(getString(string.date)).observe(getViewLifecycleOwner(), type -> {
+            if (type != null) {
+                Log.d("dateListener", type.toString());
+
+                new Handler().postDelayed(() -> {
+                    presenter.getMealToAdd().setDay(type.toString());
+                    controller.navigate(NavGraphDirections.actionToAddDialogFragment(presenter.getMealToAdd()));
+                    controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(string.date), null);
+                }, 50);
+
+            }
+
+                });
+    }
+
+
+
+
+
 
 
     private void enableInteraction() {
@@ -284,7 +313,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
         FlexboxLayoutManager layoutManager = new CustomFlexLayoutManager(getContext());
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.SPACE_EVENLY);
-
         binding.mealsRecycler.setLayoutManager(layoutManager);
         binding.mealsRecycler.setAdapter(adapter);
         binding.mealsRecycler.setNestedScrollingEnabled(false);
@@ -303,9 +331,9 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     private void setMealOfTheDay() {
         Meal meal = presenter.getMealOfTheDay();
 
-            enableInteraction();
 
-            if (meal != null) {
+
+            if (meal != null && isAdded()) {
                 binding.aboutTextView.setText(meal.getStrMeal());
                 Glide.with(requireContext())
                         .load(meal.getStrMealThumb())
@@ -318,6 +346,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     @Override
     public void onMealClicked(Meal meal, ImageView transitionView) {
+
         navigateToDetails(meal, transitionView);
     }
 
@@ -325,7 +354,7 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     @Override
     public void onMealAddClicked(Meal meal) {
         presenter.setMealToAdd(meal);
-        controller.navigate(NavGraphDirections.actionToAddDialogFragment(meal));
+        controller.navigate(NavGraphDirections.actionToDatePickerFragment(meal));
     }
 
     @Override
@@ -341,9 +370,8 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
 
     @Override
     public void onSearchSuccessResult() {
-
-            closeKeyboard();
-            enableInteraction();
+        closeKeyboard();
+        enableInteraction();
         adapter.setMeals(presenter.getAllMeals(), getContext(), MealsFragment.this);
     }
 
@@ -351,4 +379,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     public void onSearchErrorResult(String error) {
 
     }
+
+
 }

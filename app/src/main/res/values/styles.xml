@@ -83,7 +83,16 @@
         <item name="android:windowBackground">#52000000</item>
     </style>
 
+    <style name="DatePickerTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:buttonBarPositiveButtonStyle">@color/orange</item>
+        <item name="colorPrimary">@color/orange</item>
+        <item name="colorAccent">@color/orange</item>
+    </style>
 
+    <style name="DatePickerTheme.ButtonBarNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/orange</item>
+
+    </style>
     
     
 </resources>

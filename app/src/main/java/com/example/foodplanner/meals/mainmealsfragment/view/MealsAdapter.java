@@ -1,6 +1,7 @@
 package com.example.foodplanner.meals.mainmealsfragment.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealsViewHol
         this.listener = listener;
         this.context = context;
         this.meals = meals;
+        Log.d("watcher",hashCode() +"adapter success");
         notifyDataSetChanged();
     }
 

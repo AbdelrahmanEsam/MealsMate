@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +77,14 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         controller = Navigation.findNavController(view);
         mAuth = FirebaseAuth.getInstance();
-        presenter = new LoginPresenter();
+        if (savedInstanceState == null){
+
+            presenter = new LoginPresenter();
+        }else{
+            presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
+            binding.emailInputLayout.getEditText().setText(presenter.getEmail());
+            binding.passwordInputLayout.getEditText().setText(presenter.getPassword());
+        }
         userIsAuthenticated();
 
         binding.signUp.setOnClickListener(view1 -> {
@@ -95,6 +104,9 @@ public class LoginFragment extends Fragment {
             loginSuccess(getString(R.string.guest));
         });
 
+        emailTextWatcher();
+        passwordTextWatcher();
+
 
 
 
@@ -105,6 +117,13 @@ public class LoginFragment extends Fragment {
         super.onStop();
     }
 
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(R.string.presenter),presenter);
+    }
+
     private void userIsAuthenticated()
     {
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -113,6 +132,48 @@ public class LoginFragment extends Fragment {
             loginSuccess(currentUser.getDisplayName());
         }
     }
+
+
+    private void emailTextWatcher()
+    {
+        binding.emailInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence email, int i, int i1, int i2) {
+                presenter.setEmail(email.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void passwordTextWatcher()
+    {
+        binding.passwordInputLayout.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence password, int i, int i1, int i2) {
+                presenter.setPassword(password.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
 
     private void signIn()
     {

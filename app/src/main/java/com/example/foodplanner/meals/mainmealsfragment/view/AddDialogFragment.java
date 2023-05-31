@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -22,6 +23,7 @@ public class AddDialogFragment extends DialogFragment {
 
     private FragmentAddDialogBinding binding;
     private NavController controller;
+
 
 
     @Override
@@ -43,40 +45,43 @@ public class AddDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         controller = NavHostFragment.findNavController(this);
+
         Meal meal =  getArguments().getParcelable(getString(R.string.meal));
+        Log.d("dateListener",meal.getStrMeal());
         initViews();
-        clickListeners(meal);
+        clickListeners();
 
 
     }
 
-    private void clickListeners(Meal meal)
+    private void clickListeners()
     {
-        Log.d("addDialog",meal.getStrMeal());
         binding.addToBreakfast.getRoot().setOnClickListener(view1 -> {
 
-            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.breakfast);
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),R.string.breakfast);
             dismiss();
 
         });
 
 
         binding.addToLaunch.getRoot().setOnClickListener(view1 -> {
-            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.launch);
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),R.string.launch);
             dismiss();
         });
 
 
         binding.addToDinner.getRoot().setOnClickListener(view1 -> {
-            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.dinner);
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),R.string.dinner);
             dismiss();
         });
 
         binding.addToFavourites.getRoot().setOnClickListener(view1 -> {
-            controller.getPreviousBackStackEntry().getSavedStateHandle().set("type",R.string.favourites);
+            controller.getPreviousBackStackEntry().getSavedStateHandle().set(getString(R.string.type),R.string.favourites);
             dismiss();
         });
     }
+
+
 
     private void initViews()
     {
@@ -88,4 +93,6 @@ public class AddDialogFragment extends DialogFragment {
 
 
     }
+
+
 }

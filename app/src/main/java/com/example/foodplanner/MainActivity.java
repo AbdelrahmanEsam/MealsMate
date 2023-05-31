@@ -2,17 +2,12 @@ package com.example.foodplanner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.foodplanner.databinding.ActivityMainBinding;
 import com.example.utils.NetworkConnectivityObserver;
@@ -24,8 +19,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
-import io.reactivex.rxjava3.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,14 +50,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void showBottomNavigation(Boolean show)
     {
+        Log.d("showBottom",show.toString());
         if (show) binding.bottomNavigationView.setVisibility(View.GONE);
     }
 
     private void connectivityObserve()
     {
 
-        Observable.combineLatest(connectivityObserver.Observe(), fragmentObservable, (networkStatus, fragmentStatus) -> networkStatus)
-                .observeOn(AndroidSchedulers.mainThread()).distinctUntilChanged().subscribe(new Observer<Object>() {
+        Observable.combineLatest(connectivityObserver.Observe().distinctUntilChanged(), fragmentObservable.distinctUntilChanged(), (networkStatus, fragmentStatus) -> networkStatus)
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
@@ -85,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
                     case Available:{
                         if (mAuth.getCurrentUser() != null)
                         {
+
                             binding.bottomNavigationView.setVisibility(View.VISIBLE);
-                            showBottomNavigation(isInSplash());
+                            showBottomNavigation(fragmentsToHideBottomNavigation());
                             break;
                         }
                     }
@@ -112,7 +107,11 @@ public class MainActivity extends AppCompatActivity {
     {
        fragmentObservable =  Observable.create(emitter -> {
          navHostFragment.getNavController().addOnDestinationChangedListener((navController, navDestination, bundle) -> {
-             emitter.onNext(navHostFragment.getNavController().getCurrentDestination().getId() == R.id.splashFragment);
+             int currentDestination = navHostFragment.getNavController().getCurrentDestination().getId();
+             emitter.onNext( currentDestination== R.id.splashFragment
+             ||currentDestination == R.id.loginFragment
+             ||currentDestination == R.id.signUp
+             );
           });
         }).observeOn(AndroidSchedulers.mainThread());
     }
@@ -124,8 +123,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean isInSplash(){
-        return  navHostFragment.getNavController().getCurrentDestination().getId() == R.id.splashFragment ;
+    private boolean fragmentsToHideBottomNavigation(){
+        int currentDestination = navHostFragment.getNavController().getCurrentDestination().getId();
+        return  currentDestination == R.id.splashFragment     ||currentDestination == R.id.loginFragment
+                || currentDestination  == R.id.signUp;
     }
 
 

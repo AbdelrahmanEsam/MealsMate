@@ -101,7 +101,9 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         launchMealsObservers();
         dinnerMealsObservers();
         favouritesMealsObservers();
-        binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
+        if (mAuth.getCurrentUser() != null){
+            binding.goodMorningTextView.append(mAuth.getCurrentUser().getDisplayName());
+        }
         binding.syncLottie.setOnClickListener(view1 -> {
             binding.syncLottie.setRepeatMode(LottieDrawable.RESTART);
             binding.syncLottie.playAnimation();
