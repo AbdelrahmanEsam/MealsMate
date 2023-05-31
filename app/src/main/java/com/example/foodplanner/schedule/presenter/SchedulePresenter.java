@@ -44,6 +44,16 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
 
     private ScheduleViewInterface viewInterface ;
 
+    private Day selectedDay ;
+
+    public Day getSelectedDay() {
+        return selectedDay;
+    }
+
+    public void setSelectedDay(Day selectedDay) {
+        this.selectedDay = selectedDay;
+    }
+
     public List<Breakfast> getPresenterBreakfasts() {
         return presenterBreakfasts;
     }
@@ -117,12 +127,22 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
 
     protected SchedulePresenter(Parcel in) {
         repository = in.readParcelable(RepositoryInterface.class.getClassLoader());
+        this.presenterBreakfasts = in.createTypedArrayList(Breakfast.CREATOR);
+        this.presenterLaunches = in.createTypedArrayList(Launch.CREATOR);
+        this.presenterDinners = in.createTypedArrayList(Dinner.CREATOR);
+        this.presenterFavourites = in.createTypedArrayList(Favourite.CREATOR);
         days = in.createTypedArray(Day.CREATOR);
+        selectedDay = in.readParcelable(Day.class.getClassLoader());
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(presenterBreakfasts);
+        dest.writeTypedList(presenterLaunches);
+        dest.writeTypedList(presenterDinners);
+        dest.writeTypedList(presenterFavourites);
         dest.writeTypedArray(days, flags);
+        dest.writeParcelable(selectedDay,flags);
     }
 
     @Override

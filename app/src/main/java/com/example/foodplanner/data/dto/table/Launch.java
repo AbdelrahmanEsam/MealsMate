@@ -1,5 +1,8 @@
 package com.example.foodplanner.data.dto.table;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -11,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Entity(tableName = "Launch")
-public class Launch {
+public class Launch implements Parcelable{
 
 
 
@@ -691,4 +694,142 @@ public class Launch {
                 strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
         );
     }
+
+
+
+    @Ignore
+    protected Launch(Parcel in) {
+        strImageSource = in.readString();
+        strIngredient10 = in.readString();
+        strIngredient12 = in.readString();
+        strIngredient11 = in.readString();
+        strIngredient14 = in.readString();
+        strCategory = in.readString();
+        strIngredient13 = in.readString();
+        strIngredient16 = in.readString();
+        strIngredient15 = in.readString();
+        strIngredient18 = in.readString();
+        strIngredient17 =in.readString();
+        strArea = in.readString();
+        strCreativeCommonsConfirmed = in.readParcelable(Object.class.getClassLoader());
+        strIngredient19 = in.readString();
+        strTags = in.readString();
+        idMeal = in.readString();
+        strInstructions = in.readString();
+        strIngredient1 = in.readString();
+        strIngredient3 = in.readString();
+        strIngredient2 = in.readString();
+        strIngredient20 = in.readString();
+        strIngredient5 = in.readString();
+        strIngredient4 = in.readString();
+        strIngredient7 = in.readString();
+        strIngredient6 = in.readString();
+        strIngredient9 = in.readString();
+        strIngredient8 = in.readString();
+        strMealThumb = in.readString();
+        strMeasure20 = in.readString();
+        strYoutube = in.readString();
+        strMeal = in.readString();
+        strMeasure12 = in.readString();
+        strMeasure13 = in.readString();
+        strMeasure10 = in.readString();
+        strMeasure11 = in.readString();
+        dateModified = in.readParcelable(Object.class.getClassLoader());
+        strDrinkAlternate = in.readParcelable(Object.class.getClassLoader());
+        strSource = in.readString();
+        strMeasure9 = in.readString();
+        strMeasure7 = in.readString();
+        strMeasure8 = in.readString();
+        strMeasure5 = in.readString();
+        strMeasure6 = in.readString();
+        strMeasure3 = in.readString();
+        strMeasure4 = in.readString();
+        strMeasure1 = in.readString();
+        strMeasure18 = in.readString();
+        strMeasure2 = in.readString();
+        strMeasure19 = in.readString();
+        strMeasure16 = in.readString();
+        strMeasure17 = in.readString();
+        strMeasure14 = in.readString();
+        strMeasure15 = in.readString();
+        day = in.readString();
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(strImageSource);
+        dest.writeString(strIngredient10);
+        dest.writeString(strIngredient12);
+        dest.writeString(strIngredient11);
+        dest.writeString(strIngredient14);
+        dest.writeString(strCategory);
+        dest.writeString(strIngredient13);
+        dest.writeString(strIngredient16);
+        dest.writeString(strIngredient15);
+        dest.writeString(strIngredient18);
+        dest.writeString(strIngredient17);
+        dest.writeString(strArea);
+        dest.writeParcelable((Parcelable) strCreativeCommonsConfirmed, flags);
+        dest.writeString(strIngredient19);
+        dest.writeString(strTags);
+        dest.writeString(idMeal);
+        dest.writeString(strInstructions);
+        dest.writeString(strIngredient1);
+        dest.writeString(strIngredient3);
+        dest.writeString(strIngredient2);
+        dest.writeString(strIngredient20);
+        dest.writeString(strIngredient5);
+        dest.writeString(strIngredient4);
+        dest.writeString(strIngredient7);
+        dest.writeString(strIngredient6);
+        dest.writeString(strIngredient9);
+        dest.writeString(strIngredient8);
+        dest.writeString(strMealThumb);
+        dest.writeString(strMeasure20);
+        dest.writeString(strYoutube);
+        dest.writeString(strMeal);
+        dest.writeString(strMeasure12);
+        dest.writeString(strMeasure13);
+        dest.writeString(strMeasure10);
+        dest.writeString(strMeasure11);
+        dest.writeParcelable((Parcelable) dateModified, flags);
+        dest.writeParcelable((Parcelable) strDrinkAlternate, flags);
+        dest.writeString(strSource);
+        dest.writeString(strMeasure9);
+        dest.writeString(strMeasure7);
+        dest.writeString(strMeasure8);
+        dest.writeString(strMeasure5);
+        dest.writeString(strMeasure6);
+        dest.writeString(strMeasure3);
+        dest.writeString(strMeasure4);
+        dest.writeString(strMeasure1);
+        dest.writeString(strMeasure18);
+        dest.writeString(strMeasure2);
+        dest.writeString(strMeasure19);
+        dest.writeString(strMeasure16);
+        dest.writeString(strMeasure17);
+        dest.writeString(strMeasure14);
+        dest.writeString(strMeasure15);
+        dest.writeString(day);
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<Launch> CREATOR = new Parcelable.Creator<Launch>() {
+        @Override
+        public Launch createFromParcel(Parcel in) {
+            return new Launch(in);
+        }
+
+        @Override
+        public Launch[] newArray(int size) {
+            return new Launch[size];
+        }
+    };
 }

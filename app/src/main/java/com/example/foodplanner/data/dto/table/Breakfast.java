@@ -1,5 +1,8 @@
 package com.example.foodplanner.data.dto.table;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -10,12 +13,8 @@ import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;
 
 
-
 @Entity(tableName = "Breakfast")
-public class Breakfast {
-
-
-
+public class Breakfast implements Parcelable {
     @SerializedName("strImageSource")
     private String strImageSource;
 
@@ -164,10 +163,7 @@ public class Breakfast {
         this.dateModified = dateModified;
     }
 
-    public void setStrDrinkAlternate(Object strDrinkAlternate) {
-        this.strDrinkAlternate = strDrinkAlternate;
-    }
-
+    public void setStrDrinkAlternate(Object strDrinkAlternate) {this.strDrinkAlternate = strDrinkAlternate;}
     public void setStrSource(String strSource) {
         this.strSource = strSource;
     }
@@ -404,221 +400,221 @@ public class Breakfast {
         this.day = day;
     }
 
-    public String getStrImageSource(){
+    public String getStrImageSource() {
         return strImageSource;
     }
 
-    public String getStrIngredient10(){
+    public String getStrIngredient10() {
         return strIngredient10;
     }
 
-    public String getStrIngredient12(){
+    public String getStrIngredient12() {
         return strIngredient12;
     }
 
-    public String getStrIngredient11(){
+    public String getStrIngredient11() {
         return strIngredient11;
     }
 
-    public String getStrIngredient14(){
+    public String getStrIngredient14() {
         return strIngredient14;
     }
 
-    public String getStrCategory(){
+    public String getStrCategory() {
         return strCategory;
     }
 
-    public String getStrIngredient13(){
+    public String getStrIngredient13() {
         return strIngredient13;
     }
 
-    public String getStrIngredient16(){
+    public String getStrIngredient16() {
         return strIngredient16;
     }
 
-    public String getStrIngredient15(){
+    public String getStrIngredient15() {
         return strIngredient15;
     }
 
-    public String getStrIngredient18(){
+    public String getStrIngredient18() {
         return strIngredient18;
     }
 
-    public String getStrIngredient17(){
+    public String getStrIngredient17() {
         return strIngredient17;
     }
 
-    public String getStrArea(){
+    public String getStrArea() {
         return strArea;
     }
 
-    public Object getStrCreativeCommonsConfirmed(){
+    public Object getStrCreativeCommonsConfirmed() {
         return strCreativeCommonsConfirmed;
     }
 
-    public String getStrIngredient19(){
+    public String getStrIngredient19() {
         return strIngredient19;
     }
 
-    public String getStrTags(){
+    public String getStrTags() {
         return strTags;
     }
 
-    public String getIdMeal(){
+    public String getIdMeal() {
         return idMeal;
     }
 
-    public String getStrInstructions(){
+    public String getStrInstructions() {
         return strInstructions;
     }
 
-    public String getStrIngredient1(){
+    public String getStrIngredient1() {
         return strIngredient1;
     }
 
-    public String getStrIngredient3(){
+    public String getStrIngredient3() {
         return strIngredient3;
     }
 
-    public String getStrIngredient2(){
+    public String getStrIngredient2() {
         return strIngredient2;
     }
 
-    public String getStrIngredient20(){
+    public String getStrIngredient20() {
         return strIngredient20;
     }
 
-    public String getStrIngredient5(){
+    public String getStrIngredient5() {
         return strIngredient5;
     }
 
-    public String getStrIngredient4(){
+    public String getStrIngredient4() {
         return strIngredient4;
     }
 
-    public String getStrIngredient7(){
+    public String getStrIngredient7() {
         return strIngredient7;
     }
 
-    public String getStrIngredient6(){
+    public String getStrIngredient6() {
         return strIngredient6;
     }
 
-    public String getStrIngredient9(){
+    public String getStrIngredient9() {
         return strIngredient9;
     }
 
-    public String getStrIngredient8(){
+    public String getStrIngredient8() {
         return strIngredient8;
     }
 
-    public String getStrMealThumb(){
+    public String getStrMealThumb() {
         return strMealThumb;
     }
 
-    public String getStrMeasure20(){
+    public String getStrMeasure20() {
         return strMeasure20;
     }
 
-    public String getStrYoutube(){
+    public String getStrYoutube() {
         return strYoutube;
     }
 
-    public String getStrMeal(){
+    public String getStrMeal() {
         return strMeal;
     }
 
-    public String getStrMeasure12(){
+    public String getStrMeasure12() {
         return strMeasure12;
     }
 
-    public String getStrMeasure13(){
+    public String getStrMeasure13() {
         return strMeasure13;
     }
 
-    public String getStrMeasure10(){
+    public String getStrMeasure10() {
         return strMeasure10;
     }
 
-    public String getStrMeasure11(){
+    public String getStrMeasure11() {
         return strMeasure11;
     }
 
-    public Object getDateModified(){
+    public Object getDateModified() {
         return dateModified;
     }
 
-    public Object getStrDrinkAlternate(){
+    public Object getStrDrinkAlternate() {
         return strDrinkAlternate;
     }
 
-    public String getStrSource(){
+    public String getStrSource() {
         return strSource;
     }
 
-    public String getStrMeasure9(){
+    public String getStrMeasure9() {
         return strMeasure9;
     }
 
-    public String getStrMeasure7(){
+    public String getStrMeasure7() {
         return strMeasure7;
     }
 
-    public String getStrMeasure8(){
+    public String getStrMeasure8() {
         return strMeasure8;
     }
 
-    public String getStrMeasure5(){
+    public String getStrMeasure5() {
         return strMeasure5;
     }
 
-    public String getStrMeasure6(){
+    public String getStrMeasure6() {
         return strMeasure6;
     }
 
-    public String getStrMeasure3(){
+    public String getStrMeasure3() {
         return strMeasure3;
     }
 
-    public String getStrMeasure4(){
+    public String getStrMeasure4() {
         return strMeasure4;
     }
 
-    public String getStrMeasure1(){
+    public String getStrMeasure1() {
         return strMeasure1;
     }
 
-    public String getStrMeasure18(){
+    public String getStrMeasure18() {
         return strMeasure18;
     }
 
-    public String getStrMeasure2(){
+    public String getStrMeasure2() {
         return strMeasure2;
     }
 
-    public String getStrMeasure19(){
+    public String getStrMeasure19() {
         return strMeasure19;
     }
 
-    public String getStrMeasure16(){
+    public String getStrMeasure16() {
         return strMeasure16;
     }
 
-    public String getStrMeasure17(){
+    public String getStrMeasure17() {
         return strMeasure17;
     }
 
-    public String getStrMeasure14(){
+    public String getStrMeasure14() {
         return strMeasure14;
     }
 
-    public String getStrMeasure15(){
+    public String getStrMeasure15() {
         return strMeasure15;
     }
 
 
     public Breakfast(String strImageSource, String strIngredient10, String strIngredient12, String strIngredient11, String strIngredient14, String strCategory, String strIngredient13, String strIngredient16, String strIngredient15, String strIngredient18, String strIngredient17, String strArea, Object strCreativeCommonsConfirmed, String strIngredient19, String strTags, @NotNull String idMeal, String strInstructions, String strIngredient1, String strIngredient3, String strIngredient2, String strIngredient20, String strIngredient5, String strIngredient4, String strIngredient7, String strIngredient6, String strIngredient9, String strIngredient8, String strMealThumb, String strMeasure20, String strYoutube, String strMeal, String strMeasure12, String strMeasure13, String strMeasure10, String strMeasure11, Object dateModified, Object strDrinkAlternate, String strSource, String strMeasure9, String strMeasure7, String strMeasure8, String strMeasure5, String strMeasure6, String strMeasure3, String strMeasure4, String strMeasure1, String strMeasure18, String strMeasure2, String strMeasure19, String strMeasure16, String strMeasure17, String strMeasure14
-            , String strMeasure15,String day) {
+            , String strMeasure15, String day) {
         this.strImageSource = strImageSource;
         this.strIngredient10 = strIngredient10;
         this.strIngredient12 = strIngredient12;
@@ -675,24 +671,159 @@ public class Breakfast {
         this.day = day;
     }
 
-    public  Breakfast()
-    {
+    public Breakfast() {
 
     }
 
 
-    public Meal breakFastToMealMapper()
-    {
-        return new Meal(strImageSource,strIngredient10,strIngredient12,strIngredient11,strIngredient14
-                ,strCategory,strIngredient13,strIngredient16,strIngredient15,strIngredient18,strIngredient17,
-                strArea,strCreativeCommonsConfirmed,strIngredient19,strTags,idMeal,strInstructions,strIngredient1
-                ,strIngredient3,strIngredient2,strIngredient20,strIngredient5,strIngredient4,strIngredient7
-                ,strIngredient6,strIngredient9,strIngredient8,strMealThumb,strMeasure20,strYoutube,strMeal
-                ,strMeasure12,strMeasure13,strMeasure10,strMeasure11,dateModified,strDrinkAlternate,strSource,
-                strMeasure9,strMeasure7,strMeasure8,strMeasure5,strMeasure6,strMeasure3,strMeasure4,strMeasure1,
-                strMeasure18,strMeasure2,strMeasure19,strMeasure16,strMeasure17,strMeasure14,strMeasure15,day
+    public Meal breakFastToMealMapper() {
+        return new Meal(strImageSource, strIngredient10, strIngredient12, strIngredient11, strIngredient14
+                , strCategory, strIngredient13, strIngredient16, strIngredient15, strIngredient18, strIngredient17,
+                strArea, strCreativeCommonsConfirmed, strIngredient19, strTags, idMeal, strInstructions, strIngredient1
+                , strIngredient3, strIngredient2, strIngredient20, strIngredient5, strIngredient4, strIngredient7
+                , strIngredient6, strIngredient9, strIngredient8, strMealThumb, strMeasure20, strYoutube, strMeal
+                , strMeasure12, strMeasure13, strMeasure10, strMeasure11, dateModified, strDrinkAlternate, strSource,
+                strMeasure9, strMeasure7, strMeasure8, strMeasure5, strMeasure6, strMeasure3, strMeasure4, strMeasure1,
+                strMeasure18, strMeasure2, strMeasure19, strMeasure16, strMeasure17, strMeasure14, strMeasure15, day
         );
     }
+
+
+    @Ignore
+    protected Breakfast(Parcel in) {
+        strImageSource = in.readString();
+        strIngredient10 = in.readString();
+        strIngredient12 = in.readString();
+        strIngredient11 = in.readString();
+        strIngredient14 = in.readString();
+        strCategory = in.readString();
+        strIngredient13 = in.readString();
+        strIngredient16 = in.readString();
+        strIngredient15 = in.readString();
+        strIngredient18 = in.readString();
+        strIngredient17 =in.readString();
+        strArea = in.readString();
+        strCreativeCommonsConfirmed = in.readParcelable(Object.class.getClassLoader());
+        strIngredient19 = in.readString();
+        strTags = in.readString();
+        idMeal = in.readString();
+        strInstructions = in.readString();
+        strIngredient1 = in.readString();
+        strIngredient3 = in.readString();
+        strIngredient2 = in.readString();
+        strIngredient20 = in.readString();
+        strIngredient5 = in.readString();
+        strIngredient4 = in.readString();
+        strIngredient7 = in.readString();
+        strIngredient6 = in.readString();
+        strIngredient9 = in.readString();
+        strIngredient8 = in.readString();
+        strMealThumb = in.readString();
+        strMeasure20 = in.readString();
+        strYoutube = in.readString();
+        strMeal = in.readString();
+        strMeasure12 = in.readString();
+        strMeasure13 = in.readString();
+        strMeasure10 = in.readString();
+        strMeasure11 = in.readString();
+        dateModified = in.readParcelable(Object.class.getClassLoader());
+        strDrinkAlternate = in.readParcelable(Object.class.getClassLoader());
+        strSource = in.readString();
+        strMeasure9 = in.readString();
+        strMeasure7 = in.readString();
+        strMeasure8 = in.readString();
+        strMeasure5 = in.readString();
+        strMeasure6 = in.readString();
+        strMeasure3 = in.readString();
+        strMeasure4 = in.readString();
+        strMeasure1 = in.readString();
+        strMeasure18 = in.readString();
+        strMeasure2 = in.readString();
+        strMeasure19 = in.readString();
+        strMeasure16 = in.readString();
+        strMeasure17 = in.readString();
+        strMeasure14 = in.readString();
+        strMeasure15 = in.readString();
+        day = in.readString();
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(strImageSource);
+        dest.writeString(strIngredient10);
+        dest.writeString(strIngredient12);
+        dest.writeString(strIngredient11);
+        dest.writeString(strIngredient14);
+        dest.writeString(strCategory);
+        dest.writeString(strIngredient13);
+        dest.writeString(strIngredient16);
+        dest.writeString(strIngredient15);
+        dest.writeString(strIngredient18);
+        dest.writeString(strIngredient17);
+        dest.writeString(strArea);
+        dest.writeParcelable((Parcelable) strCreativeCommonsConfirmed, flags);
+        dest.writeString(strIngredient19);
+        dest.writeString(strTags);
+        dest.writeString(idMeal);
+        dest.writeString(strInstructions);
+        dest.writeString(strIngredient1);
+        dest.writeString(strIngredient3);
+        dest.writeString(strIngredient2);
+        dest.writeString(strIngredient20);
+        dest.writeString(strIngredient5);
+        dest.writeString(strIngredient4);
+        dest.writeString(strIngredient7);
+        dest.writeString(strIngredient6);
+        dest.writeString(strIngredient9);
+        dest.writeString(strIngredient8);
+        dest.writeString(strMealThumb);
+        dest.writeString(strMeasure20);
+        dest.writeString(strYoutube);
+        dest.writeString(strMeal);
+        dest.writeString(strMeasure12);
+        dest.writeString(strMeasure13);
+        dest.writeString(strMeasure10);
+        dest.writeString(strMeasure11);
+        dest.writeParcelable((Parcelable) dateModified, flags);
+        dest.writeParcelable((Parcelable) strDrinkAlternate, flags);
+        dest.writeString(strSource);
+        dest.writeString(strMeasure9);
+        dest.writeString(strMeasure7);
+        dest.writeString(strMeasure8);
+        dest.writeString(strMeasure5);
+        dest.writeString(strMeasure6);
+        dest.writeString(strMeasure3);
+        dest.writeString(strMeasure4);
+        dest.writeString(strMeasure1);
+        dest.writeString(strMeasure18);
+        dest.writeString(strMeasure2);
+        dest.writeString(strMeasure19);
+        dest.writeString(strMeasure16);
+        dest.writeString(strMeasure17);
+        dest.writeString(strMeasure14);
+        dest.writeString(strMeasure15);
+        dest.writeString(day);
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public static final Parcelable.Creator<Breakfast> CREATOR = new Parcelable.Creator<Breakfast>() {
+        @Override
+        public Breakfast createFromParcel(Parcel in) {
+            return new Breakfast(in);
+        }
+
+        @Override
+        public Breakfast[] newArray(int size) {
+            return new Breakfast[size];
+        }
+    };
 
 
 }

@@ -6,6 +6,10 @@ import android.util.Log;
 
 import com.example.foodplanner.data.dto.Meal;
 import com.example.foodplanner.data.dto.meal.MealsResponse;
+import com.example.foodplanner.data.dto.table.Breakfast;
+import com.example.foodplanner.data.dto.table.Dinner;
+import com.example.foodplanner.data.dto.table.Favourite;
+import com.example.foodplanner.data.dto.table.Launch;
 import com.example.foodplanner.data.repository.RepositoryInterface;
 import com.example.foodplanner.meals.mainmealsfragment.view.MealOfTheDayCallback;
 import com.example.foodplanner.meals.mainmealsfragment.view.MealsFragmentViewInterface;
@@ -34,15 +38,6 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
 
     private String searchPrefix;
 
-    public CompositeDisposable getDisposable() {
-        return disposable;
-    }
-
-    public void setDisposable(CompositeDisposable disposable) {
-        this.disposable = disposable;
-    }
-
-    private CompositeDisposable disposable = new CompositeDisposable();
 
     public String getSearchPrefix() {
         return searchPrefix;
@@ -177,6 +172,7 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
         viewInterface = in.readParcelable(MealsFragmentViewInterface.class.getClassLoader());
         mealToAdd = in.readParcelable(Meal.class.getClassLoader());
         mealOfTheDay = in.readParcelable(Meal.class.getClassLoader());
+
         allMeals = in.createTypedArrayList(Meal.CREATOR);
         searchPrefix = in.readString();
 

@@ -19,9 +19,6 @@ public interface ApiProvider {
     Call<MealsResponse> getMealOfTheDay();
 
     @GET("search.php")
-    Observable<MealsResponse> searchMealsByFirstLetter(@Query("f") String letter);
-
-    @GET("search.php")
     Observable<MealsResponse> searchMealsByName(@Query("s") String name);
 
     @GET("filter.php")

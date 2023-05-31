@@ -104,7 +104,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         binding.syncLottie.setOnClickListener(view1 -> {
             binding.syncLottie.setRepeatMode(LottieDrawable.RESTART);
             binding.syncLottie.playAnimation();
-
             syncCloudWithCache();
         });
         setRecyclerView(binding.daysRecycler,daysAdapter);
@@ -138,6 +137,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         if (savedInstanceState != null)
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
+            getDataFromPresenter(presenter.getSelectedDay().getDayNumber());
+
         }else{
             presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
             presenter.getAllBreakfastMeals();
@@ -278,54 +279,34 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
 
     }
 
-    private void daysRecyclerVisibility()
+    private void getDataFromPresenter(String  numberOfDay)
     {
-        if (binding.breakFastRecycler.getVisibility() ==  VISIBLE || binding.launchRecycler.getVisibility() == VISIBLE
-                || binding.dinnerRecycler.getVisibility() == VISIBLE || binding.favouritesRecycler .getVisibility() == VISIBLE)
-        {
-            binding.daysRecycler.setVisibility(View.VISIBLE);
-        }else{
-
-            binding.daysRecycler.setVisibility(View.GONE);
-        }
-
-    }
-
-
-
-
-
-
-    @Override
-    public void onDayClicked(Day day,int prevPosition) {
-
-        day.setSelected(true);
         List<Meal> breakfasts = presenter.getPresenterBreakfasts().stream().map(Breakfast::breakFastToMealMapper)
                 .filter(meal ->
-                        meal.getDay().equals(day.getDayNumber()))
+                        meal.getDay().equals(numberOfDay))
                 .collect(Collectors.toList());
 
 
         List<Meal> launches = presenter.getPresenterLaunches().stream().map(Launch::launchToMealMapper)
                 .filter(meal ->
-                        meal.getDay().equals(day.getDayNumber()))
+                        meal.getDay().equals(numberOfDay))
                 .collect(Collectors.toList());
 
 
         List<Meal> dinners = presenter.getPresenterDinners().stream().map(Dinner::dinnerToMealMapper)
                 .filter(meal ->
-                        meal.getDay().equals(day.getDayNumber())) .collect(Collectors.toList());
+                        meal.getDay().equals(numberOfDay)) .collect(Collectors.toList());
 
 
         List<Meal> favourites = presenter.getPresenterFavourites().stream().map(Favourite::favouriteToMealMapper).filter(meal ->
-                        meal.getDay().equals(day.getDayNumber()))
+                        meal.getDay().equals(numberOfDay))
                 .collect(Collectors.toList());
 
 
-            setRecyclerVisibility(binding.breakFastTextView,binding.breakFastRecycler,!breakfasts.isEmpty());
-            setRecyclerVisibility(binding.launchTextView,binding.launchRecycler,!launches.isEmpty());
-            setRecyclerVisibility(binding.dinnerTextView,binding.dinnerRecycler,!dinners.isEmpty());
-            setRecyclerVisibility(binding.favouritesTextView,binding.favouritesRecycler,!favourites.isEmpty());
+        setRecyclerVisibility(binding.breakFastTextView,binding.breakFastRecycler,!breakfasts.isEmpty());
+        setRecyclerVisibility(binding.launchTextView,binding.launchRecycler,!launches.isEmpty());
+        setRecyclerVisibility(binding.dinnerTextView,binding.dinnerRecycler,!dinners.isEmpty());
+        setRecyclerVisibility(binding.favouritesTextView,binding.favouritesRecycler,!favourites.isEmpty());
 
         breakfastAdapter.setMeals(breakfasts
                 , getContext(),breakfast,ScheduleFragment.this,ScheduleFragment.this);
@@ -340,6 +321,15 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
                 , getContext(), R.string.favourites,ScheduleFragment.this,ScheduleFragment.this);
 
         daysAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onDayClicked(Day day,int prevPosition) {
+
+          day.setSelected(true);
+          presenter.setSelectedDay(day);
+          getDataFromPresenter(day.getDayNumber());
     }
 
     @Override

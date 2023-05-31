@@ -740,6 +740,7 @@ public class Meal implements Parcelable {
 		strMeasure17 = in.readString();
 		strMeasure14 = in.readString();
 		strMeasure15 = in.readString();
+		day = in.readString();
 	}
 
 
@@ -798,6 +799,7 @@ public class Meal implements Parcelable {
 		dest.writeString(strMeasure17);
 		dest.writeString(strMeasure14);
 		dest.writeString(strMeasure15);
+		dest.writeString(day);
 	}
 
 
