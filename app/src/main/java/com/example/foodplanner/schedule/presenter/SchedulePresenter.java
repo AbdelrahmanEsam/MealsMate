@@ -1,5 +1,6 @@
 package com.example.foodplanner.schedule.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.example.foodplanner.schedule.view.ScheduleFragment;
 import com.example.foodplanner.schedule.view.ScheduleViewInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -95,6 +97,7 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         presenterLaunches = new ArrayList<>();
         presenterDinners = new ArrayList<>();
         presenterFavourites = new ArrayList<>();
+
     }
 
 
@@ -106,8 +109,7 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         if (days == null){
             days = new Day[7];
             Calendar calendar = Calendar.getInstance();
-            calendar.setFirstDayOfWeek(Calendar.SATURDAY);
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            calendar.setFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             for (int i = 0; i < 7; i++)
             {
                 Day day = new Day();
@@ -115,11 +117,18 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 day.setDayName(dayName);
                 day.setDayNumber(String.valueOf(dayOfMonth));
+                if (selectedDay != null && day.getDayNumber().equals(selectedDay.getDayNumber())){
+
+                    day.setSelected(true);
+                }
                 days[i] = day;
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
+
             }
 
-            days[0].setSelected(true);
+            if (selectedDay == null){
+                days[0].setSelected(true);
+            }
         }
         return this.days;
     }
@@ -165,8 +174,7 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
     public String getCurrentDay() {
 
        Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.SATURDAY);
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        calendar.setFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
       String day  = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         return day;
     }
@@ -304,34 +312,70 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void syncDataWithCloud(List<Meal> breakfasts, List<Meal> launches, List<Meal> dinner, List<Meal> favourites) {
         repository.clearAllTables();
-        breakfasts.forEach(meal -> {
-            if (meal != null) {
-                repository.insertMealToBreakfast(meal).subscribeOn(Schedulers.io()).subscribe();
-            }
-        });
 
-        launches.forEach(meal -> {
-            if (meal != null) {
-                repository.insertMealToLaunch(meal).subscribeOn(Schedulers.io()).subscribe();
-            }
-        });
+        Observable.fromIterable(breakfasts).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(meal -> {
+
+                    repository.insertMealToBreakfast(meal).subscribeOn(Schedulers.io()).subscribe();
+                },throwable -> {},() -> {
+                    viewInterface.onBreakfastsSuccessCallback();
+                });
 
 
-        dinner.forEach(meal -> {
-            if (meal != null) {
-                repository.insertMealToDinner(meal).subscribeOn(Schedulers.io()).subscribe();
-            }
-        });
+        Observable.fromIterable(launches).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(meal -> {
+                    repository.insertMealToLaunch(meal).subscribeOn(Schedulers.io()).subscribe();
+                },throwable -> {},() -> {
+                    viewInterface.onLaunchesSuccessCallback();
+                });
 
 
-        favourites.forEach(meal -> {
-            if (meal != null) {
-                repository.insertMealToFavourite(meal).subscribeOn(Schedulers.io()).subscribe();
-            }
-        });
+        Observable.fromIterable(dinner).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(meal -> {
+                    repository.insertMealToDinner(meal).subscribeOn(Schedulers.io()).subscribe();
+
+                },throwable -> {},() -> {
+                    viewInterface.onDinnersSuccessCallback();
+                });
+
+
+        Observable.fromIterable(favourites).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(meal -> {
+                    repository.insertMealToFavourite(meal).subscribeOn(Schedulers.io()).subscribe();
+                },throwable -> {},() -> {
+                    viewInterface.onFavouritesSuccessCallback();
+                });
+
+//
+//                breakfasts.forEach(meal -> {
+//            if (meal != null) {
+//                repository.insertMealToBreakfast(meal).subscribeOn(Schedulers.io()).subscribe();
+//            }
+//        });
+//
+//        launches.forEach(meal -> {
+//            if (meal != null) {
+//                repository.insertMealToLaunch(meal).subscribeOn(Schedulers.io()).subscribe();
+//            }
+//        });
+//
+//
+//        dinner.forEach(meal -> {
+//            if (meal != null) {
+//                repository.insertMealToDinner(meal).subscribeOn(Schedulers.io()).subscribe();
+//            }
+//        });
+//
+//
+//        favourites.forEach(meal -> {
+//            if (meal != null) {
+//                repository.insertMealToFavourite(meal).subscribeOn(Schedulers.io()).subscribe();
+//            }
+//        });
     }
 
     @Override

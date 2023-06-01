@@ -35,14 +35,13 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         controller = NavHostFragment.findNavController(this);
         Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.SATURDAY);
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        calendar.setFirstDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
     DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.DatePickerTheme, this, year, month, day);
     dialog.getDatePicker().setMinDate(calendar.getTime().getTime());
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        calendar.add(Calendar.DAY_OF_MONTH, 6);
     dialog.getDatePicker().setMaxDate(calendar.getTime().getTime());
         return dialog;
     }

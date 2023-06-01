@@ -139,8 +139,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
             getDataFromPresenter(presenter.getSelectedDay().getDayNumber());
-            Log.d("presenter","reuse presenter");
-
         }else{
             presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
             presenter.getAllBreakfastMeals();
@@ -148,7 +146,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
             presenter.getAllDinnerMeals();
             presenter.getAllFavouriteMeals();
 
-            Log.d("presenter","new presenter");
 
         }
     }
@@ -330,7 +327,7 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
 
 
     @Override
-    public void onDayClicked(Day day,int prevPosition) {
+    public void onDayClicked(Day day) {
           day.setSelected(true);
           presenter.setSelectedDay(day);
           getDataFromPresenter(day.getDayNumber());
@@ -359,8 +356,6 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
             setRecyclerVisibility(binding.breakFastTextView,binding.breakFastRecycler,!breakfasts.isEmpty());
             breakfastAdapter.setMeals(breakfasts
                     , getContext(),breakfast,ScheduleFragment.this,ScheduleFragment.this);
-
-
 
     }
 

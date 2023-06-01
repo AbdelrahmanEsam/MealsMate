@@ -4,5 +4,5 @@ import com.example.foodplanner.data.dto.Day;
 
 public interface OnDayListener {
 
-    void onDayClicked(Day day, int position);
+    void onDayClicked(Day day);
 }

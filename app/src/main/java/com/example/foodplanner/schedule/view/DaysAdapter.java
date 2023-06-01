@@ -48,11 +48,10 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
         }
 
         holder.dayCard.setOnClickListener(view -> {
-            days.get(prevSelected).setSelected(false);
+            days.forEach(day -> {day.setSelected(false);});
             prevSelected = holder.getAdapterPosition();
-            listener.onDayClicked(days.get(position), 0);
-            notifyItemChanged(position);
-            notifyItemChanged(prevSelected);
+            listener.onDayClicked(days.get(position));
+           notifyDataSetChanged();
         });
 
     }

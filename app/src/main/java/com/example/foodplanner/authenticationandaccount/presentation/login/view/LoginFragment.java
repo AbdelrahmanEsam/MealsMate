@@ -33,7 +33,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
@@ -41,7 +44,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -268,13 +273,17 @@ public class LoginFragment extends Fragment {
         data.put(getString(R.string.dinner), new ArrayList<>());
         data.put(getString(R.string.favourites), new ArrayList<>());
 
-        firebaseFirestore.collection(getString(R.string.users)).document(user.getUid()).set(data)
+
+        firebaseFirestore.collection(getString(R.string.users)).document(user.getUid()).get().addOnSuccessListener(documentSnapshot -> loginSuccess(user.getDisplayName()))
+                .addOnFailureListener(exception ->
+                        firebaseFirestore.collection(getString(R.string.users))
+                                .document(user.getUid()).set(data, SetOptions.merge())
                 .addOnSuccessListener(documentReference -> {
                     loginSuccess(user.getDisplayName());
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(),"error "+ e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                }));
     }
 
     private void loginSuccess(String username )

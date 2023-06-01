@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -221,6 +222,27 @@ public class SignUpFragment extends Fragment {
     }
 
 
+    private void createNewCollectionForGoogleUser(FirebaseUser user) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(getString(R.string.breakfast), new ArrayList<>());
+        data.put(getString(R.string.launch), new ArrayList<>());
+        data.put(getString(R.string.dinner), new ArrayList<>());
+        data.put(getString(R.string.favourites), new ArrayList<>());
+
+
+        firebaseFirestore.collection(getString(R.string.users)).document(user.getUid()).get().addOnSuccessListener(documentSnapshot -> signUpSuccess(user.getDisplayName()))
+                .addOnFailureListener(exception ->
+                        firebaseFirestore.collection(getString(R.string.users))
+                                .document(user.getUid()).set(data, SetOptions.merge())
+                                .addOnSuccessListener(documentReference -> {
+                                    signUpSuccess(user.getDisplayName());
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(requireContext(),"error "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }));
+    }
+
+
     private void createNewCollectionForUser(FirebaseUser user) {
         Map<String, Object> data = new HashMap<>();
         data.put(getString(R.string.breakfast), new ArrayList<>());
@@ -258,7 +280,7 @@ public class SignUpFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        createNewCollectionForUser(user);
+                        createNewCollectionForGoogleUser(user);
                     }
                 });
     }
