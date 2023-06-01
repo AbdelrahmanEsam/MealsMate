@@ -145,7 +145,6 @@ public class MealsFragment extends Fragment implements MealsFragmentViewInterfac
     private void initViews()
     {
         if (mAuth.getCurrentUser() == null){
-            binding.logoutImageView.setVisibility(View.GONE);
            ((MainActivity)requireActivity()).binding.bottomNavigationView.setVisibility(View.VISIBLE);
           ((MainActivity)requireActivity()).binding.bottomNavigationView.getMenu().getItem(2).setEnabled(false);
 
