@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
                         binding.bottomNavigationView.setVisibility(View.GONE);
                         if (mAuth.getCurrentUser() != null) {
                             navHostFragment.getNavController().clearBackStack(R.id.scheduleFragment);
-                          //  navHostFragment.getNavController().navigate(NavGraphDirections.actionToScheduleFragment());
+                            navHostFragment.getNavController().navigate(NavGraphDirections.actionToScheduleFragment());
                         }else{
                             navHostFragment.getNavController().clearBackStack(R.id.loginFragment);
-                         //   navHostFragment.getNavController().navigate(NavGraphDirections.actionToLoginFragment());
+                            navHostFragment.getNavController().navigate(NavGraphDirections.actionToLoginFragment());
                         }
                         break;
                     }
