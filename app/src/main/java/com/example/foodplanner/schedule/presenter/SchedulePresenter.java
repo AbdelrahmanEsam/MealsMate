@@ -98,6 +98,7 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
         presenterDinners = new ArrayList<>();
         presenterFavourites = new ArrayList<>();
 
+
     }
 
 
@@ -128,6 +129,7 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
 
             if (selectedDay == null){
                 days[0].setSelected(true);
+                selectedDay = days[0];
             }
         }
         return this.days;
@@ -249,7 +251,9 @@ public class SchedulePresenter implements  SchedulePresenterInterface, Parcelabl
 
     public void getAllDinnerMeals() {
 
-        repository.getAllDinnerMeals().debounce(500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Dinner>>() {
+        repository.getAllDinnerMeals().debounce(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Dinner>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 

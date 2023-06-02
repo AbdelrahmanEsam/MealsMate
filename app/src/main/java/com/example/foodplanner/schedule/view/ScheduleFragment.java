@@ -138,16 +138,28 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
         if (savedInstanceState != null)
         {
             presenter = savedInstanceState.getParcelable(getString(R.string.presenter));
-            getDataFromPresenter(presenter.getSelectedDay().getDayNumber());
-        }else{
-            presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance(), LocalDataSourceImp.getInstance(getContext())),this);
-            presenter.getAllBreakfastMeals();
-            presenter.getAllLaunchMeals();
-            presenter.getAllDinnerMeals();
-            presenter.getAllFavouriteMeals();
+            if (presenter != null){
 
+            getDataFromPresenter(presenter.getSelectedDay().getDayNumber());
+
+            }else{
+                initPresenterAndRequests();
+            }
+        }else{
+
+             initPresenterAndRequests();
 
         }
+    }
+
+    private void initPresenterAndRequests()
+    {
+        presenter = new SchedulePresenter(Repository.getInstance(RemoteDataSourceImpl.getInstance()
+                , LocalDataSourceImp.getInstance(getContext())),this);
+        presenter.getAllBreakfastMeals();
+        presenter.getAllLaunchMeals();
+        presenter.getAllDinnerMeals();
+        presenter.getAllFavouriteMeals();
     }
 
 
@@ -157,8 +169,10 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void popUpMenuListener(View view,Meal meal,int mealType)
     {
 
-        if (((MainActivity)getActivity()).connectivityObserver.networkStatus()){
-            Toast.makeText(requireContext(), "to take an action you need to be online", Toast.LENGTH_SHORT).show();
+        if (((MainActivity)requireActivity()).connectivityObserver.networkStatus()){
+            Toast.makeText(requireContext()
+                    , "to take an action you need to be online"
+                    , Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -172,7 +186,9 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
              {
 
                  deleteItemFromCloudAndCache(getString(breakfast),meal,(mealToDelete)-> {
-                     presenter.deleteBreakfastItem(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                     presenter.deleteBreakfastItem(meal)
+                             .subscribeOn(Schedulers.io())
+                             .observeOn(AndroidSchedulers.mainThread()).subscribe();
                      return null;
 
                  });
@@ -183,7 +199,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
              {
 
                  deleteItemFromCloudAndCache(getString(launch),meal,(mealToDelete)-> {
-                     presenter.deleteLaunchItem(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                     presenter.deleteLaunchItem(meal).subscribeOn(Schedulers.io())
+                             .observeOn(AndroidSchedulers.mainThread()).subscribe();
                      return null;
 
                  });
@@ -193,7 +210,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
              case dinner:
              {
                  deleteItemFromCloudAndCache(getString(dinner),meal,(mealToDelete)-> {
-                     presenter.deleteDinnerItem(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                     presenter.deleteDinnerItem(meal).subscribeOn(Schedulers.io())
+                             .observeOn(AndroidSchedulers.mainThread()).subscribe();
                      return null;
 
                  });
@@ -204,7 +222,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
              {
 
                  deleteItemFromCloudAndCache(getString(favourites),meal,(mealToDelete)-> {
-                     presenter.deleteFavouritesItem(meal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                     presenter.deleteFavouritesItem(meal).subscribeOn(Schedulers.io())
+                             .observeOn(AndroidSchedulers.mainThread()).subscribe();
                      return null;
 
                  });
@@ -221,7 +240,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void deleteItemFromCloudAndCache(String collectionName, Meal mealToDelete, Function<Meal,Void> function)
     {
 
-        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).update(collectionName, FieldValue.arrayRemove(mealToDelete))
+        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid())
+                .update(collectionName, FieldValue.arrayRemove(mealToDelete))
                 .addOnSuccessListener(documentReference -> {
                     function.apply(mealToDelete);
                     Toast.makeText(requireContext(), getString(R.string.meal_is_deleted_successfully), Toast.LENGTH_SHORT).show();
@@ -235,7 +255,8 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
     private void syncCloudWithCache()
     {
 
-        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+        firebaseFirestore.collection(getString(R.string.users)).document(mAuth.getCurrentUser()
+                .getUid()).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
@@ -323,6 +344,10 @@ public class ScheduleFragment extends Fragment implements OnDayListener, OnMealC
                 , getContext(), R.string.favourites,ScheduleFragment.this,ScheduleFragment.this);
 
         daysAdapter.notifyDataSetChanged();
+        breakfastAdapter.notifyDataSetChanged();
+        launchAdapter.notifyDataSetChanged();
+        dinnerAdapter.notifyDataSetChanged();
+        favouriteAdapter.notifyDataSetChanged();
     }
 
 

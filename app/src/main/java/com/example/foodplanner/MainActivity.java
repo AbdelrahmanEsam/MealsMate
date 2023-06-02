@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private void connectivityObserve()
     {
 
-        Observable.combineLatest(connectivityObserver.Observe().distinctUntilChanged(), fragmentObservable.distinctUntilChanged(), (networkStatus, fragmentStatus) -> networkStatus)
+        Observable.combineLatest(connectivityObserver.Observe().distinctUntilChanged(),
+                        fragmentObservable.distinctUntilChanged(), (networkStatus, fragmentStatus) -> networkStatus)
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {

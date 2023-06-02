@@ -123,7 +123,8 @@ public class MealsPresenter implements MealsPresenterInterface, MealOfTheDayCall
     public void searchByNameMealRequest(String prefix) {
 
        repository.searchByNameMealRequest(prefix).subscribeOn(Schedulers.io())
-                .distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe(mealsResponse -> {
+                .distinctUntilChanged().observeOn(AndroidSchedulers.mainThread())
+               .subscribe(mealsResponse -> {
                     allMeals.clear();
                     if (mealsResponse.getMeals() != null){
                         allMeals.addAll(mealsResponse.getMeals());
